@@ -76,13 +76,30 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
 
 # Introduction
 
-TODO Introduction
+This document describes a delegation mechanism for the Domain Name System (DNS) {{!STD13}} that addresses several matters that are at the time of writing are suboptimally supported or not at all:
 
+1. Signaling capabilities of the authoritative name servers that serve the delegated zone.
+2. Outsourcing operation of the delegation.
+3. DNSSEC protection of the delegation.
 
-# Conventions and Definitions
+The mechanism is designed with minimal adaption to components and to current DNS practice in mind (such as what data is authoritative) to maximize ease of implementation and deployment, without sacrificing resolution performance.
+
+<!--
+Sections {{}}, {{}}, {{}} elaborate on
+
+## Signaling capabilities
+
+What capabilities and associated details are signaled is extensible to support future uses (such as keys for encrypting the TLS ClientHello {{?I-D.ietf-tls-esni}}).
+
+## Outsourcing operation of the delegation
+
+## DNSSEC protection of the delegation
+
+-->
+
+## Terminology
 
 {::boilerplate bcp14-tagged}
-
 
 # Security Considerations
 
