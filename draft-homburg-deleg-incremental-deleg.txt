@@ -12,18 +12,23 @@ Expires: 27 December 2024                        University of Amsterdam
 
 
          Incrementally Deployable Extensible Delegation for DNS
-             draft-nlnetlabs-deleg-incremental-deleg-latest
+              draft-homburg-deleg-incremental-deleg-latest
 
 Abstract
 
-   TODO Abstract
+   This document proposes a method to realize extensible delegations in
+   the DNS.  The delegation is not placed at the zone cut, but
+   authoritatively in the parent zone.  This allows this method to
+   require only implementation in recursive resolvers to be functional.
+   Additional awareness at the authoritative name servers provides
+   optimized performance.
 
 About This Document
 
    This note is to be removed before publishing as an RFC.
 
    Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-nlnetlabs-deleg-incremental-
+   https://datatracker.ietf.org/doc/draft-homburg-deleg-incremental-
    deleg/.
 
    Discussion of this document takes place on the deleg Working Group
