@@ -23,7 +23,7 @@ title: "Incrementally Deployable Extensible Delegation for DNS"
 abbrev: "incremental-deleg"
 category: std
 
-docname: draft-nlnetlabs-deleg-incremental-deleg-latest
+docname: draft-homburg-deleg-incremental-deleg-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date: 2024-06-25
@@ -63,8 +63,10 @@ informative:
 
 --- abstract
 
-TODO Abstract
-
+This document proposes a method to realize extensible delegations in the DNS.
+The delegation is not placed at the zone cut, but authoritatively in the parent zone.
+This allows this method to require only implementation in recursive resolvers to be functional.
+Additional awareness at the authoritative name servers provides optimized performance.
 
 --- middle
 
