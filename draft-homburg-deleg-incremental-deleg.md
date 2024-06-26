@@ -63,10 +63,14 @@ informative:
 
 --- abstract
 
-This document proposes a method to realize extensible delegations in the DNS.
-The delegation is not placed at the zone cut, but authoritatively in the parent zone.
-This allows this method to require only implementation in recursive resolvers to be functional.
-Additional awareness at the authoritative name servers provides optimized performance.
+This document proposes a mechanism for extensible delegations in the DNS.
+The mechanism realizes delegations with SVCB resource record sets placed below a `_deleg` label in the apex of the delegating zone.
+The mechanism inherits extensibility, as well as the possibility to alias the delegation details, from SVCB.
+
+Support in recursive resolvers suffices for the mechanism to be fully functional.
+The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable to that with DNS Query Name Minimisation.
+Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
+None, mixed or full deployment of the mechanism on authoritative name servers are all fully-functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
 
 --- middle
 
