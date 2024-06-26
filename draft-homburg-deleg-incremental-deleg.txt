@@ -82,18 +82,34 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-   2.  Conventions and Definitions
-   3.  Security Considerations
-   4.  IANA Considerations
-   5.  Normative References
+     1.1.  Terminology
+   2.  Security Considerations
+   3.  IANA Considerations
+   4.  References
+     4.1.  Normative References
+     4.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
 1.  Introduction
 
-   TODO Introduction
+   This document describes a delegation mechanism for the Domain Name
+   System (DNS) [STD13] that addresses several matters that are at the
+   time of writing are suboptimally supported or not at all:
 
-2.  Conventions and Definitions
+   1.  Signaling capabilities of the authoritative name servers that
+       serve the delegated zone.
+
+   2.  Outsourcing operation of the delegation.
+
+   3.  DNSSEC protection of the delegation.
+
+   The mechanism is designed with minimal adaption to components and to
+   current DNS practice in mind (such as what data is authoritative) to
+   maximize ease of implementation and deployment, without sacrificing
+   resolution performance.
+
+1.1.  Terminology
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -101,15 +117,17 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Security Considerations
+2.  Security Considerations
 
    TODO Security
 
-4.  IANA Considerations
+3.  IANA Considerations
 
    This document has no IANA actions.
 
-5.  Normative References
+4.  References
+
+4.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -119,6 +137,27 @@ Table of Contents
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [STD13]    Internet Standard 13,
+              <https://www.rfc-editor.org/info/std13>.
+              At the time of writing, this STD comprises the following:
+
+              Mockapetris, P., "Domain names - concepts and facilities",
+              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
+              <https://www.rfc-editor.org/info/rfc1034>.
+
+              Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
+              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+4.2.  Informative References
+
+   [I-D.ietf-tls-esni]
+              Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
+              Encrypted Client Hello", Work in Progress, Internet-Draft,
+              draft-ietf-tls-esni-18, 4 March 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
+              esni-18>.
 
 Acknowledgments
 
