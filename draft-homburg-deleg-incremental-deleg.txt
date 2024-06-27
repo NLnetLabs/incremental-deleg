@@ -20,7 +20,8 @@ Abstract
    DNS.  The mechanism realizes delegations with SVCB resource record
    sets placed below a _deleg label in the apex of the delegating zone.
    The mechanism inherits extensibility, as well as the possibility to
-   alias the delegation details, from SVCB.
+   alias the delegation details, from SVCB.  Legacy aliasing with CNAME
+   also remains usable with this way of doing delegations.
 
    Support in recursive resolvers suffices for the mechanism to be fully
    functional.  The number of subsequent interactions between the
@@ -29,7 +30,7 @@ Abstract
    required, support in the authoritative name servers enables optimized
    behavior with reduced (simultaneous) queries.  None, mixed or full
    deployment of the mechanism on authoritative name servers are all
-   fully-functional, allowing for the mechanism to be incrementally
+   fully functional, allowing for the mechanism to be incrementally
    deployed on the authoritative name servers.
 
 About This Document
@@ -82,15 +83,32 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-     1.1.  Terminology
-   2.  Zone content
+     1.1.  Signaling capabilities of the authoritative name servers
+     1.2.  Outsourcing operation of the delegation
+     1.3.  DNSSEC protection of the delegation
+     1.4.  Maximize ease of deployment
+     1.5.  Terminology
+   2.  Delegation administration
      2.1.  Examples
        2.1.1.  One name server within the subzone
        2.1.2.  Two name servers within the subzone
        2.1.3.  Outsourced to a single operator
-   3.  Security Considerations
-   4.  IANA Considerations
-   5.  Normative References
+       2.1.4.  Outsourced to two operator
+       2.1.5.  DNSSEC signed name servers within the subzone
+   3.  Implementation
+     3.1.  Recursive Resolver
+     3.2.  Authoritative name server
+   4.  Limitations
+   5.  Comparison with other delegation mechanisms
+     5.1.  Comparison with legacy delegations
+     5.2.  Comparison with Name DNS Query Name Minimisation
+     5.3.  Comparison with I-D.dnsop-deleg
+   6.  Implementation Status
+   7.  Security Considerations
+   8.  IANA Considerations
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -98,27 +116,92 @@ Table of Contents
 
    This document describes a delegation mechanism for the Domain Name
    System (DNS) [STD13] that addresses several matters that are at the
-   time of writing are suboptimally supported or not at all:
+   time of writing are suboptimally supported or not at all.  These
+   matters are elaborated upon in sections 1.1, 1.2 and 1.3.  On top of
+   that, the mechanism described in this document also has the ambition
+   to be maximally deployable which is elaborated upon in Section 1.4.
 
-   1.  Signaling capabilities of the authoritative name servers that
-       serve the delegated zone.
+1.1.  Signaling capabilities of the authoritative name servers
 
-   2.  Outsourcing operation of the delegation.
+   The SVCB Resource Record (RR) type [RFC9460] in "dns" service mode
+   [RFC9461] is used in which capability signalling of DNS over
+   Transport Layer Protocol [RFC7858] (DoT), DNS Queries over HTTPS
+   [RFC8484] and DNS over Dedicated QUIC Connections [RFC9250], on
+   default or alternative ports, are already specified.  The SVCB RR
+   type is designed to be extensible to support future uses (such as
+   keys for encrypting the TLS ClientHello [I-D.ietf-tls-esni].)
 
-   3.  DNSSEC protection of the delegation.
+1.2.  Outsourcing operation of the delegation
 
-   Other properties of this mechanisms design are to:
+   Delegation information is stored at an authoritative location in the
+   zone with this mechanism.  Legacy methods to redirect this
+   information to another location, possible under the control of
+   another operator, such as (CNAME Section 3.6.2 of [RFC1034]) and
+   DNAME [RFC6672] remain functional.  One could even outsource all
+   delegation operational practice to another party with an DNAME on the
+   _deleg label on the apex of the delegating zone.
 
-   4.  Minimize the needed changes to DNS components and DNS practice
-       (such as what data is authoritative), with the goal to maximize
-       ease of implementation and deployment
+   Additional to the legacy methods, a delegation may be outsourced to
+   multiple third parties by having multi SVCB RRs in AliasMode, each
+   aliasing to another operator, on the delegation point.
 
-   5.  Not sacrifice resolution performance.
+1.3.  DNSSEC protection of the delegation
 
-   How these properties are met is elaborated upon further in this
-   document referencing the bullet points above.
+   With legacy delegations, the NS RRset at the parent side of a
+   delegation as well as glue records for the names in the NS RRset are
+   not authoritative and not DNSSEC signed.  An adversary that is able
+   to spoof a referral response, can alter this information and redirect
+   all traffic for the delegation to a rogue name server undetected.
+   The adversary can then perceive all queries for the redirected zone
+   (Privacy concern) and alter all unsigned parts of responses (such as
+   further referrals, which is a Security concern).
 
-1.1.  Terminology
+   DNSSEC protection of delegation information prevents that, and is the
+   only counter measure that also works against on-path attackers.  At
+   the time of writing, the only way to DNSSEC validate and verify
+   delegations at all levels in the DNS hierarchy is to revalidate
+   delegations [I-D.ietf-dnsop-ns-revalidation], which is done after the
+   fact and has other security concerns (Section 7 of
+   [I-D.ietf-dnsop-ns-revalidation]).
+
+   Direct delegation information (provided by SVCB RRs in ServiceMode)
+   includes the hostnames of the authoritative name serversfor the
+   delegation as well as IP addresses for those hostnames.  Since the
+   information is stored authoritatively in the delegating zone, it will
+   be DNSSEC signed if the zone is signed.  When the delegation is
+   outsourced, then the delegation is protected when the zones providing
+   the aliasing resource records _and_ the zones serving the targets of
+   the aliases are DNSSEC signed.
+
+1.4.  Maximize ease of deployment
+
+   Delegation information is stored authoritatively within the
+   delegation zone.  No semantic changes as to what zones are
+   authoritative for what data are needed.  As a consequence, existing
+   DNS software, such as authoritative name servers and DNSSEC signing
+   software, can remain unmodified.  Unmodified authoritative name
+   server software will serve the delegation information when queried
+   for.  Unmodified signers will sign the delegation information in the
+   delegating zone.  Only the recursive resolver needs modification to
+   follow referrals as provided by the delegation information.
+
+   Such a resolver would explicitly query for the delegations
+   administered as specified in this document.  The number of round
+   trips form the recursive resolver to the authoritative name server is
+   comparable to what is needed for DNS Query Name Minimisation
+   [RFC9156].  Additional implementation in the authoritative name
+   server optimizes resolution and reduces the number of simultaneous in
+   parallel queries to that what would be needed for legacy delegations.
+   None, mixed or full deployment of the mechanism on authoritative name
+   servers are all fully functional, allowing for the mechanism to be
+   incrementally deployed on the authoritative name servers.
+
+   Implementation in the recursive may be less demanding with respect to
+   (among other things) DNSSEC validation because of not making
+   additional exceptions to what is authoritative at the parent side of
+   a delegation.
+
+1.5.  Terminology
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -126,20 +209,49 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-2.  Zone content
+   This document follows terminology as defined in [RFC9499].
 
-   An extensible delegation is realized with an SVCB resource record
-   (RR) set (RRset) [RFC9460] below a specially for the purpose reserved
-   label with the name _deleg, at the apex of the delegating zone.  The
-   _label scopes the interpretation of the SVCB records and requires
+   Throughout this document we will also use terminology with the
+   meaning as defined below:
+
+   Legacy delegations:
+      The way delegations are done in the DNS traditionally as defined
+      in [STD13].
+
+   Delegating zone:
+      The zone in which the delegation is administered.  Sometimes also
+      called the "parent zone" of a delegation.
+
+   Subzone:
+      The zone that is delegated to from the delegating zone.
+
+   Delegating name:
+      The name which realizes the delegation.  In legacy delegations,
+      this name is the same as the name of the subzone to which the
+      delegation refers.  Delegations described in this document are
+      provided with a different name than the zone that is delegated to.
+
+   Delegation point:
+      The location in the delegating zone where the RRs are provided
+      that make up the delegation.  In legacy delegations, the parent
+      side of the zone cut.  With this document's delegation mechanism,
+      at the location given by the delegating name.
+
+2.  Delegation administration
+
+   An extensible delegation is realized with an SVCB Resource Record set
+   (RRset) [RFC9460] below a specially for the purpose reserved label
+   with the name _deleg at the apex of the delegating zone.  The _deleg
+   label scopes the interpretation of the SVCB records and requires
    registration in the "Underscored and Globally Scoped DNS Node Names"
-   [RFC8552] Section 4.  The full scoping of delegations includes the
-   labels that are below the _label and those, together with the name of
-   the delegating domain, make up the name that is delegated to.  For
-   example, if the delegating zone is example., then a delegation to
-   subzone customer.example. is realized by an SVCB RRset at the name
+   registry (see IANA Considerations (Section 8)).  The full scoping of
+   delegations includes the labels that are *below* the _label and
+   those, together with the name of the delegating domain, make up the
+   name of the subzone to which the delegation refers.  For example, if
+   the delegating zone is example., then a delegation to subzone
+   customer.example. is realized by an SVCB RRset at the name
    customer._deleg.example. in the parent zone.  A fully scoped
-   delegation name (such as customer._deleg.example.) is referred to
+   delegating name (such as customer._deleg.example.) is referred to
    further in this document as the "delegation point".
 
    The use of the SVCB RR type requires a mapping document for each
@@ -150,8 +262,8 @@ Table of Contents
    names of the authoritative name servers for the subzone, are given in
    the TargetName RDATA field of SVCB records in ServiceMode.  Port
    Prefix Naming Section 3 of [RFC9461] is not used at the delegation
-   point, but MUST be used when resolving the aliased to name server
-   with SVCB RRs in AliasMode.
+   point, but MUST be used when resolving the aliased to name servers
+   with "dns" service type SVCB RRs in AliasMode.
 
    Note that if the delegation is outsourcing to a single operator
    represented in a single SVCB RRset, for performance reasons it is
@@ -195,29 +307,90 @@ Table of Contents
    ns                 IN  AAAA  2001:db8:3::1
                       IN  A     192.0.2.1
 
-3.  Security Considerations
+2.1.4.  Outsourced to two operator
+
+   $ORIGIN example.
+   @                  IN  SOA   ns zonemaster ...
+   customer3._deleg   IN  SVCB 0 ns.operator1
+                      IN  SVCB 0 ns.operator2
+
+2.1.5.  DNSSEC signed name servers within the subzone
+
+3.  Implementation
+
+3.1.  Recursive Resolver
+
+3.2.  Authoritative name server
+
+4.  Limitations
+
+   TODO Limitations
+
+5.  Comparison with other delegation mechanisms
+
+5.1.  Comparison with legacy delegations
+
+5.2.  Comparison with Name DNS Query Name Minimisation
+
+5.3.  Comparison with [I-D.dnsop-deleg]
+
+6.  Implementation Status
+
+   *Note to the RFC Editor*: please remove this entire section before
+   publication.
+
+7.  Security Considerations
 
    TODO Security
 
-4.  IANA Considerations
+8.  IANA Considerations
 
-   This document has no IANA actions.
+   Per [RFC8552], IANA is requested to add the following entry to the
+   DNS "Underscored and Globally Scoped DNS Node Names" registry:
 
-5.  Normative References
+                +=========+============+=================+
+                | RR Type | _NODE NAME | Reference       |
+                +=========+============+=================+
+                | SVCB    | _deleg     | [this document] |
+                +---------+------------+-----------------+
+
+                                 Table 1
+
+9.  References
+
+9.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC6672]  Rose, S. and W. Wijngaards, "DNAME Redirection in the
+              DNS", RFC 6672, DOI 10.17487/RFC6672, June 2012,
+              <https://www.rfc-editor.org/rfc/rfc6672>.
+
+   [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
+              and P. Hoffman, "Specification for DNS over Transport
+              Layer Security (TLS)", RFC 7858, DOI 10.17487/RFC7858, May
+              2016, <https://www.rfc-editor.org/rfc/rfc7858>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-   [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
-              Records through "Underscored" Naming of Attribute Leaves",
-              BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
-              <https://www.rfc-editor.org/rfc/rfc8552>.
+   [RFC8484]  Hoffman, P. and P. McManus, "DNS Queries over HTTPS
+              (DoH)", RFC 8484, DOI 10.17487/RFC8484, October 2018,
+              <https://www.rfc-editor.org/rfc/rfc8484>.
+
+   [RFC9156]  Bortzmeyer, S., Dolmans, R., and P. Hoffman, "DNS Query
+              Name Minimisation to Improve Privacy", RFC 9156,
+              DOI 10.17487/RFC9156, November 2021,
+              <https://www.rfc-editor.org/rfc/rfc9156>.
+
+   [RFC9250]  Huitema, C., Dickinson, S., and A. Mankin, "DNS over
+              Dedicated QUIC Connections", RFC 9250,
+              DOI 10.17487/RFC9250, May 2022,
+              <https://www.rfc-editor.org/rfc/rfc9250>.
 
    [RFC9460]  Schwartz, B., Bishop, M., and E. Nygren, "Service Binding
               and Parameter Specification via the DNS (SVCB and HTTPS
@@ -239,6 +412,38 @@ Table of Contents
               Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+9.2.  Informative References
+
+   [I-D.dnsop-deleg]
+              April, T., Špaček, P., Weber, R., and Lawrence,
+              "Extensible Delegation for DNS", Work in Progress,
+              Internet-Draft, draft-dnsop-deleg-00, 23 January 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dnsop-deleg-
+              00>.
+
+   [I-D.ietf-dnsop-ns-revalidation]
+              Huque, S., Vixie, P. A., and W. Toorop, "Delegation
+              Revalidation by DNS Resolvers", Work in Progress,
+              Internet-Draft, draft-ietf-dnsop-ns-revalidation-06, 17
+              March 2024, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-dnsop-ns-revalidation-06>.
+
+   [I-D.ietf-tls-esni]
+              Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
+              Encrypted Client Hello", Work in Progress, Internet-Draft,
+              draft-ietf-tls-esni-18, 4 March 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
+              esni-18>.
+
+   [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
+              Records through "Underscored" Naming of Attribute Leaves",
+              BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
+              <https://www.rfc-editor.org/rfc/rfc8552>.
+
+   [RFC9499]  Hoffman, P. and K. Fujiwara, "DNS Terminology", BCP 219,
+              RFC 9499, DOI 10.17487/RFC9499, March 2024,
+              <https://www.rfc-editor.org/rfc/rfc9499>.
 
 Acknowledgments
 
