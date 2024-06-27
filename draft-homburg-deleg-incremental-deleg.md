@@ -71,7 +71,7 @@ Legacy aliasing with CNAME also remains usable with this way of doing delegation
 Support in recursive resolvers suffices for the mechanism to be fully functional.
 The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable to that with DNS Query Name Minimisation.
 Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
-None, mixed or full deployment of the mechanism on authoritative name servers are all fully-functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
+None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
 
 --- middle
 
@@ -114,12 +114,12 @@ No semantic changes as to what zones are authoritative for what data are needed.
 As a consequence, existing DNS software, such as authoritative name servers and DNSSEC signing software, can remain unmodified.
 Unmodified authoritative name server software will serve the delegation information when queried for.
 Unmodified signers will sign the delegation information in the delegating zone.
-Only the recursive resolver that follows referrals as provided by the delegation information need implementation.
+Only the recursive resolver needs modification to follow referrals as provided by the delegation information.
 
 Such a resolver would explicitly query for the delegations administered as specified in this document.
 The number of round trips form the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation {{!RFC9156}}.
 Additional implementation in the authoritative name server optimizes resolution and reduces the number of simultaneous in parallel queries to that what would be needed for legacy delegations.
-None, mixed or full deployment of the mechanism on authoritative name servers are all fully-functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
+None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
 
 Implementation in the recursive may be less demanding with respect to (among other things) DNSSEC validation because of not making additional exceptions to what is authoritative at the parent side of a delegation.
 
@@ -152,7 +152,7 @@ Delegation point:
   In legacy delegations, the parent side of the zone cut.
   With this document's delegation mechanism, at the location given by the delegating name.
 
-# Zone content
+# Delegation administration
 
 An extensible delegation is realized with an SVCB Resource Record set (RRset) {{!RFC9460}} below a specially for the purpose reserved label with the name `_deleg` at the apex of the delegating zone.
 The `_deleg` label scopes the interpretation of the SVCB records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see {{iana-considerations (IANA Considerations)}}).
