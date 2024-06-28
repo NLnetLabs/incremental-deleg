@@ -275,9 +275,8 @@ Note that both `customer5.example.` and `customer6.example.` have legacy delegat
 It is important to have those legacy delegations to maintain support for legacy resolvers, that do not support incremental deleg.
 We RECOMMMEND DNSSEC signers to construct the NS RRset and glue for the legacy delegation from the SVCB RRset.
 
-# Implementation
 
-## Recursive Resolver behavior
+# Implementation
 
 Query behavior by the incremental deleg supporting recursive resolver depends on three conditions;
 
@@ -285,7 +284,7 @@ Query behavior by the incremental deleg supporting recursive resolver depends on
 2. If the resolver is querying an authoritative name server that supports incremental deleg.
 3. If the delegating zone is DNSSEC signed.
 
-### Presence of the `_deleg` label
+## Presence of the `_deleg` label
 
 Absence of the `_deleg` label in a delegating zone is a clear signal that the zone does not contain any incremental deleg delegations.
 Recursive resolvers MUST NOT send any additional incremental deleg queries for zones for which it knows that it does not contain the `_deleg` label at the apex.
@@ -320,7 +319,16 @@ The testing query can have three possible outcomes.
    The returned A RRset in the answer section MUST be cached for the duration indicated by the TTL for the RRset, adjusted to the resolver's TTL boundaries.
    For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
 
+## Resolver behavior without authoritative name server support
+
 ## Authoritative name server support
+
+## Resolver behavior with authoritative name server support
+
+### For DNSSEC unsigned zones
+
+### For DNSSEC signed zones
+
 
 # Limitations
 
