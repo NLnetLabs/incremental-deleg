@@ -273,7 +273,7 @@ Also, `customer6.example.` is linked to from `example.` with the signed `custome
 
 Note that both `customer5.example.` and `customer6.example.` have legacy delegations in the zone as well.
 It is important to have those legacy delegations to maintain support for legacy resolvers, that do not support incremental deleg.
-We RECOMMMEND DNSSEC signers to construct the NS RRset and glue for the legacy delegation from the SVCB RRset.
+DNSSEC signers SHOULD construct the NS RRset and glue for the legacy delegation from the SVCB RRset.
 
 
 # Implementation
@@ -315,6 +315,7 @@ The testing query can have three possible outcomes.
    For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
 
 3. The `_deleg` label does exist within the zone and contains data.
+   A NOERROR response is return with an A RRset in the answer section.
 
    The returned A RRset in the answer section MUST be cached for the duration indicated by the TTL for the RRset, adjusted to the resolver's TTL boundaries.
    For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
