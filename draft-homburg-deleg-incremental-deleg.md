@@ -142,6 +142,9 @@ This document follows terminology as defined in {{?RFC9499}}.
 Throughout this document we will also use terminology with the meaning as defined below:
 
 {: vspace="0"}
+Incremental deleg:
+: Delegation as specified in this document.
+
 Legacy delegations:
 : The way delegations are done in the DNS traditionally as defined in {{!STD13}}.
 
@@ -159,8 +162,8 @@ Delegating name:
 
 Delegation point:
 : The location in the delegating zone where the RRs are provided that make up the delegation.
-  In legacy delegations, the parent side of the zone cut.
-  With this document's delegation mechanism, at the location given by the delegating name.
+  In legacy delegations, this is the parent side of the zone cut and has the same name as the subzone.
+  With incremental deleg, this is the location given by the delegating name.
 
 # Delegation administration
 
@@ -269,7 +272,7 @@ The DNSSEC authentication chain links from `example.` to `customer5.example.` in
 Also, `customer6.example.` is linked to from `example.` with the signed `customer6.example. DS` RRset in the `example.` zone.
 
 Note that both `customer5.example.` and `customer6.example.` have legacy delegations in the zone as well.
-It is important to have those legacy delegations to maintain support for legacy resolvers, that do not support the mechanism in this document.
+It is important to have those legacy delegations to maintain support for legacy resolvers, that do not support incremental deleg.
 We RECOMMMEND DNSSEC signers to construct the NS RRset and glue for the legacy delegation from the SVCB RRset.
 
 # Implementation
