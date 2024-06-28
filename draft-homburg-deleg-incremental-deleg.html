@@ -1201,15 +1201,24 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-implementation" class="internal xref">Implementation</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-recursive-resolver-behavior" class="internal xref">Recursive Resolver behavior</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
-                    <p id="section-toc.1-1.3.2.1.2.1.1"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-presence-of-the-_deleg-labe" class="internal xref">Presence of the <code>_deleg</code> label</a></p>
-</li>
-                </ul>
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-presence-of-the-_deleg-labe" class="internal xref">Presence of the <code>_deleg</code> label</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-authoritative-name-server-s" class="internal xref">Authoritative name server support</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-resolver-behavior-without-a" class="internal xref">Resolver behavior without authoritative name server support</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-authoritative-name-server-s" class="internal xref">Authoritative name server support</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-resolver-behavior-with-auth" class="internal xref">Resolver behavior with authoritative name server support</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.1">
+                    <p id="section-toc.1-1.3.2.4.2.1.1"><a href="#section-3.4.1" class="auto internal xref">3.4.1</a>.  <a href="#name-for-dnssec-unsigned-zones" class="internal xref">For DNSSEC unsigned zones</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.2">
+                    <p id="section-toc.1-1.3.2.4.2.2.1"><a href="#section-3.4.2" class="auto internal xref">3.4.2</a>.  <a href="#name-for-dnssec-signed-zones" class="internal xref">For DNSSEC signed zones</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1528,70 +1537,91 @@ We RECOMMMEND DNSSEC signers to construct the NS RRset and glue for the legacy d
       <h2 id="name-implementation">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-implementation" class="section-name selfRef">Implementation</a>
       </h2>
-<div id="recursive-resolver-behavior">
-<section id="section-3.1">
-        <h3 id="name-recursive-resolver-behavior">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-recursive-resolver-behavior" class="section-name selfRef">Recursive Resolver behavior</a>
-        </h3>
-<p id="section-3.1-1">Query behavior by the incremental deleg supporting recursive resolver depends on three conditions;<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3.1-2">
-<li id="section-3.1-2.1">
-            <p id="section-3.1-2.1.1">The presence of the <code>_deleg</code> label at the apex of the delegating zone.<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-3-1">Query behavior by the incremental deleg supporting recursive resolver depends on three conditions;<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3-2">
+<li id="section-3-2.1">
+          <p id="section-3-2.1.1">The presence of the <code>_deleg</code> label at the apex of the delegating zone.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.1-2.2">
-            <p id="section-3.1-2.2.1">If the resolver is querying an authoritative name server that supports incremental deleg.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
+        <li id="section-3-2.2">
+          <p id="section-3-2.2.1">If the resolver is querying an authoritative name server that supports incremental deleg.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.1-2.3">
-            <p id="section-3.1-2.3.1">If the delegating zone is DNSSEC signed.<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
+        <li id="section-3-2.3">
+          <p id="section-3-2.3.1">If the delegating zone is DNSSEC signed.<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
 </li>
-        </ol>
+      </ol>
 <div id="presence-of-the-deleg-label">
-<section id="section-3.1.1">
-          <h4 id="name-presence-of-the-_deleg-labe">
-<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-presence-of-the-_deleg-labe" class="section-name selfRef">Presence of the <code>_deleg</code> label</a>
-          </h4>
-<p id="section-3.1.1-1">Absence of the <code>_deleg</code> label in a delegating zone is a clear signal that the zone does not contain any incremental deleg delegations.
+<section id="section-3.1">
+        <h3 id="name-presence-of-the-_deleg-labe">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-presence-of-the-_deleg-labe" class="section-name selfRef">Presence of the <code>_deleg</code> label</a>
+        </h3>
+<p id="section-3.1-1">Absence of the <code>_deleg</code> label in a delegating zone is a clear signal that the zone does not contain any incremental deleg delegations.
 Recursive resolvers <span class="bcp14">MUST NOT</span> send any additional incremental deleg queries for zones for which it knows that it does not contain the <code>_deleg</code> label at the apex.
-The state regarding the presence of the <code>_deleg</code> label within a resolver can be "unknown", "known not to be present", or "known to be present".<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-2">When the presence of a <code>_deleg</code> label is "unknown", a <code>_deleg</code> presence test query <span class="bcp14">MUST</span> be send in parallel to the next query for the zone.
-The query name for the test query is the <code>_deleg</code> label prepended to the apex of zone for which to test presence, with query type A.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-3">When a referral response is acted upon during iteration, this is when the resolver first learns about the zone.
+The state regarding the presence of the <code>_deleg</code> label within a resolver can be "unknown", "known not to be present", or "known to be present".<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">When the presence of a <code>_deleg</code> label is "unknown", a <code>_deleg</code> presence test query <span class="bcp14">MUST</span> be send in parallel to the next query for the zone.
+The query name for the test query is the <code>_deleg</code> label prepended to the apex of zone for which to test presence, with query type A.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">When a referral response is acted upon during iteration, this is when the resolver first learns about the zone.
 The presence of the <code>_deleg</code> label within the referred to zone is yet "unknown", so a test query <span class="bcp14">MUST</span> be sent in parallel with the resolution of the triggering query.
 Validating resolvers, when following a secure referral, already need to query to the delegated name servers for the DNSKEY RRset.
-The test query could be sent in parallel with that DNSKEY query.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-4">Subsequent <code>_deleg</code> presence test query <span class="bcp14">MUST</span> be send in parallel to the next query for the zone, when the result of the test expired from cache.<a href="#section-3.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-5">The testing query can have three possible outcomes.<a href="#section-3.1.1-5" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3.1.1-6">
-<li id="section-3.1.1-6.1">
-              <p id="section-3.1.1-6.1.1">The <code>_deleg</code> label does not exist within the zone, and an NXDOMAIN response is returned.<a href="#section-3.1.1-6.1.1" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-6.1.2">
+The test query could be sent in parallel with that DNSKEY query.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">Subsequent <code>_deleg</code> presence test query <span class="bcp14">MUST</span> be send in parallel to the next query for the zone, when the result of the test expired from cache.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">The testing query can have three possible outcomes.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.1-6">
+<li id="section-3.1-6.1">
+            <p id="section-3.1-6.1.1">The <code>_deleg</code> label does not exist within the zone, and an NXDOMAIN response is returned.<a href="#section-3.1-6.1.1" class="pilcrow">¶</a></p>
+<p id="section-3.1-6.1.2">
 The non-existence of the <code>_deleg</code> label <span class="bcp14">MUST</span> be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the boundaries for TTL values that the resolver has (<span><a href="https://rfc-editor.org/rfc/rfc8767#section-4" class="relref">Section 4</a> of [<a href="#RFC8767" class="cite xref">RFC8767</a>]</span>).
-For the period the non-existence of the <code>_deleg</code> label is cached, the label is "known not to be present" and the resolver <span class="bcp14">MUST NOT</span> send any (additional) incremental deleg queries.<a href="#section-3.1.1-6.1.2" class="pilcrow">¶</a></p>
+For the period the non-existence of the <code>_deleg</code> label is cached, the label is "known not to be present" and the resolver <span class="bcp14">MUST NOT</span> send any (additional) incremental deleg queries.<a href="#section-3.1-6.1.2" class="pilcrow">¶</a></p>
 </li>
-            <li id="section-3.1.1-6.2">
-              <p id="section-3.1.1-6.2.1">The <code>_deleg</code> label does exist within the zone but contains no data.
+          <li id="section-3.1-6.2">
+            <p id="section-3.1-6.2.1">The <code>_deleg</code> label does exist within the zone but contains no data.
 A NOERROR response is returned with no RRs in the answer section.
-The <code>_deleg</code> label is at an empty non-terminal (<span><a href="https://rfc-editor.org/rfc/rfc4592#section-2.2.2" class="relref">Section 2.2.2</a> of [<a href="#RFC4592" class="cite xref">RFC4592</a>]</span>).<a href="#section-3.1.1-6.2.1" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-6.2.2">
+The <code>_deleg</code> label is at an empty non-terminal (<span><a href="https://rfc-editor.org/rfc/rfc4592#section-2.2.2" class="relref">Section 2.2.2</a> of [<a href="#RFC4592" class="cite xref">RFC4592</a>]</span>).<a href="#section-3.1-6.2.1" class="pilcrow">¶</a></p>
+<p id="section-3.1-6.2.2">
 The existence of the <code>_deleg</code> empty non-terminal <span class="bcp14">MUST</span> be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
-For the period the existence of the empty non-terminal at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.1.1-6.2.2" class="pilcrow">¶</a></p>
+For the period the existence of the empty non-terminal at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.1-6.2.2" class="pilcrow">¶</a></p>
 </li>
-            <li id="section-3.1.1-6.3">
-              <p id="section-3.1.1-6.3.1">The <code>_deleg</code> label does exist within the zone and contains data.<a href="#section-3.1.1-6.3.1" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-6.3.2">
+          <li id="section-3.1-6.3">
+            <p id="section-3.1-6.3.1">The <code>_deleg</code> label does exist within the zone and contains data.<a href="#section-3.1-6.3.1" class="pilcrow">¶</a></p>
+<p id="section-3.1-6.3.2">
 The returned A RRset in the answer section <span class="bcp14">MUST</span> be cached for the duration indicated by the TTL for the RRset, adjusted to the resolver's TTL boundaries.
-For the period any RRset at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.1.1-6.3.2" class="pilcrow">¶</a></p>
+For the period any RRset at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.1-6.3.2" class="pilcrow">¶</a></p>
 </li>
-          </ol>
+        </ol>
 </section>
 </div>
+<div id="resolver-behavior-without-authoritative-name-server-support">
+<section id="section-3.2">
+        <h3 id="name-resolver-behavior-without-a">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-resolver-behavior-without-a" class="section-name selfRef">Resolver behavior without authoritative name server support</a>
+      </h3>
 </section>
 </div>
 <div id="authoritative-name-server-support">
-<section id="section-3.2">
+<section id="section-3.3">
         <h3 id="name-authoritative-name-server-s">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-authoritative-name-server-s" class="section-name selfRef">Authoritative name server support</a>
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-authoritative-name-server-s" class="section-name selfRef">Authoritative name server support</a>
       </h3>
+</section>
+</div>
+<div id="resolver-behavior-with-authoritative-name-server-support">
+<section id="section-3.4">
+        <h3 id="name-resolver-behavior-with-auth">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-resolver-behavior-with-auth" class="section-name selfRef">Resolver behavior with authoritative name server support</a>
+        </h3>
+<div id="for-dnssec-unsigned-zones">
+<section id="section-3.4.1">
+          <h4 id="name-for-dnssec-unsigned-zones">
+<a href="#section-3.4.1" class="section-number selfRef">3.4.1. </a><a href="#name-for-dnssec-unsigned-zones" class="section-name selfRef">For DNSSEC unsigned zones</a>
+        </h4>
+</section>
+</div>
+<div id="for-dnssec-signed-zones">
+<section id="section-3.4.2">
+          <h4 id="name-for-dnssec-signed-zones">
+<a href="#section-3.4.2" class="section-number selfRef">3.4.2. </a><a href="#name-for-dnssec-signed-zones" class="section-name selfRef">For DNSSEC signed zones</a>
+        </h4>
+</section>
+</div>
 </section>
 </div>
 </section>
