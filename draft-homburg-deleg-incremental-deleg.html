@@ -1525,7 +1525,7 @@ The DNSSEC authentication chain links from <code>example.</code> to <code>custom
 Also, <code>customer6.example.</code> is linked to from <code>example.</code> with the signed <code>customer6.example. DS</code> RRset in the <code>example.</code> zone.<a href="#section-2.1.4-2" class="pilcrow">¶</a></p>
 <p id="section-2.1.4-3">Note that both <code>customer5.example.</code> and <code>customer6.example.</code> have legacy delegations in the zone as well.
 It is important to have those legacy delegations to maintain support for legacy resolvers, that do not support incremental deleg.
-We RECOMMMEND DNSSEC signers to construct the NS RRset and glue for the legacy delegation from the SVCB RRset.<a href="#section-2.1.4-3" class="pilcrow">¶</a></p>
+DNSSEC signers <span class="bcp14">SHOULD</span> construct the NS RRset and glue for the legacy delegation from the SVCB RRset.<a href="#section-2.1.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1581,7 +1581,8 @@ The existence of the <code>_deleg</code> empty non-terminal <span class="bcp14">
 For the period the existence of the empty non-terminal at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.1-6.2.2" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.1-6.3">
-            <p id="section-3.1-6.3.1">The <code>_deleg</code> label does exist within the zone and contains data.<a href="#section-3.1-6.3.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-6.3.1">The <code>_deleg</code> label does exist within the zone and contains data.
+A NOERROR response is return with an A RRset in the answer section.<a href="#section-3.1-6.3.1" class="pilcrow">¶</a></p>
 <p id="section-3.1-6.3.2">
 The returned A RRset in the answer section <span class="bcp14">MUST</span> be cached for the duration indicated by the TTL for the RRset, adjusted to the resolver's TTL boundaries.
 For the period any RRset at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.1-6.3.2" class="pilcrow">¶</a></p>
