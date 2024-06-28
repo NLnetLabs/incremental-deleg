@@ -277,9 +277,50 @@ We RECOMMMEND DNSSEC signers to construct the NS RRset and glue for the legacy d
 
 # Implementation
 
-## Recursive Resolver
+## Recursive Resolver behavior
 
-## Authoritative name server
+Query behavior by the incremental deleg supporting recursive resolver depends on three conditions;
+
+1. The presence of the `_deleg` label at the apex of the delegating zone.
+2. If the resolver is querying an authoritative name server that supports incremental deleg.
+3. If the delegating zone is DNSSEC signed.
+
+### Presence of the `_deleg` label
+
+Absence of the `_deleg` label in a delegating zone is a clear signal that the zone does not contain any incremental deleg delegations.
+Recursive resolvers MUST NOT send any additional incremental deleg queries for zones for which it knows that it does not contain the `_deleg` label at the apex.
+The state regarding the presence of the `_deleg` label within a resolver can be "unknown", "known not to be present", or "known to be present".
+
+When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query MUST be send in parallel to the next query for the zone.
+The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type A.
+
+When a referral response is acted upon during iteration, this is when the resolver first learns about the zone.
+The presence of the `_deleg` label within the referred to zone is yet "unknown", so a test query MUST be sent in parallel with the resolution of the triggering query.
+Validating resolvers, when following a secure referral, already need to query to the delegated name servers for the DNSKEY RRset.
+The test query could be sent in parallel with that DNSKEY query.
+
+Subsequent `_deleg` presence test query MUST be send in parallel to the next query for the zone, when the result of the test expired from cache.
+
+The testing query can have three possible outcomes.
+
+1. The `_deleg` label does not exist within the zone, and an NXDOMAIN response is returned.
+
+   The non-existence of the `_deleg` label MUST be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the boundaries for TTL values that the resolver has ({{Section 4 of !RFC8767}}).
+   For the period the non-existence of the `_deleg` label is cached, the label is "known not to be present" and the resolver MUST NOT send any (additional) incremental deleg queries.
+
+2. The `_deleg` label does exist within the zone but contains no data.
+   A NOERROR response is returned with no RRs in the answer section.
+   The `_deleg` label is at an empty non-terminal ({{Section 2.2.2 of !RFC4592}}).
+
+   The existence of the `_deleg` empty non-terminal MUST be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
+   For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
+
+3. The `_deleg` label does exist within the zone and contains data.
+
+   The returned A RRset in the answer section MUST be cached for the duration indicated by the TTL for the RRset, adjusted to the resolver's TTL boundaries.
+   For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
+
+## Authoritative name server support
 
 # Limitations
 
