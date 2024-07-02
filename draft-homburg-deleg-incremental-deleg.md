@@ -393,6 +393,12 @@ The testing query can have three possible outcomes:
 Incremental delegations supporting authoritative name servers do not need the additional (parallel) incremental delegation query, but instead will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
 If it is known that an authoritative name server supports incremental deleg, than no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
 
+{{dnssec-signed-zones}} describes deleg referral responses, and how a resolver can detect support for it with an authoritative nameserver, for DNSSEC signed zones.
+{{unsigned-zones}} shortly addresses support with unsigned zones.
+{{behavior-with-auth-support}} specifies how authoritative name server support influences resolver behavior.
+
+### Referral responses with DNSSEC signed zones {#dnssec-signed-zones}
+
 For example, querying the zone from {{dnssec-zone}} for `www.customer5.example. A`, will return the following referral response:
 
 ~~~
@@ -509,6 +515,20 @@ In other cases an returned CNAME may need chasing by the resolver.
 
 The resolver SHOULD register that the authoritative name server, supports incremental deleg for the duration indicated by the TTL for the CNAME, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 
+### Referral responses with unsigned zones {#unsigned-zones}
+
+With unsigned zones, only if an incremental deleg delegation exists, the SVCB RRset (or CNAME) will be present in the authority section of referral responses.
+Resolvers SHOULD register that authoritative name server supports incremental deleg for the duration indicated by the TTL for the CNAME or SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+If the incremental deleg does not exist, then it is simply absent from the authority section and the referral response is indistinguishable from an non supportive authoritative.
+
+### Resolver behavior with authoritative name server support {#behavior-with-auth-support}
+
+Resolvers can detect support for incremental deleg with authoritative name servers from the returned referral responses.
+With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.
+For as long as the resolver knows that the authoritative name server support incremental deleg, no additional parallel direct deleg query (as described in {{recursive-resolver-behavior}}) needs to be send.
+
+However, if the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC signed zone is being served, then all referrals MUST contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
+If a referral is returned that does not contain an incremental delegation nor an indication that is does not exist, and , then the resolver MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).
 
 # Limitations
 
@@ -534,6 +554,27 @@ TODO Limitations
 Currently this means that query load can be spread out over multiple operators (even though that is NOT RECOMMENDED), but operationally it would make more sense to allow a resolver to select from all the name servers from all the operators.
 Assumingly SVCB currently supports only a single AliasMode RR in an SVCB RRset because it would otherwise be impossible to interpret the SvcPriority from the SVCB RRsets that is aliased to.
 A possible solution could be to resolve all AliasMode RRs at the delegation point (though limited to a certain amount, say 8) and then let the resolver pick from all the SVCB RRs, ignoring SvcPriority.
+
+## Wildcard incremental delegation
+
+Zones may have a wildcard incremental delegation.
+For example:
+
+~~~
+$ORIGIN example.
+@                  IN  SOA   ns zonemaster ...
+*._deleg    86400  IN  SVCB  0 .
+customer1._deleg   IN  SVCB  1 ( ns.customer1
+                                 ipv4hint=198.51.100.1,203.0.113.1
+                                 ipv6hint=2001:db8:1::1,2001:db8:2::1
+                               )
+customer3._deleg   IN  CNAME _dns.ns.operator1
+~~~
+{: #wildcard-deleg title="Wildcard incremental deleg to control duration of detected support"}
+
+This may be convenient, for example to signal (with an AliasMode SVCB RR aliasing to the root) that there is no incremental delegation with unsigned zones.
+In this case signalling of non-existence works for both signed and unsigned zones.
+Furthermore, the zone owner controls the duration a resolver has registered the authoritative name server supports incremental deleg, also for non-existent delegations, with the TTL of the `SVCB 0 .` RR.
 
 # Implementation Status
 
