@@ -1208,6 +1208,17 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-authoritative-name-server-s" class="internal xref">Authoritative name server support</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
+                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-referral-responses-with-dns" class="internal xref">Referral responses with DNSSEC signed zones</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2">
+                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-referral-responses-with-uns" class="internal xref">Referral responses with unsigned zones</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.3">
+                    <p id="section-toc.1-1.3.2.3.2.3.1"><a href="#section-3.3.3" class="auto internal xref">3.3.3</a>.  <a href="#name-resolver-behavior-with-auth" class="internal xref">Resolver behavior with authoritative name server support</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1233,6 +1244,9 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-outsourcing-to-more-than-on" class="internal xref">Outsourcing to more than one operator</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-wildcard-incremental-delega" class="internal xref">Wildcard incremental delegation</a></p>
 </li>
             </ul>
 </li>
@@ -1692,10 +1706,18 @@ For the period any RRset at the <code>_deleg</code> label is cached, the label i
         </h3>
 <p id="section-3.3-1">Incremental delegations supporting authoritative name servers do not need the additional (parallel) incremental delegation query, but instead will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
 If it is known that an authoritative name server supports incremental deleg, than no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">For example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer5.example. A</code>, will return the following referral response:<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-2"><a href="#dnssec-signed-zones" class="auto internal xref">Section 3.3.1</a> describes deleg referral responses, and how a resolver can detect support for it with an authoritative nameserver, for DNSSEC signed zones.
+<a href="#unsigned-zones" class="auto internal xref">Section 3.3.2</a> shortly addresses support with unsigned zones.
+<a href="#behavior-with-auth-support" class="auto internal xref">Section 3.3.3</a> specifies how authoritative name server support influences resolver behavior.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<div id="dnssec-signed-zones">
+<section id="section-3.3.1">
+          <h4 id="name-referral-responses-with-dns">
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-referral-responses-with-dns" class="section-name selfRef">Referral responses with DNSSEC signed zones</a>
+          </h4>
+<p id="section-3.3.1-1">For example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer5.example. A</code>, will return the following referral response:<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
 <span id="name-an-incremental-deleg-referr"></span><div id="deleg-response">
 <figure id="figure-7">
-          <div class="alignLeft art-text artwork" id="section-3.3-3.1">
+            <div class="alignLeft art-text artwork" id="section-3.3.1-2.1">
 <pre>
 ;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, rcode: NOERROR, id: 54349
 ;; flags: qr ; QUERY: 1, ANSWER: 0, AUTHORITY: 5, ADDITIONAL: 2
@@ -1728,14 +1750,14 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 </div>
 <figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
 <a href="#name-an-incremental-deleg-referr" class="selfRef">An incremental deleg referral response</a>
-          </figcaption></figure>
+            </figcaption></figure>
 </div>
-<p id="section-3.3-4">The response in <a href="#deleg-response" class="auto internal xref">Figure 7</a> returns the signed SVCB RRset in the authority section.
-The resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server (in our example 192.0.2.53), supports incremental deleg for the duration indicated by the TTL for the SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
-<p id="section-3.3-5">As another example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer6.example. A</code>, will return the following referral response:<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-3">The response in <a href="#deleg-response" class="auto internal xref">Figure 7</a> returns the signed SVCB RRset in the authority section.
+The resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server (in our example 192.0.2.53), supports incremental deleg for the duration indicated by the TTL for the SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-4">As another example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer6.example. A</code>, will return the following referral response:<a href="#section-3.3.1-4" class="pilcrow">¶</a></p>
 <span id="name-referral-response-without-i"></span><div id="no-incr-deleg-response">
 <figure id="figure-8">
-          <div class="alignLeft art-text artwork" id="section-3.3-6.1">
+            <div class="alignLeft art-text artwork" id="section-3.3.1-5.1">
 <pre>
 ;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, rcode: NOERROR, id: 36574
 ;; flags: qr ; QUERY: 1, ANSWER: 0, AUTHORITY: 9, ADDITIONAL: 2
@@ -1771,14 +1793,14 @@ ns.customer6.example.   3600    IN      AAAA    2001:db8:6::1
 </div>
 <figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-referral-response-without-i" class="selfRef">Referral response without incremental deleg</a>
-          </figcaption></figure>
+            </figcaption></figure>
 </div>
-<p id="section-3.3-7">Next to the legacy delegation, the incremental deleg supporting authoritative returns the NSEC(3) RRs needed to show that there was no incremental delegation in the referral response in <a href="#no-incr-deleg-response" class="auto internal xref">Figure 8</a>.
-The resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server (in our example 192.0.2.53), supports incremental deleg for the duration indicated by the TTL for the NSEC(3) RRs, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.<a href="#section-3.3-7" class="pilcrow">¶</a></p>
-<p id="section-3.3-8">Querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer7.example. A</code>, will return the following referral response:<a href="#section-3.3-8" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-6">Next to the legacy delegation, the incremental deleg supporting authoritative returns the NSEC(3) RRs needed to show that there was no incremental delegation in the referral response in <a href="#no-incr-deleg-response" class="auto internal xref">Figure 8</a>.
+The resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server (in our example 192.0.2.53), supports incremental deleg for the duration indicated by the TTL for the NSEC(3) RRs, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.<a href="#section-3.3.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-7">Querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer7.example. A</code>, will return the following referral response:<a href="#section-3.3.1-7" class="pilcrow">¶</a></p>
 <span id="name-aliasing-referral-response"></span><div id="alias-response">
 <figure id="figure-9">
-          <div class="alignLeft art-text artwork" id="section-3.3-9.1">
+            <div class="alignLeft art-text artwork" id="section-3.3.1-8.1">
 <pre>
 ;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, rcode: NOERROR, id: 9456
 ;; flags: qr ; QUERY: 1, ANSWER: 0, AUTHORITY: 7, ADDITIONAL: 2
@@ -1812,13 +1834,37 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 </div>
 <figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-aliasing-referral-response" class="selfRef">Aliasing referral response</a>
-          </figcaption></figure>
+            </figcaption></figure>
 </div>
-<p id="section-3.3-10">The incremental delegation of <code>customer7.example.</code> is alias to the one that is also used by <code>customer5.example.</code>
+<p id="section-3.3.1-9">The incremental delegation of <code>customer7.example.</code> is alias to the one that is also used by <code>customer5.example.</code>
 Since both delegations are in the same zone, the authoritative name server for <code>example.</code> returns both the CNAME realising the alias, as well as the SVCB RRset which is the target of the alias in <a href="#alias-response" class="auto internal xref">Figure 9</a>.
 In other cases an returned CNAME may need chasing by the resolver.
-<span><a href="https://rfc-editor.org/rfc/rfc9460#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that zone structures that require following more than eight aliases (counting both AliasMode and CNAME records) are <span class="bcp14">NOT RECOMMENDED</span>.<a href="#section-3.3-10" class="pilcrow">¶</a></p>
-<p id="section-3.3-11">The resolver <span class="bcp14">SHOULD</span> register that the authoritative name server, supports incremental deleg for the duration indicated by the TTL for the CNAME, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.<a href="#section-3.3-11" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9460#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that zone structures that require following more than eight aliases (counting both AliasMode and CNAME records) are <span class="bcp14">NOT RECOMMENDED</span>.<a href="#section-3.3.1-9" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-10">The resolver <span class="bcp14">SHOULD</span> register that the authoritative name server, supports incremental deleg for the duration indicated by the TTL for the CNAME, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.<a href="#section-3.3.1-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="unsigned-zones">
+<section id="section-3.3.2">
+          <h4 id="name-referral-responses-with-uns">
+<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-referral-responses-with-uns" class="section-name selfRef">Referral responses with unsigned zones</a>
+          </h4>
+<p id="section-3.3.2-1">With unsigned zones, only if an incremental deleg delegation exists, the SVCB RRset (or CNAME) will be present in the authority section of referral responses.
+Resolvers <span class="bcp14">SHOULD</span> register that authoritative name server supports incremental deleg for the duration indicated by the TTL for the CNAME or SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+If the incremental deleg does not exist, then it is simply absent from the authority section and the referral response is indistinguishable from an non supportive authoritative.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="behavior-with-auth-support">
+<section id="section-3.3.3">
+          <h4 id="name-resolver-behavior-with-auth">
+<a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-resolver-behavior-with-auth" class="section-name selfRef">Resolver behavior with authoritative name server support</a>
+          </h4>
+<p id="section-3.3.3-1">Resolvers can detect support for incremental deleg with authoritative name servers from the returned referral responses.
+With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.
+For as long as the resolver knows that the authoritative name server support incremental deleg, no additional parallel direct deleg query (as described in <a href="#recursive-resolver-behavior" class="auto internal xref">Section 3.1</a>) needs to be send.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-2">However, if the resolver knows that the authoritative name server supports incremental deleg, <em>and</em> a DNSSEC signed zone is being served, then all referrals <span class="bcp14">MUST</span> contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
+If a referral is returned that does not contain an incremental delegation nor an indication that is does not exist, and , then the resolver <span class="bcp14">MUST</span> send an additional incremental deleg query to find the incremental delegation (or denial of its existence).<a href="#section-3.3.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -1875,6 +1921,36 @@ In other cases an returned CNAME may need chasing by the resolver.
 <p id="section-6.1-2">Currently this means that query load can be spread out over multiple operators (even though that is <span class="bcp14">NOT RECOMMENDED</span>), but operationally it would make more sense to allow a resolver to select from all the name servers from all the operators.
 Assumingly SVCB currently supports only a single AliasMode RR in an SVCB RRset because it would otherwise be impossible to interpret the SvcPriority from the SVCB RRsets that is aliased to.
 A possible solution could be to resolve all AliasMode RRs at the delegation point (though limited to a certain amount, say 8) and then let the resolver pick from all the SVCB RRs, ignoring SvcPriority.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="wildcard-incremental-delegation">
+<section id="section-6.2">
+        <h3 id="name-wildcard-incremental-delega">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-wildcard-incremental-delega" class="section-name selfRef">Wildcard incremental delegation</a>
+        </h3>
+<p id="section-6.2-1">Zones may have a wildcard incremental delegation.
+For example:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<span id="name-wildcard-incremental-deleg-"></span><div id="wildcard-deleg">
+<figure id="figure-10">
+          <div class="alignLeft art-text artwork" id="section-6.2-2.1">
+<pre>
+$ORIGIN example.
+@                  IN  SOA   ns zonemaster ...
+*._deleg    86400  IN  SVCB  0 .
+customer1._deleg   IN  SVCB  1 ( ns.customer1
+                                 ipv4hint=198.51.100.1,203.0.113.1
+                                 ipv6hint=2001:db8:1::1,2001:db8:2::1
+                               )
+customer3._deleg   IN  CNAME _dns.ns.operator1
+</pre>
+</div>
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<a href="#name-wildcard-incremental-deleg-" class="selfRef">Wildcard incremental deleg to control duration of detected support</a>
+          </figcaption></figure>
+</div>
+<p id="section-6.2-3">This may be convenient, for example to signal (with an AliasMode SVCB RR aliasing to the root) that there is no incremental delegation with unsigned zones.
+In this case signalling of non-existence works for both signed and unsigned zones.
+Furthermore, the zone owner controls the duration a resolver has registered the authoritative name server supports incremental deleg, also for non-existent delegations, with the TTL of the <code>SVCB 0 .</code> RR.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
