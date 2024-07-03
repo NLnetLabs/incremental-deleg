@@ -525,7 +525,7 @@ If the incremental deleg does not exist, then it is simply absent from the autho
 
 Resolvers can detect support for incremental deleg with authoritative name servers from the returned referral responses.
 With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.
-For as long as the resolver knows that the authoritative name server support incremental deleg, no additional parallel direct deleg query (as described in {{recursive-resolver-behavior}}) needs to be send.
+For as long as the resolver knows that the authoritative name server support incremental deleg, no additional parallel direct deleg query (as described in {{recursive-resolver-behavior}}) needs to be sent.
 
 However, if the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC signed zone is being served, then all referrals MUST contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
 If a referral is returned that does not contain an incremental delegation nor an indication that is does not exist, and , then the resolver MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).
