@@ -751,7 +751,7 @@ Table of Contents
    delegation exists.  For as long as the resolver knows that the
    authoritative name server support incremental deleg, no additional
    parallel direct deleg query (as described in Section 3.1) needs to be
-   send.
+   sent.
 
    However, if the resolver knows that the authoritative name server
    supports incremental deleg, _and_ a DNSSEC signed zone is being
