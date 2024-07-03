@@ -94,28 +94,26 @@ Table of Contents
        2.1.2.  Two name servers within the subzone
        2.1.3.  Outsourced to an operator
        2.1.4.  DNSSEC signed name servers within the subzone
-   3.  Implementation
+   3.  Minimal implementation
      3.1.  Recursive Resolver behavior
      3.2.  _deleg label presence
-     3.3.  Authoritative name server support
-       3.3.1.  Referral responses with DNSSEC signed zones
-       3.3.2.  Referral responses with unsigned zones
-       3.3.3.  Resolver behavior with authoritative name server
-               support
-   4.  Limitations
-   5.  Comparison with other delegation mechanisms
-     5.1.  Comparison with legacy delegations
-     5.2.  Comparison with Name DNS Query Name Minimisation
-     5.3.  Comparison with I-D.dnsop-deleg
-   6.  Protocol considerations
-     6.1.  Outsourcing to more than one operator
-     6.2.  Wildcard incremental delegation
-   7.  Implementation Status
-   8.  Security Considerations
-   9.  IANA Considerations
-   10. References
-     10.1.  Normative References
-     10.2.  Informative References
+   4.  Optimized implementation
+     4.1.  Authoritative name server support
+     4.2.  Resolver behavior with authoritative name server support
+   5.  Extra optimized implementation
+   6.  Limitations
+   7.  Comparison with other delegation mechanisms
+     7.1.  Comparison with legacy delegations
+     7.2.  Comparison with Name DNS Query Name Minimisation
+     7.3.  Comparison with I-D.dnsop-deleg
+   8.  Protocol considerations
+     8.1.  Outsourcing to more than one operator
+   9.  Implementation Status
+   10. Security Considerations
+   11. IANA Considerations
+   12. References
+     12.1.  Normative References
+     12.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -262,7 +260,7 @@ Table of Contents
    with the name _deleg at the apex of the delegating zone.  The _deleg
    label scopes the interpretation of the SVCB records and requires
    registration in the "Underscored and Globally Scoped DNS Node Names"
-   registry (see IANA Considerations (Section 9)).  The full scoping of
+   registry (see IANA Considerations (Section 11)).  The full scoping of
    delegations includes the labels that are *below* the _label and
    those, together with the name of the delegating domain, make up the
    name of the subzone to which the delegation refers.  For example, if
@@ -429,7 +427,7 @@ Table of Contents
    not support incremental deleg.  DNSSEC signers SHOULD construct the
    NS RRset and glue for the legacy delegation from the SVCB RRset.
 
-3.  Implementation
+3.  Minimal implementation
 
    Support in recursive resolvers suffices for the mechanism to be fully
    functional.  Section 3.1 specifies the basic algorithm for resolving
@@ -437,7 +435,7 @@ Table of Contents
    presented that will reduce the number of (parallel) queries
    especially when authoritative name server support is still lacking
    and there are still many zones that do not contain incremental
-   delegations.  Section 3.3 specifies support in the authoritative name
+   delegations.  Section 4.1 specifies support in the authoritative name
    server.
 
 3.1.  Recursive Resolver behavior
@@ -575,27 +573,16 @@ Table of Contents
        the resolver MUST send additional incremental deleg queries as
        described in TODO.
 
-3.3.  Authoritative name server support
+4.  Optimized implementation
+
+4.1.  Authoritative name server support
 
    Incremental delegations supporting authoritative name servers do not
    need the additional (parallel) incremental delegation query, but
    instead will include the incremental delegation information (or the
    NSEC(3) records showing the non-existence) in the authority section
-   of referral responses.  If it is known that an authoritative name
-   server supports incremental deleg, than no direct queries for the
-   incremental delegation need to be send in parallel to the legacy
-   delegation query.
-
-   Section 3.3.1 describes deleg referral responses, and how a resolver
-   can detect support for it with an authoritative nameserver, for
-   DNSSEC signed zones.  Section 3.3.2 shortly addresses support with
-   unsigned zones.  Section 3.3.3 specifies how authoritative name
-   server support influences resolver behavior.
-
-3.3.1.  Referral responses with DNSSEC signed zones
-
-   For example, querying the zone from Figure 6 for
-   www.customer5.example.  A, will return the following referral
+   of referral responses.  For example, querying the zone from Figure 6
+   for www.customer5.example.  A, will return the following referral
    response:
 
    ;; ->>HEADER<<- opcode: QUERY, rcode: NOERROR, id: 54349
@@ -629,11 +616,7 @@ Table of Contents
               Figure 7: An incremental deleg referral response
 
    The response in Figure 7 returns the signed SVCB RRset in the
-   authority section.  The resolver SHOULD register that the contacted
-   authoritative name server (in our example 192.0.2.53), supports
-   incremental deleg for the duration indicated by the TTL for the SVCB
-   RRset, adjusted to the resolver's TTL boundaries, but only if it is
-   longer than any already registered duration.
+   authority section.
 
    As another example, querying the zone from Figure 6 for
    www.customer6.example.  A, will return the following referral
@@ -674,12 +657,7 @@ Table of Contents
 
    Next to the legacy delegation, the incremental deleg supporting
    authoritative returns the NSEC(3) RRs needed to show that there was
-   no incremental delegation in the referral response in Figure 8.  The
-   resolver SHOULD register that the contacted authoritative name server
-   (in our example 192.0.2.53), supports incremental deleg for the
-   duration indicated by the TTL for the NSEC(3) RRs, adjusted to the
-   resolver's TTL boundaries, but only if it is longer than any already
-   registered duration.
+   no incremental delegation in the referral response in Figure 8.
 
    Querying the zone from Figure 6 for www.customer7.example.  A, will
    return the following referral response:
@@ -720,29 +698,45 @@ Table of Contents
    in the same zone, the authoritative name server for example. returns
    both the CNAME realising the alias, as well as the SVCB RRset which
    is the target of the alias in Figure 9.  In other cases an returned
-   CNAME may need chasing by the resolver.  Section 10.2 of [RFC9460]
-   states that zone structures that require following more than eight
-   aliases (counting both AliasMode and CNAME records) are NOT
-   RECOMMENDED.
+   CNAME may need further chasing by the resolver.
+
+   With unsigned zones, only if an incremental deleg delegation exists,
+   the SVCB RRset (or CNAME) will be present in the authority section of
+   referral responses.  If the incremental deleg does not exist, then it
+   is simply absent from the authority section and the referral response
+   is indistinguishable from an non supportive authoritative.
+
+4.2.  Resolver behavior with authoritative name server support
+
+   If it is known that an authoritative name server supports incremental
+   deleg, than no direct queries for the incremental delegation need to
+   be send in parallel to the legacy delegation query.
+
+   The resolver SHOULD register that the contacted authoritative name
+   server (in our example 192.0.2.53), supports incremental deleg for
+   the duration indicated by the TTL for the SVCB RRset, adjusted to the
+   resolver's TTL boundaries, but only if it is longer than any already
+   registered duration.
+
+   The resolver SHOULD register that the contacted authoritative name
+   server (in our example 192.0.2.53), supports incremental deleg for
+   the duration indicated by the TTL for the NSEC(3) RRs, adjusted to
+   the resolver's TTL boundaries, but only if it is longer than any
+   already registered duration.
+
+   Section 10.2 of [RFC9460] states that zone structures that require
+   following more than eight aliases (counting both AliasMode and CNAME
+   records) are NOT RECOMMENDED.
 
    The resolver SHOULD register that the authoritative name server,
    supports incremental deleg for the duration indicated by the TTL for
    the CNAME, adjusted to the resolver's TTL boundaries, but only if it
    is longer than any already registered duration.
 
-3.3.2.  Referral responses with unsigned zones
-
-   With unsigned zones, only if an incremental deleg delegation exists,
-   the SVCB RRset (or CNAME) will be present in the authority section of
-   referral responses.  Resolvers SHOULD register that authoritative
-   name server supports incremental deleg for the duration indicated by
-   the TTL for the CNAME or SVCB RRset, adjusted to the resolver's TTL
-   boundaries, but only if it is longer than any already registered
-   duration.  If the incremental deleg does not exist, then it is simply
-   absent from the authority section and the referral response is
-   indistinguishable from an non supportive authoritative.
-
-3.3.3.  Resolver behavior with authoritative name server support
+   Resolvers SHOULD register that authoritative name server supports
+   incremental deleg for the duration indicated by the TTL for the CNAME
+   or SVCB RRset, adjusted to the resolver's TTL boundaries, but only if
+   it is longer than any already registered duration.
 
    Resolvers can detect support for incremental deleg with authoritative
    name servers from the returned referral responses.  With DNSSEC
@@ -751,55 +745,18 @@ Table of Contents
    delegation exists.  For as long as the resolver knows that the
    authoritative name server support incremental deleg, no additional
    parallel direct deleg query (as described in Section 3.1) needs to be
-   send.
+   sent.
 
    However, if the resolver knows that the authoritative name server
    supports incremental deleg, _and_ a DNSSEC signed zone is being
    served, then all referrals MUST contain either an incremental
    delegation, or NSEC(3) records showing that the delegation does not
    exist.  If a referral is returned that does not contain an
-   incremental delegation nor an indication that is does not exist, and
-   , then the resolver MUST send an additional incremental deleg query
-   to find the incremental delegation (or denial of its existence).
+   incremental delegation nor an indication that it does not exist, then
+   the resolver MUST send an additional incremental deleg query to find
+   the incremental delegation (or denial of its existence).
 
-4.  Limitations
-
-   TODO Limitations
-
-5.  Comparison with other delegation mechanisms
-
-5.1.  Comparison with legacy delegations
-
-5.2.  Comparison with Name DNS Query Name Minimisation
-
-5.3.  Comparison with [I-D.dnsop-deleg]
-
-6.  Protocol considerations
-
-   *Note to the RFC Editor*: please remove this entire section before
-   publication.
-
-6.1.  Outsourcing to more than one operator
-
-   Section 2.4.1 of [RFC9460] states that within an SVCB RRset, all RRs
-   SHOULD have the same mode, and that if an RRset contains a record in
-   AliasMode, the recipient MUST ignore any ServiceMode records in the
-   set.  Section 2.4.2 of [RFC9460] states that SVCB RRsets SHOULD only
-   have a single RR in AliasMode, and that if multiple AliasMode RRs are
-   present, clients or recursive resolvers SHOULD pick one at random.
-
-   Currently this means that query load can be spread out over multiple
-   operators (even though that is NOT RECOMMENDED), but operationally it
-   would make more sense to allow a resolver to select from all the name
-   servers from all the operators.  Assumingly SVCB currently supports
-   only a single AliasMode RR in an SVCB RRset because it would
-   otherwise be impossible to interpret the SvcPriority from the SVCB
-   RRsets that is aliased to.  A possible solution could be to resolve
-   all AliasMode RRs at the delegation point (though limited to a
-   certain amount, say 8) and then let the resolver pick from all the
-   SVCB RRs, ignoring SvcPriority.
-
-6.2.  Wildcard incremental delegation
+5.  Extra optimized implementation
 
    Zones may have a wildcard incremental delegation.  For example:
 
@@ -823,23 +780,60 @@ Table of Contents
    supports incremental deleg, also for non-existent delegations, with
    the TTL of the SVCB 0 . RR.
 
-7.  Implementation Status
+6.  Limitations
+
+   TODO Limitations
+
+7.  Comparison with other delegation mechanisms
+
+7.1.  Comparison with legacy delegations
+
+7.2.  Comparison with Name DNS Query Name Minimisation
+
+7.3.  Comparison with [I-D.dnsop-deleg]
+
+8.  Protocol considerations
 
    *Note to the RFC Editor*: please remove this entire section before
    publication.
 
-   Jesse van Zutphen has build a proof of concept implementation of
-   support of delegations as specified in this document for the Unbound
+8.1.  Outsourcing to more than one operator
+
+   Section 2.4.1 of [RFC9460] states that within an SVCB RRset, all RRs
+   SHOULD have the same mode, and that if an RRset contains a record in
+   AliasMode, the recipient MUST ignore any ServiceMode records in the
+   set.  Section 2.4.2 of [RFC9460] states that SVCB RRsets SHOULD only
+   have a single RR in AliasMode, and that if multiple AliasMode RRs are
+   present, clients or recursive resolvers SHOULD pick one at random.
+
+   Currently this means that query load can be spread out over multiple
+   operators (even though that is NOT RECOMMENDED), but operationally it
+   would make more sense to allow a resolver to select from all the name
+   servers from all the operators.  Assumingly SVCB currently supports
+   only a single AliasMode RR in an SVCB RRset because it would
+   otherwise be impossible to interpret the SvcPriority from the SVCB
+   RRsets that is aliased to.  A possible solution could be to resolve
+   all AliasMode RRs at the delegation point (though limited to a
+   certain amount, say 8) and then let the resolver pick from all the
+   SVCB RRs, ignoring SvcPriority.
+
+9.  Implementation Status
+
+   *Note to the RFC Editor*: please remove this entire section before
+   publication.
+
+   Jesse van Zutphen has built a proof of concept implementation
+   supporting delegations as specified in this document for the Unbound
    recursive resolver as part of his master thesis for the Security and
    Network Engineering master program of the University of Amsterdam.
    The source code of his implementation is available on github
    [DELEG4UNBOUND]
 
-8.  Security Considerations
+10.  Security Considerations
 
    TODO Security
 
-9.  IANA Considerations
+11.  IANA Considerations
 
    Per [RFC8552], IANA is requested to add the following entry to the
    DNS "Underscored and Globally Scoped DNS Node Names" registry:
@@ -854,9 +848,9 @@ Table of Contents
                       Globally Scoped DNS Node Names
                                  registry
 
-10.  References
+12.  References
 
-10.1.  Normative References
+12.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -916,7 +910,7 @@ Table of Contents
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
 
-10.2.  Informative References
+12.2.  Informative References
 
    [DELEG4UNBOUND]
               van Zutphen, J., "A proof of concept implementation of
