@@ -31,7 +31,7 @@ Abstract
    behavior with reduced (simultaneous) queries.  None, mixed or full
    deployment of the mechanism on authoritative name servers are all
    fully functional, allowing for the mechanism to be incrementally
-   deployed on the authoritative name servers.
+   deployed.
 
 About This Document
 
