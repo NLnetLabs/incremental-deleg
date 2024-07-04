@@ -115,6 +115,7 @@ Table of Contents
      12.1.  Normative References
      12.2.  Informative References
    Acknowledgments
+   Contributors
    Authors' Addresses
 
 1.  Introduction
@@ -969,6 +970,13 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
               esni-18>.
 
+   [I-D.tapril-ns2]
+              April, T., "Parameterized Nameserver Delegation with NS2
+              and NS2T", Work in Progress, Internet-Draft, draft-tapril-
+              ns2-01, 13 July 2020,
+              <https://datatracker.ietf.org/doc/html/draft-tapril-
+              ns2-01>.
+
    [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
               Records through "Underscored" Naming of Attribute Leaves",
               BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
@@ -980,7 +988,110 @@ Table of Contents
 
 Acknowledgments
 
-   TODO acknowledge.
+   The idea to utilize SVCB based RRs to signal capabilities was first
+   proposed by Tim April in [I-D.tapril-ns2].
+
+Contributors
+
+   Petr Špaček
+   ISC
+   Email: pspacek@isc.org
+
+
+   Ralf Weber
+   Akamai Technologies
+   Email: rweber@akamai.com
+
+
+   David C Lawrence
+   Salesforce
+   Email: tale@dd.org
+
+
+   Christian Elmerot
+   Cloudflare
+   Email: christian@elmerot.se
+
+
+   Edward Lewis
+   ICANN
+   Email: edward.lewis@icann.org
+
+
+   Roy Arends
+   ICANN
+   Email: roy.arends@icann.org
+
+
+   Shumon Huque
+   Salesforce
+   Email: shuque@gmail.com
+
+
+   Klaus Darilion
+   nic.at
+   Email: klaus.darilion@nic.at
+
+
+   Libor Peltan
+   CZ.nic
+   Email: libor.peltan@nic.cz
+
+
+   Vladimír Čunát
+   CZ.nic
+   Email: vladimir.cunat@nic.cz
+
+
+   Shane Kerr
+   NS1
+   Email: shane@time-travellers.org
+
+
+   David Blacka
+   Verisign
+   Email: davidb@verisign.com
+
+
+   George Michaelson
+   APNIC
+   Email: ggm@algebras.org
+
+
+   Ben Schwartz
+   Meta
+   Email: bemasc@meta.com
+
+
+   Jan Včelák
+   NS1
+   Email: jvcelak@ns1.com
+
+
+   Peter van Dijk
+   PowerDNS
+   Email: peter.van.dijk@powerdns.com
+
+
+   Erik Nygren
+   Akamai Technologies
+   Email: erik+ietf@nygren.org
+
+
+   Vandan Adhvaryu
+   Team Internet
+   Email: vandan@adhvaryu.uk
+
+
+   Manu Bretelle
+   Meta
+   Email: chantr4@gmail.com
+
+
+   Bob Halley
+   Cloudflare
+   Email: bhalley@cloudflare.com
+
 
 Authors' Addresses
 
