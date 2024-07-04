@@ -216,7 +216,7 @@ The number of round trips form the recursive resolver to the authoritative name 
 Additional implementation in the authoritative name server optimizes resolution and reduces the number of simultaneous in parallel queries to that what would be needed for legacy delegations.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
 
-Implementation in the recursive may be less demanding with respect to (among other things) DNSSEC validation because of not making additional exceptions to what is authoritative at the parent side of a delegation.
+Implementation in the recursive may be less demanding with respect to (among other things) DNSSEC validation because there is no need to make additional exceptions as to what is authoritative at the parent side of a delegation.
 
 ## Terminology
 
@@ -355,7 +355,7 @@ customer5._deleg  IN  SVCB   1 ns.customer5 alpn=h2,h3 (
                                             dohpath=/dns-query{?dns}
                                             )
                   IN  RRSIG  SVCB ...
-                  IN  NSEC   customer5 RRSIG NSEC SVCB
+                  IN  NSEC   customer7._deleg RRSIG NSEC SVCB
                   IN  RRSIG  NSEC ...
 
 customer7._deleg  IN  CNAME  customer5._deleg
