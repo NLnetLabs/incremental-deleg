@@ -841,6 +841,36 @@ Table of Contents
 
 7.3.  Comparison with [I-D.dnsop-deleg]
 
+   +=========================+========================================+
+   | [I-D.dnsop-deleg]       | [this document]                        |
+   +=========================+========================================+
+   | Requires implementation | Only resolver implementation required. |
+   | in both authoritative   | But optimized with updated             |
+   | name server as well as  | authoritative software.                |
+   | in the resolver         |                                        |
+   +-------------------------+----------------------------------------+
+   | Authoritative name      | Authoritative name servers may be      |
+   | servers need to be      | updated gradually for optimization     |
+   | updated all at once     |                                        |
+   +-------------------------+----------------------------------------+
+   | DNSKEY flag needed to   | No DNSKEY flag needed.  Separation of  |
+   | signal DELEG.  Special  | concerns.                              |
+   | requirements for the    |                                        |
+   | child domain.           |                                        |
+   +-------------------------+----------------------------------------+
+   | New semantics about     | Works with current DNS semantics.      |
+   | what is authoritative   | Easier to implement.                   |
+   | (BOGUS with current     |                                        |
+   | DNSSEC validators)      |                                        |
+   +-------------------------+----------------------------------------+
+   | No extra queries        | An extra query _per zone_ to determine |
+   |                         | presence of the _deleg label, and _per |
+   |                         | authoritative_ server when incremental |
+   |                         | deleg support is not yet detected      |
+   +-------------------------+----------------------------------------+
+
+      Table 1: Comparison of [I-D.dnsop-deleg] with [this document]
+
 8.  Implementation Status
 
    *Note to the RFC Editor*: please remove this entire section before
@@ -868,7 +898,7 @@ Table of Contents
                 | SVCB    | _deleg     | [this document] |
                 +---------+------------+-----------------+
 
-                  Table 1: Entry in the Underscored and
+                  Table 2: Entry in the Underscored and
                       Globally Scoped DNS Node Names
                                  registry
 
