@@ -60,6 +60,91 @@ author:
     organization: NLnet Labs
     email: willem@nlnetlabs.nl
 
+contributor:
+-
+    ins: P.Špaček
+    name: Petr Špaček
+    organization: ISC
+    email: pspacek@isc.org
+-
+    ins: R.Weber
+    name: Ralf Weber
+    organization: Akamai Technologies
+    email: rweber@akamai.com
+-
+    ins: D.Lawrence
+    name: David C Lawrence
+    organization: Salesforce
+    email: tale@dd.org
+-
+    name: Christian Elmerot
+    organization: Cloudflare
+    email: christian@elmerot.se
+-
+    name: Edward Lewis
+    organization: ICANN
+    email: edward.lewis@icann.org
+-
+    name: Roy Arends
+    organization: ICANN
+    email: roy.arends@icann.org
+-
+    name: Shumon Huque
+    organization: Salesforce
+    email: shuque@gmail.com
+-
+    name: Klaus Darilion
+    organization: nic.at
+    email: klaus.darilion@nic.at
+-
+    name: Libor Peltan
+    organization: CZ.nic
+    email: libor.peltan@nic.cz
+-
+    name: Vladimír Čunát
+    organization: CZ.nic
+    email: vladimir.cunat@nic.cz
+-
+    name: Shane Kerr
+    organization: NS1
+    email: shane@time-travellers.org
+-
+    name: David Blacka
+    organization: Verisign
+    email: davidb@verisign.com
+-
+    name: George Michaelson
+    organization: APNIC
+    email: ggm@algebras.org
+-
+    name: Ben Schwartz
+    organization: Meta
+    email: bemasc@meta.com
+-
+    name: Jan Včelák
+    organization: NS1
+    email: jvcelak@ns1.com
+-
+    name: Peter van Dijk
+    organization: PowerDNS
+    email: peter.van.dijk@powerdns.com
+-
+    name: Erik Nygren
+    organization: Akamai Technologies
+    email: erik+ietf@nygren.org
+-
+    name: Vandan Adhvaryu
+    organization: Team Internet
+    email: vandan@adhvaryu.uk
+-
+    name: Manu Bretelle
+    organization: Meta
+    email: chantr4@gmail.com
+-
+    name: Bob Halley
+    organization: Cloudflare
+    email: bhalley@cloudflare.com
+
 normative:
 
 informative:
@@ -618,4 +703,5 @@ Per {{?RFC8552}}, IANA is requested to add the following entry to the DNS "Under
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+The idea to utilize SVCB based RRs to signal capabilities was first proposed by Tim April in {{?I-D.tapril-ns2}}.
+
