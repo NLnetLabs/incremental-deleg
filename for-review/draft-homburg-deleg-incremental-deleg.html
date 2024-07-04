@@ -11,10 +11,10 @@
 <meta content="
        This document proposes a mechanism for extensible delegations in the DNS.
 The mechanism realizes delegations with SVCB resource record sets placed below a  _deleg  label in the apex of the delegating zone.
-The mechanism inherits extensibility, as well as the possibility to alias the delegation details, from SVCB.
-Legacy aliasing with CNAME also remains usable with this way of doing delegations. 
+This authoritative delegation point can be aliased to other names using CNAME and DNAME.
+The mechanism inherits extensibility from SVCB. 
        Support in recursive resolvers suffices for the mechanism to be fully functional.
-The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable to that with DNS Query Name Minimisation.
+The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable with those for DNS Query Name Minimisation.
 Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers. 
     " name="description">
@@ -1268,10 +1268,10 @@ li > p:last-of-type:only-child {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document proposes a mechanism for extensible delegations in the DNS.
 The mechanism realizes delegations with SVCB resource record sets placed below a <code>_deleg</code> label in the apex of the delegating zone.
-The mechanism inherits extensibility, as well as the possibility to alias the delegation details, from SVCB.
-Legacy aliasing with CNAME also remains usable with this way of doing delegations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+This authoritative delegation point can be aliased to other names using CNAME and DNAME.
+The mechanism inherits extensibility from SVCB.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">Support in recursive resolvers suffices for the mechanism to be fully functional.
-The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable to that with DNS Query Name Minimisation.
+The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable with those for DNS Query Name Minimisation.
 Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
@@ -1465,9 +1465,9 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This document describes a delegation mechanism for the Domain Name System (DNS) <span>[<a href="#STD13" class="cite xref">STD13</a>]</span> that addresses several matters that are at the time of writing are suboptimally supported or not at all.
+<p id="section-1-1">This document describes a delegation mechanism for the Domain Name System (DNS) <span>[<a href="#STD13" class="cite xref">STD13</a>]</span> that addresses several matters that, at the time of writing, are suboptimally supported or not at all.
 These matters are elaborated upon in sections <a href="#signaling" class="auto internal xref">1.1</a>, <a href="#outsourcing" class="auto internal xref">1.2</a> and <a href="#dnssec-protection" class="auto internal xref">1.3</a>.
-On top of that, the mechanism described in this document also has the ambition to be maximally deployable which is elaborated upon in <a href="#deployability" class="auto internal xref">Section 1.4</a>.<a href="#section-1-1" class="pilcrow">¶</a></p>
+In addition, the mechanism described in this document aspires to be maximally deployable, which is elaborated upon in <a href="#deployability" class="auto internal xref">Section 1.4</a>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <div id="signaling">
 <section id="section-1.1">
         <h3 id="name-signaling-capabilities-of-t">
