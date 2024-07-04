@@ -143,7 +143,10 @@ Throughout this document we will also use terminology with the meaning as define
 
 {: vspace="0"}
 Incremental deleg:
-: Delegation as specified in this document.
+: The delegation mechanism as specified in this document.
+
+Incremental delegation:
+: A delegation as specified in this document
 
 Legacy delegations:
 : The way delegations are done in the DNS traditionally as defined in {{!STD13}}.
@@ -316,8 +319,7 @@ DNSSEC signers SHOULD construct the NS RRset and glue for the legacy delegation 
 
 Support in recursive resolvers suffices for the mechanism to be fully functional.
 {{recursive-resolver-behavior}} specifies the basic algorithm for resolving incremental delegations.
-In {{presence}}, an optimization is presented that will reduce the number of (parallel) queries especially when authoritative name server support is still lacking and there are still many zones that do not contain incremental delegations.
-{{authoritative-name-server-support}} specifies support in the authoritative name server.
+In {{presence}}, an optimization is presented that will reduce the number of (parallel) queries especially for when authoritative name server support is still lacking and there are still many zones that do not contain incremental delegations.
 
 ## Recursive Resolver behavior
 
@@ -326,7 +328,7 @@ No special behavior or processing is needed.
 
 Otherwise, the triggering query is below the target zone apex and a delegation may exist in the target zone.
 In this case two parallel queries are send.
-One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query {{!RFC9156}}), and one incremental deleg query with query type SVCB.
+One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query {{!RFC9156}}), and one *incremental deleg query* with query type SVCB.
 
 The incremental deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a `_deleg` label and the name of the target zone.
 For example if the triggering query is `www.customer.example.` and the target zone `example.`, then the incremental deleg query name is `customer._deleg.example.`
@@ -390,9 +392,13 @@ The testing query can have three possible outcomes:
 
 # Optimized implementation
 
+Support for authoritative name servers enables optimized query behavior by resolvers with reduced (simultaneous) queries.
+{{authoritative-name-server-support}} specifies how incremental deleg supporting authoritative name servers return referral responses for delegations.
+In {{behavior-with-auth-support}} we specify how resolvers can benefit from those authoritative servers.
+
 ## Authoritative name server support
 
-Incremental delegations supporting authoritative name servers do not need the additional (parallel) incremental delegation query, but instead will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
+Incremental delegations supporting authoritative name servers include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses to legacy DNS queries.
 For example, querying the zone from {{dnssec-zone}} for `www.customer5.example. A`, will return the following referral response:
 
 ~~~
@@ -426,7 +432,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ~~~
 {: #deleg-response title="An incremental deleg referral response"}
 
-The response in {{deleg-response}} returns the signed SVCB RRset in the authority section.
+The referral response in {{deleg-response}} includes the signed SVCB RRset in the authority section.
 
 As another example, querying the zone from {{dnssec-zone}} for `www.customer6.example. A`, will return the following referral response:
 
@@ -500,38 +506,45 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ~~~
 {: #alias-response title="Aliasing referral response"}
 
-The incremental delegation of `customer7.example.` is alias to the one that is also used by `customer5.example.`
+The incremental delegation of `customer7.example.` is aliased to the one that is also used by `customer5.example.`
 Since both delegations are in the same zone, the authoritative name server for `example.` returns both the CNAME realising the alias, as well as the SVCB RRset which is the target of the alias in {{alias-response}}.
-In other cases an returned CNAME may need further chasing by the resolver.
+In other cases an returned CNAME or SVCB RR in AliasMode may need further chasing by the resolver.
+<!-- TODO: Add an AliasMode referral without expansion within the zone -->
 
 With unsigned zones, only if an incremental deleg delegation exists, the SVCB RRset (or CNAME) will be present in the authority section of referral responses.
+<!-- TODO: Add a referral response for an unsigned zone -->
 If the incremental deleg does not exist, then it is simply absent from the authority section and the referral response is indistinguishable from an non supportive authoritative.
+<!-- TODO: Add a non incremental deleg referral response for an unsigned zone -->
 
 ## Resolver behavior with authoritative name server support {#behavior-with-auth-support}
 
+Incremental deleg supporting authoritative name servers will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
 If it is known that an authoritative name server supports incremental deleg, than no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
+A resolver SHOULD register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.
 
-The resolver SHOULD register that the contacted authoritative name server (in our example 192.0.2.53), supports incremental deleg for the duration indicated by the TTL for the SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+When the authority section of a referral response contains an SVCB RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such SVCB or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that SVCB, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+Subsequent queries SHOULD NOT include incremental deleg queries, as described in {{recursive-resolver-behavior}}, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.
 
-The resolver SHOULD register that the contacted authoritative name server (in our example 192.0.2.53), supports incremental deleg for the duration indicated by the TTL for the NSEC(3) RRs, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+For example, in {{deleg-response}}, the SVCB RRset at the incremental delegation point has TTL 3600.
+The resolver should register that the contacted authoritative name server supports incremental deleg for (at least) 3600 seconds (one hour).
+All subsequent queries to that authoritative name server SHOULD NOT include incremental deleg queries to be send in parallel.
 
-{{Section 10.2 of !RFC9460}} states that zone structures that require following more than eight aliases (counting both AliasMode and CNAME records) are NOT RECOMMENDED.
+If the authority section contains more than one RRset making up the incremental delegation, then the RRset with the longest TTL MUST be taken to determine the duration for which incremental deleg support is registered.
 
-The resolver SHOULD register that the authoritative name server, supports incremental deleg for the duration indicated by the TTL for the CNAME, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+For example, in {{alias-response}}, both a CNAME and an SVCB RRset for the incremental delegation are included in the authority section.
+The longest TTL must be taken for incremental support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.
 
-Resolvers SHOULD register that authoritative name server supports incremental deleg for the duration indicated by the TTL for the CNAME or SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
-
-Resolvers can detect support for incremental deleg with authoritative name servers from the returned referral responses.
 With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.
-For as long as the resolver knows that the authoritative name server support incremental deleg, no additional parallel direct deleg query (as described in {{recursive-resolver-behavior}}) needs to be sent.
 
-However, if the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC signed zone is being served, then all referrals MUST contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
+If the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC signed zone is being served, then all referrals MUST contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
 If a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).
 
 # Extra optimized implementation
 
-Zones may have a wildcard incremental delegation.
-For example:
+An SVCB RRset on an incremental delegation point, with a SVCB RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
+All service parameters for such AliasMode (aliasing to the root) SVCB RRs on the incremental delegation point, MUST be ignored.
+
+For example, such an SVCB RRset registered on the wildcard below the `_deleg` label on the apex of a zone, can signal that legacy DNS referrals MUST be used for both signed and *unsigned* zones:
 
 ~~~
 $ORIGIN example.
@@ -545,10 +558,12 @@ customer3._deleg   IN  CNAME _dns.ns.operator1
 ~~~
 {: #wildcard-deleg title="Wildcard incremental deleg to control duration of detected support"}
 
-This may be convenient, for example to signal (with an AliasMode SVCB RR aliasing to the root) that there is no incremental delegation with unsigned zones.
-In this case signalling of non-existence works for both signed and unsigned zones.
-Furthermore, the zone owner controls the duration a resolver has registered the authoritative name server supports incremental deleg, also for non-existent delegations, with the TTL of the `SVCB 0 .` RR.
+Resolvers SHOULD register that an authoritative name server supports incremental deleg, if such an SVCB RRset is returned in the authority section of referral responses, for the duration of the TTL if the SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+Note that this will also be included in referral responses for unsigned zones, which would otherwise not have signalling of incremental deleg support by the authoritative name server.
+Also, signed zones need fewer RRs to indicate that no incremental delegation exists.
+The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`), so only one additional NSEC(3) is needed to show non-existence of the queried for name below the closest encloser.
 
+This method of signalling that the legacy delegation MUST be used, is RECOMMENDED.
 
 # Limitations
 
