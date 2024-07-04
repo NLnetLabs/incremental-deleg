@@ -835,6 +835,23 @@ Table of Contents
 
 7.  Comparison with other delegation mechanisms
 
+   +=+======+=========+========++=====================+===============+
+   | | apex | support | _deleg || <sub>._deleg.<apex> | _deleg.<apex> |
+   | |      |         |        ||         SVCB        |       A       |
+   +=+======+=========+========++=====================+===============+
+   |1|  +   |    *    |   *    ||                     |               |
+   +-+------+---------+--------++---------------------+---------------+
+   |2|  -   |    +    |   *    ||                     |               |
+   +-+------+---------+--------++---------------------+---------------+
+   |3|  -   |    ?    |   -    ||                     |               |
+   +-+------+---------+--------++---------------------+---------------+
+   |4|  -   |    ?    |   +    ||          X          |               |
+   +-+------+---------+--------++---------------------+---------------+
+   |5|  -   |    ?    |   ?    ||          X          |       X       |
+   +-+------+---------+--------++---------------------+---------------+
+
+       Table 1: Additional queries in parallel to the legacy query
+
 7.1.  Comparison with legacy delegations
 
 7.2.  Comparison with Name DNS Query Name Minimisation
@@ -869,7 +886,7 @@ Table of Contents
    |                         | deleg support is not yet detected      |
    +-------------------------+----------------------------------------+
 
-      Table 1: Comparison of [I-D.dnsop-deleg] with [this document]
+      Table 2: Comparison of [I-D.dnsop-deleg] with [this document]
 
 8.  Implementation Status
 
@@ -898,7 +915,7 @@ Table of Contents
                 | SVCB    | _deleg     | [this document] |
                 +---------+------------+-----------------+
 
-                  Table 2: Entry in the Underscored and
+                  Table 3: Entry in the Underscored and
                       Globally Scoped DNS Node Names
                                  registry
 
