@@ -652,20 +652,6 @@ This method of signalling that the legacy delegation MUST be used, is RECOMMENDE
 
 # Limitations
 
-TODO Limitations
-
-# Comparison with other delegation mechanisms
-
-## Comparison with legacy delegations
-
-## Comparison with Name DNS Query Name Minimisation
-
-## Comparison with {{?I-D.dnsop-deleg}}
-
-# Protocol considerations
-
-**Note to the RFC Editor**: please remove this entire section before publication.
-
 ## Outsourcing to more than one operator
 
 {{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
@@ -674,6 +660,14 @@ TODO Limitations
 Currently this means that query load can be spread out over multiple operators (even though that is NOT RECOMMENDED), but operationally it would make more sense to allow a resolver to select from all the name servers from all the operators.
 Assumingly SVCB currently supports only a single AliasMode RR in an SVCB RRset because it would otherwise be impossible to interpret the SvcPriority from the SVCB RRsets that is aliased to.
 A possible solution could be to resolve all AliasMode RRs at the delegation point (though limited to a certain amount, say 8) and then let the resolver pick from all the SVCB RRs, ignoring SvcPriority.
+
+# Comparison with other delegation mechanisms
+
+## Comparison with legacy delegations
+
+## Comparison with Name DNS Query Name Minimisation
+
+## Comparison with {{?I-D.dnsop-deleg}}
 
 # Implementation Status
 
