@@ -202,9 +202,9 @@ Table of Contents
    incrementally deployed on the authoritative name servers.
 
    Implementation in the recursive may be less demanding with respect to
-   (among other things) DNSSEC validation because of not making
-   additional exceptions to what is authoritative at the parent side of
-   a delegation.
+   (among other things) DNSSEC validation because there is no need to
+   make additional exceptions as to what is authoritative at the parent
+   side of a delegation.
 
 1.5.  Terminology
 
@@ -379,7 +379,7 @@ Table of Contents
                                                dohpath=/dns-query{?dns}
                                                )
                      IN  RRSIG  SVCB ...
-                     IN  NSEC   customer5 RRSIG NSEC SVCB
+                     IN  NSEC   customer7._deleg RRSIG NSEC SVCB
                      IN  RRSIG  NSEC ...
 
    customer7._deleg  IN  CNAME  customer5._deleg
