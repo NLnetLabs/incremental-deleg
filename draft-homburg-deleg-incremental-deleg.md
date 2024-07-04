@@ -669,6 +669,22 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
 
 ## Comparison with {{?I-D.dnsop-deleg}}
 
+|---------------------|-------------------|
+| \[I-D.dnsop-deleg\] | \[this document\] |
+|---------------------|-------------------|
+| Requires implementation in both authoritative name server as well as in the resolver | Only resolver implementation required. But optimized with updated authoritative software. |
+|-----------------------------------------|
+| Authoritative name servers need to be updated all at once | Authoritative name servers may be updated gradually for optimization |
+|-----------------------------------------|
+| DNSKEY flag needed to signal DELEG. Special requirements for the child domain. | No DNSKEY flag needed. Separation of concerns. |
+|-----------------------------------------|
+| New semantics about what is authoritative (BOGUS with current DNSSEC validators) | Works with current DNS semantics. Easier to implement. |
+|-----------------------------------------|
+| No extra queries | An extra query *per zone* to determine presence of the `_deleg` label, and *per authoritative* server when incremental deleg support is not yet detected |
+|---------------------|-------------------|
+{: title="Comparison of [I-D.dnsop-deleg] with [this document]"}
+
+
 # Implementation Status
 
 **Note to the RFC Editor**: please remove this entire section before publication.
