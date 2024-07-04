@@ -539,9 +539,6 @@ customer5._deleg.example.       1234    IN      RRSIG   NSEC ...
 example.        1234    IN      NSEC    (
                 customer5._deleg.example.  NS SOA RRSIG NSEC DNSKEY )
 example.        1234    IN      RRSIG   NSEC ...
-example.        1234    IN      SOA     ns.example. (
-                zonemaster.example. 20240627 7200 3600 1209600 1234 )
-example.        1234    IN      RRSIG   SOA ...
 
 ;; ADDITIONAL SECTION:
 ns.customer6.example.   3600    IN      A       203.0.113.1
