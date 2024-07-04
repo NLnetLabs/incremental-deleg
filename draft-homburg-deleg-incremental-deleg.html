@@ -2125,7 +2125,41 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
 <section id="section-7.3">
         <h3 id="name-comparison-with">
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-comparison-with" class="section-name selfRef">Comparison with <span class="cite xref">[I-D.dnsop-deleg]</span></a>
-      </h3>
+        </h3>
+<span id="name-comparison-of-i-ddnsop-dele"></span><table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-comparison-of-i-ddnsop-dele" class="selfRef">Comparison of [I-D.dnsop-deleg] with [this document]</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">[I-D.dnsop-deleg]</th>
+              <th class="text-left" rowspan="1" colspan="1">[this document]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Requires implementation in both authoritative name server as well as in the resolver</td>
+              <td class="text-left" rowspan="1" colspan="1">Only resolver implementation required. But optimized with updated authoritative software.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Authoritative name servers need to be updated all at once</td>
+              <td class="text-left" rowspan="1" colspan="1">Authoritative name servers may be updated gradually for optimization</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">DNSKEY flag needed to signal DELEG. Special requirements for the child domain.</td>
+              <td class="text-left" rowspan="1" colspan="1">No DNSKEY flag needed. Separation of concerns.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">New semantics about what is authoritative (BOGUS with current DNSSEC validators)</td>
+              <td class="text-left" rowspan="1" colspan="1">Works with current DNS semantics. Easier to implement.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">No extra queries</td>
+              <td class="text-left" rowspan="1" colspan="1">An extra query <em>per zone</em> to determine presence of the <code>_deleg</code> label, and <em>per authoritative</em> server when incremental deleg support is not yet detected</td>
+            </tr>
+          </tbody>
+        </table>
 </section>
 </div>
 </section>
@@ -2154,9 +2188,9 @@ The source code of his implementation is available on github <span>[<a href="#DE
 <a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
 <p id="section-10-1">Per <span>[<a href="#RFC8552" class="cite xref">RFC8552</a>]</span>, IANA is requested to add the following entry to the DNS "Underscored and Globally Scoped DNS Node Names" registry:<a href="#section-10-1" class="pilcrow">¶</a></p>
-<span id="name-entry-in-the-underscored-an"></span><table class="center" id="table-1">
+<span id="name-entry-in-the-underscored-an"></span><table class="center" id="table-2">
         <caption>
-<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#table-2" class="selfRef">Table 2</a>:
 <a href="#name-entry-in-the-underscored-an" class="selfRef">Entry in the Underscored and Globally Scoped DNS Node Names registry</a>
         </caption>
 <thead>
