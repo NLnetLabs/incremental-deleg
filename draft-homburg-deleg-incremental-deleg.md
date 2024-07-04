@@ -75,11 +75,11 @@ informative:
 
 This document proposes a mechanism for extensible delegations in the DNS.
 The mechanism realizes delegations with SVCB resource record sets placed below a `_deleg` label in the apex of the delegating zone.
-The mechanism inherits extensibility, as well as the possibility to alias the delegation details, from SVCB.
-Legacy aliasing with CNAME also remains usable with this way of doing delegations.
+This authoritative delegation point can be aliased to other names using CNAME and DNAME.
+The mechanism inherits extensibility from SVCB.
 
 Support in recursive resolvers suffices for the mechanism to be fully functional.
-The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable to that with DNS Query Name Minimisation.
+The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable with those for DNS Query Name Minimisation.
 Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
 
@@ -87,9 +87,9 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
 
 # Introduction
 
-This document describes a delegation mechanism for the Domain Name System (DNS) {{!STD13}} that addresses several matters that are at the time of writing are suboptimally supported or not at all.
+This document describes a delegation mechanism for the Domain Name System (DNS) {{!STD13}} that addresses several matters that, at the time of writing, are suboptimally supported or not at all.
 These matters are elaborated upon in sections {{<signaling}}, {{<outsourcing}} and {{<dnssec-protection}}.
-On top of that, the mechanism described in this document also has the ambition to be maximally deployable which is elaborated upon in {{deployability}}.
+In addition, the mechanism described in this document aspires to be maximally deployable, which is elaborated upon in {{deployability}}.
 
 ## Signaling capabilities of the authoritative name servers {#signaling}
 
