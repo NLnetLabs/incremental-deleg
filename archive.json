@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-02T00:23:33.791693+00:00",
+  "timestamp": "2024-07-04T00:23:11.579063+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -50,5 +50,159 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOMN-KqM50T3Mz",
+      "title": "PR for review",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/1",
+      "state": "CLOSED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-03T10:57:03Z",
+      "updatedAt": "2024-07-03T11:54:32Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "initial-setup",
+      "baseRefOid": "58d89a72a1c93ae25ff5609e945c5b99f4afb985",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "main",
+      "headRefOid": "9e2ca5cadc24fd5c16c12ab4ebf1ed7b0ef5e3ad",
+      "closedAt": "2024-07-03T11:54:32Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOMN-KqM50USIQ",
+      "title": "Content for review",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/2",
+      "state": "OPEN",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-03T11:59:18Z",
+      "updatedAt": "2024-07-03T15:00:05Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "7f397a52234ed6440480b331e2df11ebf9bbd974",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "for-review",
+      "headRefOid": "7bcd4fed1e294221202684dd496da021af82a64a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6Aih2O",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "maertsen",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T13:57:29Z",
+          "updatedAt": "2024-07-03T13:57:30Z",
+          "comments": [
+            {
+              "originalPosition": 528,
+              "body": "```suggestion\r\nFor as long as the resolver knows that the authoritative name server support incremental deleg, no additional parallel direct deleg query (as described in {{recursive-resolver-behavior}}) needs to be sent.\r\n```",
+              "createdAt": "2024-07-03T13:57:29Z",
+              "updatedAt": "2024-07-03T13:57:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6Aii0o",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "maertsen",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T13:59:01Z",
+          "updatedAt": "2024-07-03T13:59:01Z",
+          "comments": [
+            {
+              "originalPosition": 531,
+              "body": "s/is/it/\r\nNot sure what comes after \u201cand\u201d",
+              "createdAt": "2024-07-03T13:59:01Z",
+              "updatedAt": "2024-07-03T13:59:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6AikrI",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "maertsen",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T14:01:54Z",
+          "updatedAt": "2024-07-03T14:01:55Z",
+          "comments": [
+            {
+              "originalPosition": 583,
+              "body": "```suggestion\r\nJesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam.\r\n```",
+              "createdAt": "2024-07-03T14:01:55Z",
+              "updatedAt": "2024-07-03T14:01:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6Ai5YN",
+          "commit": {
+            "abbreviatedOid": "2cf9a12"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T14:34:41Z",
+          "updatedAt": "2024-07-03T14:34:41Z",
+          "comments": [
+            {
+              "originalPosition": 531,
+              "body": "```suggestion\r\nIf a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).\r\n```",
+              "createdAt": "2024-07-03T14:34:41Z",
+              "updatedAt": "2024-07-03T14:34:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6Ai73A",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T14:38:46Z",
+          "updatedAt": "2024-07-03T14:38:46Z",
+          "comments": [
+            {
+              "originalPosition": 531,
+              "body": "Thanks, when I wrote it I was thinking: \"and a _deleg is known to be present in the signed zone\", but this is not necessary, because if it wouldn't have been there, then authoritative name server support would also not have been detected. Anyways, resolved in [08385ad](https://github.com/NLnetLabs/incremental-deleg/pull/2/commits/08385adfba80b3512da4d8132cdff551b17f6502)",
+              "createdAt": "2024-07-03T14:38:46Z",
+              "updatedAt": "2024-07-03T14:38:47Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
