@@ -916,39 +916,39 @@ Table of Contents
 
 7.3.  Comparison with [I-D.dnsop-deleg]
 
-     +=================================+=============================+
-     | [I-D.dnsop-deleg]               | [this document]             |
-     +=================================+=============================+
-     | Requires implementation in both | Only resolver               |
-     | authoritative name server as    | implementation required.    |
-     | well as in the resolver         | But optimized with updated  |
-     |                                 | authoritative software.     |
-     +---------------------------------+-----------------------------+
-     | DNSKEY flag needed to signal    | No DNSKEY flag needed.      |
-     | DELEG support with all          | Separation of concerns.     |
-     | authoritative name servers that |                             |
-     | serve the parent (delegating)   |                             |
-     | domain.  Special requirements   |                             |
-     | for the child domain.           |                             |
-     +---------------------------------+-----------------------------+
-     | Authoritative name servers need | Authoritative name servers  |
-     | to be updated all at once       | may be updated gradually    |
-     |                                 | for optimization            |
-     +---------------------------------+-----------------------------+
-     | New semantics about what is     | Works with current DNS and  |
-     | authoritative (BOGUS with       | DNSSEC semantics.  Easier   |
-     | current DNSSEC validators)      | to implement.               |
-     +---------------------------------+-----------------------------+
-     | No extra queries                | An extra query, in parallel |
-     |                                 | to the legacy query, _per   |
-     |                                 | zone_ to determine presence |
-     |                                 | of the _deleg label, and    |
-     |                                 | _per authoritative_ server  |
-     |                                 | when incremental deleg      |
-     |                                 | support is not yet detected |
-     +---------------------------------+-----------------------------+
+    +=================================+==============================+
+    | [I-D.dnsop-deleg]               | [this document]              |
+    +=================================+==============================+
+    | Requires implementation in both | Only resolver implementation |
+    | authoritative name server as    | required.  But optimized     |
+    | well as in the resolver         | with updated authoritative   |
+    |                                 | software.                    |
+    +---------------------------------+------------------------------+
+    | DNSKEY flag needed to signal    | No DNSKEY flag needed.       |
+    | DELEG support with all          | Separation of concerns.      |
+    | authoritative name servers that |                              |
+    | serve the parent (delegating)   |                              |
+    | domain.  Special requirements   |                              |
+    | for the child domain.           |                              |
+    +---------------------------------+------------------------------+
+    | Authoritative name servers need | Authoritative name servers   |
+    | to be updated all at once       | may be updated gradually for |
+    |                                 | optimization                 |
+    +---------------------------------+------------------------------+
+    | New semantics about what is     | Works with current DNS and   |
+    | authoritative (BOGUS with       | DNSSEC semantics.  Easier to |
+    | current DNSSEC validators)      | implement.                   |
+    +---------------------------------+------------------------------+
+    | No extra queries                | An extra query, in parallel  |
+    |                                 | to the legacy query, _per    |
+    |                                 | authoritative_ server when   |
+    |                                 | incremental deleg support is |
+    |                                 | not yet detected, and _per   |
+    |                                 | unsigned zone_ to determine  |
+    |                                 | presence of the _deleg label |
+    +---------------------------------+------------------------------+
 
-       Table 2: Comparison of [I-D.dnsop-deleg] with [this document]
+      Table 2: Comparison of [I-D.dnsop-deleg] with [this document]
 
 8.  Implementation Status
 
