@@ -36,10 +36,10 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
     Jinja2 3.1.4
     lxml 4.9.4
     platformdirs 4.2.2
-    pycountry 24.6.1
+    pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.32.3
-    setuptools 70.2.0
+    setuptools 69.5.1
     wcwidth 0.2.13
 -->
 <link href="draft-homburg-deleg-incremental-deleg.xml" rel="alternate" type="application/rfc+xml">
@@ -1227,7 +1227,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Homburg, et al.</td>
-<td class="center">Expires 5 January 2025</td>
+<td class="center">Expires 9 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1240,12 +1240,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-homburg-deleg-incremental-deleg-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-04" class="published">4 July 2024</time>
+<time datetime="2024-07-08" class="published">8 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-05">5 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-01-09">9 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1309,7 +1309,7 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1411,6 +1411,9 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-outsourcing-to-more-than-on" class="internal xref">Outsourcing to more than one operator</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-priming-queries" class="internal xref">Priming queries</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
@@ -1451,10 +1454,7 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
             <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1496,11 +1496,11 @@ One could even outsource all delegation operational practice to another party wi
 <p id="section-1.3-1">With legacy delegations, the NS RRset at the parent side of a delegation as well as glue records for the names in the NS RRset are not authoritative and not DNSSEC signed.
 An adversary that is able to spoof a referral response, can alter this information and redirect all traffic for the delegation to a rogue name server undetected.
 The adversary can then perceive all queries for the redirected zone (Privacy concern) and alter all unsigned parts of responses (such as further referrals, which is a Security concern).<a href="#section-1.3-1" class="pilcrow">¶</a></p>
-<p id="section-1.3-2">DNSSEC protection of delegation information prevents that, and is the only counter measure that also works against on-path attackers.
-At the time of writing, the only way to DNSSEC validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations <span>[<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>, which is done after the fact and has other security concerns (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-06#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>).<a href="#section-1.3-2" class="pilcrow">¶</a></p>
-<p id="section-1.3-3">Direct delegation information (provided by SVCB RRs in ServiceMode) include the hostnames of the authoritative name serversfor the delegation as well as IP addresses for those hostnames.
+<p id="section-1.3-2">DNSSEC protection of delegation information prevents that, and is the only countermeasure that also works against on-path attackers.
+At the time of writing, the only way to DNSSEC validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations <span>[<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>, which is done after the fact and has other security concerns (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-07#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>).<a href="#section-1.3-2" class="pilcrow">¶</a></p>
+<p id="section-1.3-3">Direct delegation information (provided by SVCB RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.
 Since the information is stored authoritatively in the delegating zone, it will be DNSSEC signed if the zone is signed.
-When the delegation is outsourced, then the delegation is protected when the zones providing the aliasing resource records <em>and</em> the zones serving the targets of the aliases are all DNSSEC signed.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
+When the delegation is outsourced, then it's protected when the zones providing the aliasing resource records <em>and</em> the zones serving the targets of the aliases are all DNSSEC signed.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="deployability">
@@ -1515,10 +1515,10 @@ Unmodified authoritative name server software will serve the delegation informat
 Unmodified signers will sign the delegation information in the delegating zone.
 Only the recursive resolver needs modification to follow referrals as provided by the delegation information.<a href="#section-1.4-1" class="pilcrow">¶</a></p>
 <p id="section-1.4-2">Such a resolver would explicitly query for the delegations administered as specified in <a href="#delegation-administration" class="auto internal xref">Section 2</a>.
-The number of round trips form the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation <span>[<a href="#RFC9156" class="cite xref">RFC9156</a>]</span>.
+The number of round trips from the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation <span>[<a href="#RFC9156" class="cite xref">RFC9156</a>]</span>.
 Additional implementation in the authoritative name server optimizes resolution and reduces the number of simultaneous in parallel queries to that what would be needed for legacy delegations.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.<a href="#section-1.4-2" class="pilcrow">¶</a></p>
-<p id="section-1.4-3">Implementation in the recursive may be less demanding with respect to (among other things) DNSSEC validation because of not making additional exceptions to what is authoritative at the parent side of a delegation.<a href="#section-1.4-3" class="pilcrow">¶</a></p>
+<p id="section-1.4-3">Implementation in the recursive may be less demanding with respect to (among other things) DNSSEC validation because there is no need to make additional exceptions as to what is authoritative at the parent side of a delegation.<a href="#section-1.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
@@ -1676,7 +1676,8 @@ customer3._deleg   IN  CNAME _dns.ns.operator1
 </div>
 <p id="section-2.1.3-2">Instead of using CNAME, the outsourcing could also been accomplished with an SVCB RRset with a single SVCB RR in AliasMode.
 The configuration below is operationally equivalent to the CNAME configuration above.
-It is <span class="bcp14">RECOMMENDED</span> to use a CNAME over an SVCB RRset with a single SVCB RR in AliasMode (<span><a href="https://rfc-editor.org/rfc/rfc9460#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>).<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
+It is <span class="bcp14">RECOMMENDED</span> to use a CNAME over an SVCB RRset with a single SVCB RR in AliasMode (<span><a href="https://rfc-editor.org/rfc/rfc9460#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>).
+Note that an SVCB RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming <span><a href="https://rfc-editor.org/rfc/rfc9461#section-3" class="relref">Section 3</a> of [<a href="#RFC9461" class="cite xref">RFC9461</a>]</span>, but that CNAME refers to the domain name of the target SVCB RRset (or CNAME) which may have an <code>_dns</code> prefix.<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
 <span id="name-outsourced-with-an-aliasmod"></span><div id="outsourced-svcb">
 <figure id="figure-4">
             <div class="alignLeft art-text artwork" id="section-2.1.3-3.1">
@@ -1743,7 +1744,7 @@ customer5._deleg  IN  SVCB   1 ns.customer5 alpn=h2,h3 (
                                             dohpath=/dns-query{?dns}
                                             )
                   IN  RRSIG  SVCB ...
-                  IN  NSEC   customer5 RRSIG NSEC SVCB
+                  IN  NSEC   customer7._deleg RRSIG NSEC SVCB
                   IN  RRSIG  NSEC ...
 
 customer7._deleg  IN  CNAME  customer5._deleg
@@ -1809,7 +1810,7 @@ In <a href="#presence" class="auto internal xref">Section 3.2</a>, an optimizati
 <p id="section-3.1-1">If the triggering query name is the same as the name of the target zone apex, then no further delegation will occur, and resolution will complete.
 No special behavior or processing is needed.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">Otherwise, the triggering query is below the target zone apex and a delegation may exist in the target zone.
-In this case two parallel queries are send.
+In this case two parallel queries <span class="bcp14">MUST</span> be sent.
 One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query <span>[<a href="#RFC9156" class="cite xref">RFC9156</a>]</span>), and one <em>incremental deleg query</em> with query type SVCB.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">The incremental deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a <code>_deleg</code> label and the name of the target zone.
 For example if the triggering query is <code>www.customer.example.</code> and the target zone <code>example.</code>, then the incremental deleg query name is <code>customer._deleg.example.</code>
@@ -1831,7 +1832,7 @@ The NS RRset and glue, in the response of the legacy query that was sent in para
 There is no incremental delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed  as would be done with legacy DNS and DNSSEC processing.<a href="#section-3.1-5.2.2" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.1-5.3">
-            <p id="section-3.1-5.3.1">The incremental deleg query name does exist, but resulted in an NOERROR no answer responses (also known as a NODATA response).<a href="#section-3.1-5.3.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-5.3.1">The incremental deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).<a href="#section-3.1-5.3.1" class="pilcrow">¶</a></p>
 <p id="section-3.1-5.3.2">
 If the legacy query, did result in a referral for the same number of labels as the subdomain that the incremental deleg query was for, then there was no incremental delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed as would be done with legacy DNS and DNSSEC processing.<a href="#section-3.1-5.3.2" class="pilcrow">¶</a></p>
 <p id="section-3.1-5.3.3">
@@ -1841,9 +1842,9 @@ If the response to the legacy query resulted in a referral, then a new increment
 For example if the triggering query is <code>www.university.ac.example.</code> and the target zone <code>example.</code>, and the legacy response contained an NS RRset for <code>university.ac.example.</code>, then the incremental deleg query name is <code>university.ac._deleg.example.</code>
 The response to the new incremental deleg query <span class="bcp14">MUST</span> be processed as described above, as if it was the initial incremental deleg query.<a href="#section-3.1-5.3.4" class="pilcrow">¶</a></p>
 <p id="section-3.1-5.3.5">
-If the legacy query was send minimised and needs a followup query, then parallel to that followup query a new incremental deleg query will be send, adding a single label to the previous incremental deleg query name.
-For example if the triggering query is <code>www.university.ac.example.</code> and the target zone <code>example.</code> and the minimised legacy query name was <code>ac.example.</code> (which also resulted in a NOERROR no answer response), then the incremental deleg query to be send along in parallel with the followup legacy query will become <code>university.ac.example.</code>
-Processing of the responses of those two new queries will as described above.<a href="#section-3.1-5.3.5" class="pilcrow">¶</a></p>
+If the legacy query was sent minimised and needs a followup query, then parallel to that followup query a new incremental deleg query will be sent, adding a single label to the previous incremental deleg query name.
+For example if the triggering query is <code>www.university.ac.example.</code> and the target zone is <code>example.</code> and the minimised legacy query name is <code>ac.example.</code> (which also resulted in a NOERROR no answer response), then the incremental deleg query to be sent along in parallel with the followup legacy query will become <code>university.ac.example.</code>
+Processing of the responses of those two new queries will be done as described above.<a href="#section-3.1-5.3.5" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -1856,29 +1857,31 @@ Processing of the responses of those two new queries will as described above.<a 
 <p id="section-3.2-1">Absence of the <code>_deleg</code> label in a zone is a clear signal that the zone does not contain any incremental deleg delegations.
 Recursive resolvers <span class="bcp14">SHOULD NOT</span> send any additional incremental deleg queries for zones for which it is known that it does not contain the <code>_deleg</code> label at the apex.
 The state regarding the presence of the <code>_deleg</code> label within a resolver can be "unknown", "known not to be present", or "known to be present".<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">When the presence of a <code>_deleg</code> label is "unknown", a <code>_deleg</code> presence test query <span class="bcp14">SHOULD</span> be send in parallel to the next query for the zone.
-The query name for the test query is the <code>_deleg</code> label prepended to the apex of zone for which to test presence, with query type A.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">The testing query can have three possible outcomes:<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3.2-4">
-<li id="section-3.2-4.1">
-            <p id="section-3.2-4.1.1">The <code>_deleg</code> label does not exist within the zone, and an NXDOMAIN response is returned.<a href="#section-3.2-4.1.1" class="pilcrow">¶</a></p>
-<p id="section-3.2-4.1.2">
+<p id="section-3.2-2">The state regarding the presence of the <code>_deleg</code> label can be deduced from the response of the incremental deleg query, if the target zone is signed with DNSSEC.
+If the target zone is unsigned, the procedure as described in the remainder of this section <span class="bcp14">SHOULD</span> be followed.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">When the presence of a <code>_deleg</code> label is "unknown", a <code>_deleg</code> presence test query <span class="bcp14">SHOULD</span> be sent in parallel to the next query for the unsigned target zone (though not when the target name server is known to support incremental deleg, which will be discussed in <a href="#authoritative-name-server-support" class="auto internal xref">Section 4.1</a>).
+The query name for the test query is the <code>_deleg</code> label prepended to the apex of zone for which to test presence, with query type A.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">The testing query can have three possible outcomes:<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.2-5">
+<li id="section-3.2-5.1">
+            <p id="section-3.2-5.1.1">The <code>_deleg</code> label does not exist within the zone, and an NXDOMAIN response is returned.<a href="#section-3.2-5.1.1" class="pilcrow">¶</a></p>
+<p id="section-3.2-5.1.2">
 The non-existence of the <code>_deleg</code> label <span class="bcp14">MUST</span> be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the boundaries for TTL values that the resolver has (<span><a href="https://rfc-editor.org/rfc/rfc8767#section-4" class="relref">Section 4</a> of [<a href="#RFC8767" class="cite xref">RFC8767</a>]</span>).
-For the period the non-existence of the <code>_deleg</code> label is cached, the label is "known not to be present" and the resolver <span class="bcp14">SHOULD NOT</span> send any (additional) incremental deleg queries.<a href="#section-3.2-4.1.2" class="pilcrow">¶</a></p>
+For the period the non-existence of the <code>_deleg</code> label is cached, the label is "known not to be present" and the resolver <span class="bcp14">SHOULD NOT</span> send any (additional) incremental deleg queries.<a href="#section-3.2-5.1.2" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.2-4.2">
-            <p id="section-3.2-4.2.1">The <code>_deleg</code> label does exist within the zone but contains no data.
-A NOERROR response is returned with no RRs in the answer section.<a href="#section-3.2-4.2.1" class="pilcrow">¶</a></p>
-<p id="section-3.2-4.2.2">
+          <li id="section-3.2-5.2">
+            <p id="section-3.2-5.2.1">The <code>_deleg</code> label does exist within the zone but contains no data.
+A NOERROR response is returned with no RRs in the answer section.<a href="#section-3.2-5.2.1" class="pilcrow">¶</a></p>
+<p id="section-3.2-5.2.2">
 The existence of the <code>_deleg</code> name <span class="bcp14">MUST</span> be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
-For the period the existence of the empty non-terminal at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.2-4.2.2" class="pilcrow">¶</a></p>
+For the period the existence of the empty non-terminal at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.2-5.2.2" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.2-4.3">
-            <p id="section-3.2-4.3.1">The <code>_deleg</code> label does exist within the zone and contains data.
-A NOERROR response is return with an A RRset in the answer section.<a href="#section-3.2-4.3.1" class="pilcrow">¶</a></p>
-<p id="section-3.2-4.3.2">
-The returned A RRset in the answer section <span class="bcp14">MUST</span> be cached for the duration indicated by the TTL for the RRset, adjusted to the resolver's TTL boundaries.
-For the period any RRset at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.2-4.3.2" class="pilcrow">¶</a></p>
+          <li id="section-3.2-5.3">
+            <p id="section-3.2-5.3.1">The <code>_deleg</code> label does exist within the zone and contains data.
+A NOERROR response is return with an A RRset in the answer section.<a href="#section-3.2-5.3.1" class="pilcrow">¶</a></p>
+<p id="section-3.2-5.3.2">
+The resolver <span class="bcp14">MUST</span> record that the <code>_deleg</code> label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
+For the period any RRset at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.2-5.3.2" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -1960,9 +1963,6 @@ customer5._deleg.example.       1234    IN      RRSIG   NSEC ...
 example.        1234    IN      NSEC    (
                 customer5._deleg.example.  NS SOA RRSIG NSEC DNSKEY )
 example.        1234    IN      RRSIG   NSEC ...
-example.        1234    IN      SOA     ns.example. (
-                zonemaster.example. 20240627 7200 3600 1209600 1234 )
-example.        1234    IN      RRSIG   SOA ...
 
 ;; ADDITIONAL SECTION:
 ns.customer6.example.   3600    IN      A       203.0.113.1
@@ -2033,7 +2033,7 @@ If the incremental deleg does not exist, then it is simply absent from the autho
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-resolver-behavior-with-auth" class="section-name selfRef">Resolver behavior with authoritative name server support</a>
         </h3>
 <p id="section-4.2-1">Incremental deleg supporting authoritative name servers will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
-If it is known that an authoritative name server supports incremental deleg, than no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
+If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
 A resolver <span class="bcp14">SHOULD</span> register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">When the authority section of a referral response contains an SVCB RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such SVCB or CNAME RRset, then the resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that SVCB, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Subsequent queries <span class="bcp14">SHOULD NOT</span> include incremental deleg queries, as described in <a href="#recursive-resolver-behavior" class="auto internal xref">Section 3.1</a>, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
@@ -2100,6 +2100,16 @@ Assumingly SVCB currently supports only a single AliasMode RR in an SVCB RRset b
 A possible solution could be to resolve all AliasMode RRs at the delegation point (though limited to a certain amount, say 8) and then let the resolver pick from all the SVCB RRs, ignoring SvcPriority.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="priming-queries">
+<section id="section-6.2">
+        <h3 id="name-priming-queries">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-priming-queries" class="section-name selfRef">Priming queries</a>
+        </h3>
+<p id="section-6.2-1">Some zones, such as the root zone, are targeted directly from hints files.
+Information about which authoritative name servers and with capabilities, <span class="bcp14">MAY</span> be provided in an SVCB RRset directly at the <code>_deleg</code> label under the apex of the zone.
+Priming queries from a incremental deleg supporting resolver, <span class="bcp14">MUST</span> send an <code>_deleg.&lt;apex&gt; SVCB</code> query in parallel to the legacy <code>&lt;apex&gt; NS</code> query and process the content as if it was found through an incremental referral response.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="comparison-with-other-delegation-mechanisms">
@@ -2107,7 +2117,9 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
       <h2 id="name-comparison-with-other-deleg">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-comparison-with-other-deleg" class="section-name selfRef">Comparison with other delegation mechanisms</a>
       </h2>
-<span id="name-additional-queries-in-paral"></span><table class="center" id="table-1">
+<p id="section-7-1">Table <a href="#xtraqueries" class="auto internal xref">Table 1</a> provides an overview of when extra queries, in parallel to the legacy query, are sent.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<span id="name-additional-queries-in-paral"></span><div id="xtraqueries">
+<table class="center" id="table-1">
         <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
 <a href="#name-additional-queries-in-paral" class="selfRef">Additional queries in parallel to the legacy query</a>
@@ -2126,7 +2138,7 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
         <tbody>
           <tr>
             <td class="text-center" rowspan="1" colspan="1">1</td>
-            <td class="text-center" rowspan="1" colspan="1">+</td>
+            <td class="text-center" rowspan="1" colspan="1">Yes</td>
             <td class="text-center" rowspan="1" colspan="1">*</td>
             <td class="text-center" rowspan="1" colspan="1">*</td>
             <td class="text-left" rowspan="1" colspan="1"> </td>
@@ -2135,42 +2147,71 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
           </tr>
           <tr>
             <td class="text-center" rowspan="1" colspan="1">2</td>
-            <td class="text-center" rowspan="1" colspan="1">-</td>
-            <td class="text-center" rowspan="1" colspan="1">+</td>
+            <td class="text-center" rowspan="1" colspan="1">No</td>
             <td class="text-center" rowspan="1" colspan="1">*</td>
+            <td class="text-center" rowspan="1" colspan="1">No</td>
             <td class="text-left" rowspan="1" colspan="1"> </td>
             <td class="text-center" rowspan="1" colspan="1"> </td>
             <td class="text-center" rowspan="1" colspan="1"> </td>
           </tr>
           <tr>
             <td class="text-center" rowspan="1" colspan="1">3</td>
-            <td class="text-center" rowspan="1" colspan="1">-</td>
-            <td class="text-center" rowspan="1" colspan="1">?</td>
-            <td class="text-center" rowspan="1" colspan="1">-</td>
+            <td class="text-center" rowspan="1" colspan="1">No</td>
+            <td class="text-center" rowspan="1" colspan="1">Yes</td>
+            <td class="text-center" rowspan="1" colspan="1">*</td>
             <td class="text-left" rowspan="1" colspan="1"> </td>
             <td class="text-center" rowspan="1" colspan="1"> </td>
             <td class="text-center" rowspan="1" colspan="1"> </td>
           </tr>
           <tr>
             <td class="text-center" rowspan="1" colspan="1">4</td>
-            <td class="text-center" rowspan="1" colspan="1">-</td>
-            <td class="text-center" rowspan="1" colspan="1">?</td>
-            <td class="text-center" rowspan="1" colspan="1">+</td>
+            <td class="text-center" rowspan="1" colspan="1">No</td>
+            <td class="text-center" rowspan="1" colspan="1">Unknown</td>
+            <td class="text-center" rowspan="1" colspan="1">Yes</td>
             <td class="text-left" rowspan="1" colspan="1"> </td>
             <td class="text-center" rowspan="1" colspan="1">X</td>
             <td class="text-center" rowspan="1" colspan="1"> </td>
           </tr>
           <tr>
             <td class="text-center" rowspan="1" colspan="1">5</td>
-            <td class="text-center" rowspan="1" colspan="1">-</td>
-            <td class="text-center" rowspan="1" colspan="1">?</td>
-            <td class="text-center" rowspan="1" colspan="1">?</td>
+            <td class="text-center" rowspan="1" colspan="1">No</td>
+            <td class="text-center" rowspan="1" colspan="1">Unknown</td>
+            <td class="text-center" rowspan="1" colspan="1">Unknown</td>
             <td class="text-left" rowspan="1" colspan="1"> </td>
             <td class="text-center" rowspan="1" colspan="1">X</td>
-            <td class="text-center" rowspan="1" colspan="1">X</td>
+            <td class="text-center" rowspan="1" colspan="1">only for unsigned zones</td>
           </tr>
         </tbody>
       </table>
+</div>
+<p id="section-7-3">The three headers on the left side of the table mean the following:<a href="#section-7-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-7-4">
+        <dt id="section-7-4.1">apex:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-4.2">
+          <p id="section-7-4.2.1">Whether the query is for the apex of the target zone.
+"Yes" means an apex query, "No" means a query below the apex which may be delegated<a href="#section-7-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-4.3">support:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-4.4">
+          <p id="section-7-4.4.1">Whether or not the target authoritative server supports incremental deleg.
+"Yes" means it supports it and "Unknown" means support is not detected.
+"*" means it does not matter<a href="#section-7-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-4.5">
+<code>_deleg</code>:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-4.6">
+          <p id="section-7-4.6.1">Whether or not the <code>_deleg</code> label is present in the target zone (and thus incremental delegations)<a href="#section-7-4.6.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+<p id="section-7-5">On the right side of the table are the extra queries, to be sent in parallel with the legacy query.
+The <code>_deleg</code> presence test query (most right column) only needs to be sent to unsigned target zones, because its non-existence will be show in the NSEC(3) records showing the non-existence of the incremental delegation (second from right column).<a href="#section-7-5" class="pilcrow">¶</a></p>
+<p id="section-7-6">If the query name is the same as the apex of the target zone, no extra queries need to be sent (Row 1).
+If the <code>_deleg</code> label is known not to exist in the target zone (Row 2) or if the target name server is known to support incremental deleg (Row 3), no extra queries need to be sent.
+Only if it is unknown that the target name server supports incremental deleg, and the <code>_deleg</code> label is known to exist in the target zone (Row 4) or it its not known whether or not the <code>_deleg</code> label exists (Row 5), and extra incremental deleg query is sent in parallel to the legacy query.
+If the target zone is unsigned, presence of the <code>_deleg</code> label needs to be tested explicitly (Row 5).<a href="#section-7-6" class="pilcrow">¶</a></p>
 <div id="comparison-with-legacy-delegations">
 <section id="section-7.1">
         <h3 id="name-comparison-with-legacy-dele">
@@ -2207,20 +2248,20 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
               <td class="text-left" rowspan="1" colspan="1">Only resolver implementation required. But optimized with updated authoritative software.</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">DNSKEY flag needed to signal DELEG support with all authoritative name servers that serve the parent (delegating) domain. Special requirements for the child domain.</td>
+              <td class="text-left" rowspan="1" colspan="1">No DNSKEY flag needed. Separation of concerns.</td>
+            </tr>
+            <tr>
               <td class="text-left" rowspan="1" colspan="1">Authoritative name servers need to be updated all at once</td>
               <td class="text-left" rowspan="1" colspan="1">Authoritative name servers may be updated gradually for optimization</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">DNSKEY flag needed to signal DELEG. Special requirements for the child domain.</td>
-              <td class="text-left" rowspan="1" colspan="1">No DNSKEY flag needed. Separation of concerns.</td>
-            </tr>
-            <tr>
               <td class="text-left" rowspan="1" colspan="1">New semantics about what is authoritative (BOGUS with current DNSSEC validators)</td>
-              <td class="text-left" rowspan="1" colspan="1">Works with current DNS semantics. Easier to implement.</td>
+              <td class="text-left" rowspan="1" colspan="1">Works with current DNS and DNSSEC semantics. Easier to implement.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">No extra queries</td>
-              <td class="text-left" rowspan="1" colspan="1">An extra query <em>per zone</em> to determine presence of the <code>_deleg</code> label, and <em>per authoritative</em> server when incremental deleg support is not yet detected</td>
+              <td class="text-left" rowspan="1" colspan="1">An extra query, in parallel to the legacy query, <em>per zone</em> to determine presence of the <code>_deleg</code> label, and <em>per authoritative</em> server when incremental deleg support is not yet detected</td>
             </tr>
           </tbody>
         </table>
@@ -2234,7 +2275,7 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
       </h2>
 <p id="section-8-1"><strong>Note to the RFC Editor</strong>: please remove this entire section before publication.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">Jesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam.
+<p id="section-8-2">Jesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam. <span>[<a href="#JZUTPHEN" class="cite xref">JZUTPHEN</a>]</span>
 The source code of his implementation is available on github <span>[<a href="#DELEG4UNBOUND" class="cite xref">DELEG4UNBOUND</a>]</span><a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2353,7 +2394,7 @@ The source code of his implementation is available on github <span>[<a href="#DE
 <dd class="break"></dd>
 <dt id="I-D.ietf-dnsop-ns-revalidation">[I-D.ietf-dnsop-ns-revalidation]</dt>
         <dd>
-<span class="refAuthor">Huque, S.</span>, <span class="refAuthor">Vixie, P. A.</span>, and <span class="refAuthor">W. Toorop</span>, <span class="refTitle">"Delegation Revalidation by DNS Resolvers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dnsop-ns-revalidation-06</span>, <time datetime="2024-03-17" class="refDate">17 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-06">https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-06</a>&gt;</span>. </dd>
+<span class="refAuthor">Huque, S.</span>, <span class="refAuthor">Vixie, P. A.</span>, and <span class="refAuthor">W. Toorop</span>, <span class="refTitle">"Delegation Revalidation by DNS Resolvers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dnsop-ns-revalidation-07</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-07">https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-07</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-tls-esni">[I-D.ietf-tls-esni]</dt>
         <dd>
@@ -2362,6 +2403,10 @@ The source code of his implementation is available on github <span>[<a href="#DE
 <dt id="I-D.tapril-ns2">[I-D.tapril-ns2]</dt>
         <dd>
 <span class="refAuthor">April, T.</span>, <span class="refTitle">"Parameterized Nameserver Delegation with NS2 and NS2T"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tapril-ns2-01</span>, <time datetime="2020-07-13" class="refDate">13 July 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tapril-ns2-01">https://datatracker.ietf.org/doc/html/draft-tapril-ns2-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="JZUTPHEN">[JZUTPHEN]</dt>
+        <dd>
+<span class="refAuthor">van Zutphen, J.</span>, <span class="refTitle">"Extensible delegations in DNS Recursive resolvers"</span>, <span>n.d.</span>, <span>&lt;<a href="https://nlnetlabs.nl/downloads/publications/extensible-deleg-in-resolvers_2024-07-08.pdf">https://nlnetlabs.nl/downloads/publications/extensible-deleg-in-resolvers_2024-07-08.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8552">[RFC8552]</dt>
         <dd>
@@ -2381,177 +2426,12 @@ The source code of his implementation is available on github <span>[<a href="#DE
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
 <p id="appendix-A-1">The idea to utilize SVCB based RRs to signal capabilities was first proposed by Tim April in <span>[<a href="#I-D.tapril-ns2" class="cite xref">I-D.tapril-ns2</a>]</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="contributors">
-<section id="appendix-B">
-      <h2 id="name-contributors">
-<a href="#name-contributors" class="section-name selfRef">Contributors</a>
-      </h2>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Petr Špaček</span></div>
-<div dir="auto" class="left"><span class="org">ISC</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:pspacek@isc.org" class="email">pspacek@isc.org</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Ralf Weber</span></div>
-<div dir="auto" class="left"><span class="org">Akamai Technologies</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:rweber@akamai.com" class="email">rweber@akamai.com</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">David C Lawrence</span></div>
-<div dir="auto" class="left"><span class="org">Salesforce</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:tale@dd.org" class="email">tale@dd.org</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Christian Elmerot</span></div>
-<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:christian@elmerot.se" class="email">christian@elmerot.se</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Edward Lewis</span></div>
-<div dir="auto" class="left"><span class="org">ICANN</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:edward.lewis@icann.org" class="email">edward.lewis@icann.org</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Roy Arends</span></div>
-<div dir="auto" class="left"><span class="org">ICANN</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:roy.arends@icann.org" class="email">roy.arends@icann.org</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Shumon Huque</span></div>
-<div dir="auto" class="left"><span class="org">Salesforce</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:shuque@gmail.com" class="email">shuque@gmail.com</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Klaus Darilion</span></div>
-<div dir="auto" class="left"><span class="org">nic.at</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:klaus.darilion@nic.at" class="email">klaus.darilion@nic.at</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Libor Peltan</span></div>
-<div dir="auto" class="left"><span class="org">CZ.nic</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:libor.peltan@nic.cz" class="email">libor.peltan@nic.cz</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Vladimír Čunát</span></div>
-<div dir="auto" class="left"><span class="org">CZ.nic</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:vladimir.cunat@nic.cz" class="email">vladimir.cunat@nic.cz</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Shane Kerr</span></div>
-<div dir="auto" class="left"><span class="org">NS1</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:shane@time-travellers.org" class="email">shane@time-travellers.org</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">David Blacka</span></div>
-<div dir="auto" class="left"><span class="org">Verisign</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:davidb@verisign.com" class="email">davidb@verisign.com</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">George Michaelson</span></div>
-<div dir="auto" class="left"><span class="org">APNIC</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:ggm@algebras.org" class="email">ggm@algebras.org</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Ben Schwartz</span></div>
-<div dir="auto" class="left"><span class="org">Meta</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:bemasc@meta.com" class="email">bemasc@meta.com</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Jan Včelák</span></div>
-<div dir="auto" class="left"><span class="org">NS1</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:jvcelak@ns1.com" class="email">jvcelak@ns1.com</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Peter van Dijk</span></div>
-<div dir="auto" class="left"><span class="org">PowerDNS</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:peter.van.dijk@powerdns.com" class="email">peter.van.dijk@powerdns.com</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Erik Nygren</span></div>
-<div dir="auto" class="left"><span class="org">Akamai Technologies</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:erik+ietf@nygren.org" class="email">erik+ietf@nygren.org</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Vandan Adhvaryu</span></div>
-<div dir="auto" class="left"><span class="org">Team Internet</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:vandan@adhvaryu.uk" class="email">vandan@adhvaryu.uk</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Manu Bretelle</span></div>
-<div dir="auto" class="left"><span class="org">Meta</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:chantr4@gmail.com" class="email">chantr4@gmail.com</a>
-</div>
-</address>
-<address class="vcard">
-        <div dir="auto" class="left"><span class="fn nameRole">Bob Halley</span></div>
-<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
-<div class="email">
-<span>Email:</span>
-<a href="mailto:bhalley@cloudflare.com" class="email">bhalley@cloudflare.com</a>
-</div>
-</address>
+<p id="appendix-A-2">The idea to utilize SVCB for extensible delegations (and also the idea described in this document) emerged from the DNS Hackathon at the IETF 118.
+The following participants contributed to this brainstorm session: Vandan Adhvaryu, Roy Arends, David Blacka, Manu Bretelle, Vladimír Čunát, Klaus Darilion, Peter van Dijk, Christian Elmerot, Bob Halley, Shumon Huque, Shane Kerr, David C Lawrence, Edward Lewis, George Michaelson, Erik Nygren, Libor Peltan, Ben Schwartz, Petr Špaček, Jan Včelák and Ralf Weber<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-C">
+<section id="appendix-B">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>

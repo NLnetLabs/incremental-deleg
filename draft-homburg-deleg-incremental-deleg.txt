@@ -5,10 +5,10 @@
 DNS Delegation                                                P. Homburg
 Internet-Draft                                                NLnet Labs
 Intended status: Standards Track                           J. V. Zutphen
-Expires: 5 January 2025                          University of Amsterdam
+Expires: 9 January 2025                          University of Amsterdam
                                                                W. Toorop
                                                               NLnet Labs
-                                                             4 July 2024
+                                                             8 July 2024
 
 
          Incrementally Deployable Extensible Delegation for DNS
@@ -64,7 +64,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2025.
+   This Internet-Draft will expire on 9 January 2025.
 
 Copyright Notice
 
@@ -103,6 +103,7 @@ Table of Contents
    5.  Extra optimized implementation
    6.  Limitations
      6.1.  Outsourcing to more than one operator
+     6.2.  Priming queries
    7.  Comparison with other delegation mechanisms
      7.1.  Comparison with legacy delegations
      7.2.  Comparison with Name DNS Query Name Minimisation
@@ -114,7 +115,6 @@ Table of Contents
      11.1.  Normative References
      11.2.  Informative References
    Acknowledgments
-   Contributors
    Authors' Addresses
 
 1.  Introduction
@@ -162,7 +162,7 @@ Table of Contents
    further referrals, which is a Security concern).
 
    DNSSEC protection of delegation information prevents that, and is the
-   only counter measure that also works against on-path attackers.  At
+   only countermeasure that also works against on-path attackers.  At
    the time of writing, the only way to DNSSEC validate and verify
    delegations at all levels in the DNS hierarchy is to revalidate
    delegations [I-D.ietf-dnsop-ns-revalidation], which is done after the
@@ -170,13 +170,13 @@ Table of Contents
    [I-D.ietf-dnsop-ns-revalidation]).
 
    Direct delegation information (provided by SVCB RRs in ServiceMode)
-   include the hostnames of the authoritative name serversfor the
+   includes the hostnames of the authoritative name servers for the
    delegation as well as IP addresses for those hostnames.  Since the
    information is stored authoritatively in the delegating zone, it will
    be DNSSEC signed if the zone is signed.  When the delegation is
-   outsourced, then the delegation is protected when the zones providing
-   the aliasing resource records _and_ the zones serving the targets of
-   the aliases are all DNSSEC signed.
+   outsourced, then it's protected when the zones providing the aliasing
+   resource records _and_ the zones serving the targets of the aliases
+   are all DNSSEC signed.
 
 1.4.  Maximize ease of deployment
 
@@ -192,7 +192,7 @@ Table of Contents
 
    Such a resolver would explicitly query for the delegations
    administered as specified in Section 2.  The number of round trips
-   form the recursive resolver to the authoritative name server is
+   from the recursive resolver to the authoritative name server is
    comparable to what is needed for DNS Query Name Minimisation
    [RFC9156].  Additional implementation in the authoritative name
    server optimizes resolution and reduces the number of simultaneous in
@@ -202,9 +202,9 @@ Table of Contents
    incrementally deployed on the authoritative name servers.
 
    Implementation in the recursive may be less demanding with respect to
-   (among other things) DNSSEC validation because of not making
-   additional exceptions to what is authoritative at the parent side of
-   a delegation.
+   (among other things) DNSSEC validation because there is no need to
+   make additional exceptions as to what is authoritative at the parent
+   side of a delegation.
 
 1.5.  Terminology
 
@@ -328,6 +328,10 @@ Table of Contents
    configuration below is operationally equivalent to the CNAME
    configuration above.  It is RECOMMENDED to use a CNAME over an SVCB
    RRset with a single SVCB RR in AliasMode (Section 10.2 of [RFC9460]).
+   Note that an SVCB RRset refers with TargetName to an DNS service,
+   which will be looked up using Port Prefix Naming Section 3 of
+   [RFC9461], but that CNAME refers to the domain name of the target
+   SVCB RRset (or CNAME) which may have an _dns prefix.
 
    $ORIGIN example.
    @                  IN  SOA   ns zonemaster ...
@@ -379,7 +383,7 @@ Table of Contents
                                                dohpath=/dns-query{?dns}
                                                )
                      IN  RRSIG  SVCB ...
-                     IN  NSEC   customer5 RRSIG NSEC SVCB
+                     IN  NSEC   customer7._deleg RRSIG NSEC SVCB
                      IN  RRSIG  NSEC ...
 
    customer7._deleg  IN  CNAME  customer5._deleg
@@ -448,8 +452,8 @@ Table of Contents
 
    Otherwise, the triggering query is below the target zone apex and a
    delegation may exist in the target zone.  In this case two parallel
-   queries are send.  One for the triggering query in the way that is
-   conventional with legacy delegations (which could be just the
+   queries MUST be sent.  One for the triggering query in the way that
+   is conventional with legacy delegations (which could be just the
    triggering query or a minimised query [RFC9156]), and one
    _incremental deleg query_ with query type SVCB.
 
@@ -492,8 +496,8 @@ Table of Contents
        referral response for the legacy delegation MUST be processed as
        would be done with legacy DNS and DNSSEC processing.
 
-   3.  The incremental deleg query name does exist, but resulted in an
-       NOERROR no answer responses (also known as a NODATA response).
+   3.  The incremental deleg query name does exist, but resulted in a
+       NOERROR no answer response (also known as a NODATA response).
 
        If the legacy query, did result in a referral for the same number
        of labels as the subdomain that the incremental deleg query was
@@ -514,16 +518,17 @@ Table of Contents
        incremental deleg query MUST be processed as described above, as
        if it was the initial incremental deleg query.
 
-       If the legacy query was send minimised and needs a followup
+       If the legacy query was sent minimised and needs a followup
        query, then parallel to that followup query a new incremental
-       deleg query will be send, adding a single label to the previous
+       deleg query will be sent, adding a single label to the previous
        incremental deleg query name.  For example if the triggering
-       query is www.university.ac.example. and the target zone example.
-       and the minimised legacy query name was ac.example. (which also
-       resulted in a NOERROR no answer response), then the incremental
-       deleg query to be send along in parallel with the followup legacy
-       query will become university.ac.example.  Processing of the
-       responses of those two new queries will as described above.
+       query is www.university.ac.example. and the target zone is
+       example. and the minimised legacy query name is ac.example.
+       (which also resulted in a NOERROR no answer response), then the
+       incremental deleg query to be sent along in parallel with the
+       followup legacy query will become university.ac.example.
+       Processing of the responses of those two new queries will be done
+       as described above.
 
 3.2.  _deleg label presence
 
@@ -535,10 +540,18 @@ Table of Contents
    label within a resolver can be "unknown", "known not to be present",
    or "known to be present".
 
+   The state regarding the presence of the _deleg label can be deduced
+   from the response of the incremental deleg query, if the target zone
+   is signed with DNSSEC.  If the target zone is unsigned, the procedure
+   as described in the remainder of this section SHOULD be followed.
+
    When the presence of a _deleg label is "unknown", a _deleg presence
-   test query SHOULD be send in parallel to the next query for the zone.
-   The query name for the test query is the _deleg label prepended to
-   the apex of zone for which to test presence, with query type A.
+   test query SHOULD be sent in parallel to the next query for the
+   unsigned target zone (though not when the target name server is known
+   to support incremental deleg, which will be discussed in
+   Section 4.1).  The query name for the test query is the _deleg label
+   prepended to the apex of zone for which to test presence, with query
+   type A.
 
    The testing query can have three possible outcomes:
 
@@ -568,12 +581,12 @@ Table of Contents
    3.  The _deleg label does exist within the zone and contains data.  A
        NOERROR response is return with an A RRset in the answer section.
 
-       The returned A RRset in the answer section MUST be cached for the
-       duration indicated by the TTL for the RRset, adjusted to the
-       resolver's TTL boundaries.  For the period any RRset at the
-       _deleg label is cached, the label is "known to be present" and
-       the resolver MUST send additional incremental deleg queries as
-       described in TODO.
+       The resolver MUST record that the _deleg label is known to be
+       present for a duration indicated by A RRset's TTL value, adjusted
+       to the resolver's TTL boundaries, for example by caching the
+       RRset.  For the period any RRset at the _deleg label is cached,
+       the label is "known to be present" and the resolver MUST send
+       additional incremental deleg queries as described in TODO.
 
 4.  Optimized implementation
 
@@ -647,9 +660,6 @@ Table of Contents
    example.        1234    IN      NSEC    (
                    customer5._deleg.example.  NS SOA RRSIG NSEC DNSKEY )
    example.        1234    IN      RRSIG   NSEC ...
-   example.        1234    IN      SOA     ns.example. (
-                   zonemaster.example. 20240627 7200 3600 1209600 1234 )
-   example.        1234    IN      RRSIG   SOA ...
 
    ;; ADDITIONAL SECTION:
    ns.customer6.example.   3600    IN      A       203.0.113.1
@@ -721,7 +731,7 @@ Table of Contents
    the incremental delegation information (or the NSEC(3) records
    showing the non-existence) in the authority section of referral
    responses.  If it is known that an authoritative name server supports
-   incremental deleg, than no direct queries for the incremental
+   incremental deleg, then no direct queries for the incremental
    delegation need to be send in parallel to the legacy delegation
    query.  A resolver SHOULD register that an authoritative name server
    supports incremental deleg when the authority section, of the
@@ -833,24 +843,72 @@ Table of Contents
    certain amount, say 8) and then let the resolver pick from all the
    SVCB RRs, ignoring SvcPriority.
 
+6.2.  Priming queries
+
+   Some zones, such as the root zone, are targeted directly from hints
+   files.  Information about which authoritative name servers and with
+   capabilities, MAY be provided in an SVCB RRset directly at the _deleg
+   label under the apex of the zone.  Priming queries from a incremental
+   deleg supporting resolver, MUST send an _deleg.<apex> SVCB query in
+   parallel to the legacy <apex> NS query and process the content as if
+   it was found through an incremental referral response.
+
 7.  Comparison with other delegation mechanisms
 
-   +=+======+=========+========++=====================+===============+
-   | | apex | support | _deleg || <sub>._deleg.<apex> | _deleg.<apex> |
-   | |      |         |        ||         SVCB        |       A       |
-   +=+======+=========+========++=====================+===============+
-   |1|  +   |    *    |   *    ||                     |               |
-   +-+------+---------+--------++---------------------+---------------+
-   |2|  -   |    +    |   *    ||                     |               |
-   +-+------+---------+--------++---------------------+---------------+
-   |3|  -   |    ?    |   -    ||                     |               |
-   +-+------+---------+--------++---------------------+---------------+
-   |4|  -   |    ?    |   +    ||          X          |               |
-   +-+------+---------+--------++---------------------+---------------+
-   |5|  -   |    ?    |   ?    ||          X          |       X       |
-   +-+------+---------+--------++---------------------+---------------+
+   Table Table 1 provides an overview of when extra queries, in parallel
+   to the legacy query, are sent.
+
+   +=+====+=========+=========++=====================+================+
+   | |apex| support |  _deleg || <sub>._deleg.<apex> | _deleg.<apex>  |
+   | |    |         |         ||         SVCB        |       A        |
+   +=+====+=========+=========++=====================+================+
+   |1|Yes |    *    |    *    ||                     |                |
+   +-+----+---------+---------++---------------------+----------------+
+   |2| No |    *    |    No   ||                     |                |
+   +-+----+---------+---------++---------------------+----------------+
+   |3| No |   Yes   |    *    ||                     |                |
+   +-+----+---------+---------++---------------------+----------------+
+   |4| No | Unknown |   Yes   ||          X          |                |
+   +-+----+---------+---------++---------------------+----------------+
+   |5| No | Unknown | Unknown ||          X          |    only for    |
+   | |    |         |         ||                     | unsigned zones |
+   +-+----+---------+---------++---------------------+----------------+
 
        Table 1: Additional queries in parallel to the legacy query
+
+   The three headers on the left side of the table mean the following:
+
+   apex:
+      Whether the query is for the apex of the target zone.  "Yes" means
+      an apex query, "No" means a query below the apex which may be
+      delegated
+
+   support:
+      Whether or not the target authoritative server supports
+      incremental deleg.  "Yes" means it supports it and "Unknown" means
+      support is not detected. "*" means it does not matter
+
+   _deleg:
+      Whether or not the _deleg label is present in the target zone (and
+      thus incremental delegations)
+
+   On the right side of the table are the extra queries, to be sent in
+   parallel with the legacy query.  The _deleg presence test query (most
+   right column) only needs to be sent to unsigned target zones, because
+   its non-existence will be show in the NSEC(3) records showing the
+   non-existence of the incremental delegation (second from right
+   column).
+
+   If the query name is the same as the apex of the target zone, no
+   extra queries need to be sent (Row 1).  If the _deleg label is known
+   not to exist in the target zone (Row 2) or if the target name server
+   is known to support incremental deleg (Row 3), no extra queries need
+   to be sent.  Only if it is unknown that the target name server
+   supports incremental deleg, and the _deleg label is known to exist in
+   the target zone (Row 4) or it its not known whether or not the _deleg
+   label exists (Row 5), and extra incremental deleg query is sent in
+   parallel to the legacy query.  If the target zone is unsigned,
+   presence of the _deleg label needs to be tested explicitly (Row 5).
 
 7.1.  Comparison with legacy delegations
 
@@ -858,35 +916,39 @@ Table of Contents
 
 7.3.  Comparison with [I-D.dnsop-deleg]
 
-   +=========================+========================================+
-   | [I-D.dnsop-deleg]       | [this document]                        |
-   +=========================+========================================+
-   | Requires implementation | Only resolver implementation required. |
-   | in both authoritative   | But optimized with updated             |
-   | name server as well as  | authoritative software.                |
-   | in the resolver         |                                        |
-   +-------------------------+----------------------------------------+
-   | Authoritative name      | Authoritative name servers may be      |
-   | servers need to be      | updated gradually for optimization     |
-   | updated all at once     |                                        |
-   +-------------------------+----------------------------------------+
-   | DNSKEY flag needed to   | No DNSKEY flag needed.  Separation of  |
-   | signal DELEG.  Special  | concerns.                              |
-   | requirements for the    |                                        |
-   | child domain.           |                                        |
-   +-------------------------+----------------------------------------+
-   | New semantics about     | Works with current DNS semantics.      |
-   | what is authoritative   | Easier to implement.                   |
-   | (BOGUS with current     |                                        |
-   | DNSSEC validators)      |                                        |
-   +-------------------------+----------------------------------------+
-   | No extra queries        | An extra query _per zone_ to determine |
-   |                         | presence of the _deleg label, and _per |
-   |                         | authoritative_ server when incremental |
-   |                         | deleg support is not yet detected      |
-   +-------------------------+----------------------------------------+
+     +=================================+=============================+
+     | [I-D.dnsop-deleg]               | [this document]             |
+     +=================================+=============================+
+     | Requires implementation in both | Only resolver               |
+     | authoritative name server as    | implementation required.    |
+     | well as in the resolver         | But optimized with updated  |
+     |                                 | authoritative software.     |
+     +---------------------------------+-----------------------------+
+     | DNSKEY flag needed to signal    | No DNSKEY flag needed.      |
+     | DELEG support with all          | Separation of concerns.     |
+     | authoritative name servers that |                             |
+     | serve the parent (delegating)   |                             |
+     | domain.  Special requirements   |                             |
+     | for the child domain.           |                             |
+     +---------------------------------+-----------------------------+
+     | Authoritative name servers need | Authoritative name servers  |
+     | to be updated all at once       | may be updated gradually    |
+     |                                 | for optimization            |
+     +---------------------------------+-----------------------------+
+     | New semantics about what is     | Works with current DNS and  |
+     | authoritative (BOGUS with       | DNSSEC semantics.  Easier   |
+     | current DNSSEC validators)      | to implement.               |
+     +---------------------------------+-----------------------------+
+     | No extra queries                | An extra query, in parallel |
+     |                                 | to the legacy query, _per   |
+     |                                 | zone_ to determine presence |
+     |                                 | of the _deleg label, and    |
+     |                                 | _per authoritative_ server  |
+     |                                 | when incremental deleg      |
+     |                                 | support is not yet detected |
+     +---------------------------------+-----------------------------+
 
-      Table 2: Comparison of [I-D.dnsop-deleg] with [this document]
+       Table 2: Comparison of [I-D.dnsop-deleg] with [this document]
 
 8.  Implementation Status
 
@@ -897,8 +959,8 @@ Table of Contents
    supporting delegations as specified in this document for the Unbound
    recursive resolver as part of his master thesis for the Security and
    Network Engineering master program of the University of Amsterdam.
-   The source code of his implementation is available on github
-   [DELEG4UNBOUND]
+   [JZUTPHEN] The source code of his implementation is available on
+   github [DELEG4UNBOUND]
 
 9.  Security Considerations
 
@@ -998,9 +1060,9 @@ Table of Contents
    [I-D.ietf-dnsop-ns-revalidation]
               Huque, S., Vixie, P. A., and W. Toorop, "Delegation
               Revalidation by DNS Resolvers", Work in Progress,
-              Internet-Draft, draft-ietf-dnsop-ns-revalidation-06, 17
-              March 2024, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-dnsop-ns-revalidation-06>.
+              Internet-Draft, draft-ietf-dnsop-ns-revalidation-07, 8
+              July 2024, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-dnsop-ns-revalidation-07>.
 
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
@@ -1016,6 +1078,11 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-tapril-
               ns2-01>.
 
+   [JZUTPHEN] van Zutphen, J., "Extensible delegations in DNS Recursive
+              resolvers", n.d.,
+              <https://nlnetlabs.nl/downloads/publications/extensible-
+              deleg-in-resolvers_2024-07-08.pdf>.
+
    [RFC8552]  Crocker, D., "Scoped Interpretation of DNS Resource
               Records through "Underscored" Naming of Attribute Leaves",
               BCP 222, RFC 8552, DOI 10.17487/RFC8552, March 2019,
@@ -1030,107 +1097,14 @@ Acknowledgments
    The idea to utilize SVCB based RRs to signal capabilities was first
    proposed by Tim April in [I-D.tapril-ns2].
 
-Contributors
-
-   Petr Špaček
-   ISC
-   Email: pspacek@isc.org
-
-
-   Ralf Weber
-   Akamai Technologies
-   Email: rweber@akamai.com
-
-
-   David C Lawrence
-   Salesforce
-   Email: tale@dd.org
-
-
-   Christian Elmerot
-   Cloudflare
-   Email: christian@elmerot.se
-
-
-   Edward Lewis
-   ICANN
-   Email: edward.lewis@icann.org
-
-
-   Roy Arends
-   ICANN
-   Email: roy.arends@icann.org
-
-
-   Shumon Huque
-   Salesforce
-   Email: shuque@gmail.com
-
-
-   Klaus Darilion
-   nic.at
-   Email: klaus.darilion@nic.at
-
-
-   Libor Peltan
-   CZ.nic
-   Email: libor.peltan@nic.cz
-
-
-   Vladimír Čunát
-   CZ.nic
-   Email: vladimir.cunat@nic.cz
-
-
-   Shane Kerr
-   NS1
-   Email: shane@time-travellers.org
-
-
-   David Blacka
-   Verisign
-   Email: davidb@verisign.com
-
-
-   George Michaelson
-   APNIC
-   Email: ggm@algebras.org
-
-
-   Ben Schwartz
-   Meta
-   Email: bemasc@meta.com
-
-
-   Jan Včelák
-   NS1
-   Email: jvcelak@ns1.com
-
-
-   Peter van Dijk
-   PowerDNS
-   Email: peter.van.dijk@powerdns.com
-
-
-   Erik Nygren
-   Akamai Technologies
-   Email: erik+ietf@nygren.org
-
-
-   Vandan Adhvaryu
-   Team Internet
-   Email: vandan@adhvaryu.uk
-
-
-   Manu Bretelle
-   Meta
-   Email: chantr4@gmail.com
-
-
-   Bob Halley
-   Cloudflare
-   Email: bhalley@cloudflare.com
-
+   The idea to utilize SVCB for extensible delegations (and also the
+   idea described in this document) emerged from the DNS Hackathon at
+   the IETF 118.  The following participants contributed to this
+   brainstorm session: Vandan Adhvaryu, Roy Arends, David Blacka, Manu
+   Bretelle, Vladimír Čunát, Klaus Darilion, Peter van Dijk, Christian
+   Elmerot, Bob Halley, Shumon Huque, Shane Kerr, David C Lawrence,
+   Edward Lewis, George Michaelson, Erik Nygren, Libor Peltan, Ben
+   Schwartz, Petr Špaček, Jan Včelák and Ralf Weber
 
 Authors' Addresses
 
