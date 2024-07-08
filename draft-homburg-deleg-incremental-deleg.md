@@ -650,7 +650,7 @@ If the target zone is unsigned, presence of the `_deleg` label needs to be teste
 |-----------------------------------------|
 | New semantics about what is authoritative (BOGUS with current DNSSEC validators) | Works with current DNS and DNSSEC semantics. Easier to implement. |
 |-----------------------------------------|
-| No extra queries | An extra query, in parallel to the legacy query, *per zone* to determine presence of the `_deleg` label, and *per authoritative* server when incremental deleg support is not yet detected |
+| No extra queries | An extra query, in parallel to the legacy query, *per authoritative* server when incremental deleg support is not yet detected, and *per unsigned zone* to determine presence of the `_deleg` label |
 |---------------------|-------------------|
 {: title="Comparison of [I-D.dnsop-deleg] with [this document]"}
 
