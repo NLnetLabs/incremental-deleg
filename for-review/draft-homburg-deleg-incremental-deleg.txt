@@ -162,7 +162,7 @@ Table of Contents
    further referrals, which is a Security concern).
 
    DNSSEC protection of delegation information prevents that, and is the
-   only counter measure that also works against on-path attackers.  At
+   only countermeasure that also works against on-path attackers.  At
    the time of writing, the only way to DNSSEC validate and verify
    delegations at all levels in the DNS hierarchy is to revalidate
    delegations [I-D.ietf-dnsop-ns-revalidation], which is done after the
@@ -170,13 +170,13 @@ Table of Contents
    [I-D.ietf-dnsop-ns-revalidation]).
 
    Direct delegation information (provided by SVCB RRs in ServiceMode)
-   include the hostnames of the authoritative name serversfor the
+   includes the hostnames of the authoritative name servers for the
    delegation as well as IP addresses for those hostnames.  Since the
    information is stored authoritatively in the delegating zone, it will
    be DNSSEC signed if the zone is signed.  When the delegation is
-   outsourced, then the delegation is protected when the zones providing
-   the aliasing resource records _and_ the zones serving the targets of
-   the aliases are all DNSSEC signed.
+   outsourced, then it's protected when the zones providing the aliasing
+   resource records _and_ the zones serving the targets of the aliases
+   are all DNSSEC signed.
 
 1.4.  Maximize ease of deployment
 
@@ -192,7 +192,7 @@ Table of Contents
 
    Such a resolver would explicitly query for the delegations
    administered as specified in Section 2.  The number of round trips
-   form the recursive resolver to the authoritative name server is
+   from the recursive resolver to the authoritative name server is
    comparable to what is needed for DNS Query Name Minimisation
    [RFC9156].  Additional implementation in the authoritative name
    server optimizes resolution and reduces the number of simultaneous in
@@ -328,6 +328,10 @@ Table of Contents
    configuration below is operationally equivalent to the CNAME
    configuration above.  It is RECOMMENDED to use a CNAME over an SVCB
    RRset with a single SVCB RR in AliasMode (Section 10.2 of [RFC9460]).
+   Note that an SVCB RRset refers with TargetName to an DNS service,
+   which will be looked up using Port Prefix Naming Section 3 of
+   [RFC9461], but that CNAME refers to the domain name of the target
+   SVCB RRset (or CNAME) which may have an _dns prefix.
 
    $ORIGIN example.
    @                  IN  SOA   ns zonemaster ...
@@ -448,8 +452,8 @@ Table of Contents
 
    Otherwise, the triggering query is below the target zone apex and a
    delegation may exist in the target zone.  In this case two parallel
-   queries are send.  One for the triggering query in the way that is
-   conventional with legacy delegations (which could be just the
+   queries MUST be sent.  One for the triggering query in the way that
+   is conventional with legacy delegations (which could be just the
    triggering query or a minimised query [RFC9156]), and one
    _incremental deleg query_ with query type SVCB.
 
@@ -492,8 +496,8 @@ Table of Contents
        referral response for the legacy delegation MUST be processed as
        would be done with legacy DNS and DNSSEC processing.
 
-   3.  The incremental deleg query name does exist, but resulted in an
-       NOERROR no answer responses (also known as a NODATA response).
+   3.  The incremental deleg query name does exist, but resulted in a
+       NOERROR no answer response (also known as a NODATA response).
 
        If the legacy query, did result in a referral for the same number
        of labels as the subdomain that the incremental deleg query was
@@ -514,16 +518,17 @@ Table of Contents
        incremental deleg query MUST be processed as described above, as
        if it was the initial incremental deleg query.
 
-       If the legacy query was send minimised and needs a followup
+       If the legacy query was sent minimised and needs a followup
        query, then parallel to that followup query a new incremental
-       deleg query will be send, adding a single label to the previous
+       deleg query will be sent, adding a single label to the previous
        incremental deleg query name.  For example if the triggering
-       query is www.university.ac.example. and the target zone example.
-       and the minimised legacy query name was ac.example. (which also
-       resulted in a NOERROR no answer response), then the incremental
-       deleg query to be send along in parallel with the followup legacy
-       query will become university.ac.example.  Processing of the
-       responses of those two new queries will as described above.
+       query is www.university.ac.example. and the target zone is
+       example. and the minimised legacy query name is ac.example.
+       (which also resulted in a NOERROR no answer response), then the
+       incremental deleg query to be sent along in parallel with the
+       followup legacy query will become university.ac.example.
+       Processing of the responses of those two new queries will be done
+       as described above.
 
 3.2.  _deleg label presence
 
@@ -536,9 +541,11 @@ Table of Contents
    or "known to be present".
 
    When the presence of a _deleg label is "unknown", a _deleg presence
-   test query SHOULD be send in parallel to the next query for the zone.
-   The query name for the test query is the _deleg label prepended to
-   the apex of zone for which to test presence, with query type A.
+   test query SHOULD be sent in parallel to the next query for the zone
+   (though not when the target name server is known to support
+   incremental deleg, which will be discussed in Section 4.1).  The
+   query name for the test query is the _deleg label prepended to the
+   apex of zone for which to test presence, with query type A.
 
    The testing query can have three possible outcomes:
 
@@ -568,12 +575,12 @@ Table of Contents
    3.  The _deleg label does exist within the zone and contains data.  A
        NOERROR response is return with an A RRset in the answer section.
 
-       The returned A RRset in the answer section MUST be cached for the
-       duration indicated by the TTL for the RRset, adjusted to the
-       resolver's TTL boundaries.  For the period any RRset at the
-       _deleg label is cached, the label is "known to be present" and
-       the resolver MUST send additional incremental deleg queries as
-       described in TODO.
+       The resolver MUST record that the _deleg label is known to be
+       present for a duration indicated by A RRset's TTL value, adjusted
+       to the resolver's TTL boundaries, for example by caching the
+       RRset.  For the period any RRset at the _deleg label is cached,
+       the label is "known to be present" and the resolver MUST send
+       additional incremental deleg queries as described in TODO.
 
 4.  Optimized implementation
 
@@ -718,7 +725,7 @@ Table of Contents
    the incremental delegation information (or the NSEC(3) records
    showing the non-existence) in the authority section of referral
    responses.  If it is known that an authoritative name server supports
-   incremental deleg, than no direct queries for the incremental
+   incremental deleg, then no direct queries for the incremental
    delegation need to be send in parallel to the legacy delegation
    query.  A resolver SHOULD register that an authoritative name server
    supports incremental deleg when the authority section, of the
@@ -995,9 +1002,9 @@ Table of Contents
    [I-D.ietf-dnsop-ns-revalidation]
               Huque, S., Vixie, P. A., and W. Toorop, "Delegation
               Revalidation by DNS Resolvers", Work in Progress,
-              Internet-Draft, draft-ietf-dnsop-ns-revalidation-06, 17
-              March 2024, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-dnsop-ns-revalidation-06>.
+              Internet-Draft, draft-ietf-dnsop-ns-revalidation-07, 8
+              July 2024, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-dnsop-ns-revalidation-07>.
 
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
