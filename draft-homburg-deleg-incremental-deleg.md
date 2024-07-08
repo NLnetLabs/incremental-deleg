@@ -195,12 +195,12 @@ With legacy delegations, the NS RRset at the parent side of a delegation as well
 An adversary that is able to spoof a referral response, can alter this information and redirect all traffic for the delegation to a rogue name server undetected.
 The adversary can then perceive all queries for the redirected zone (Privacy concern) and alter all unsigned parts of responses (such as further referrals, which is a Security concern).
 
-DNSSEC protection of delegation information prevents that, and is the only counter measure that also works against on-path attackers.
+DNSSEC protection of delegation information prevents that, and is the only countermeasure that also works against on-path attackers.
 At the time of writing, the only way to DNSSEC validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations {{?I-D.ietf-dnsop-ns-revalidation}}, which is done after the fact and has other security concerns ({{Section 7 of ?I-D.ietf-dnsop-ns-revalidation}}).
 
-Direct delegation information (provided by SVCB RRs in ServiceMode) include the hostnames of the authoritative name serversfor the delegation as well as IP addresses for those hostnames.
+Direct delegation information (provided by SVCB RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.
 Since the information is stored authoritatively in the delegating zone, it will be DNSSEC signed if the zone is signed.
-When the delegation is outsourced, then the delegation is protected when the zones providing the aliasing resource records *and* the zones serving the targets of the aliases are all DNSSEC signed.
+When the delegation is outsourced, then it's protected when the zones providing the aliasing resource records *and* the zones serving the targets of the aliases are all DNSSEC signed.
 
 ## Maximize ease of deployment {#deployability}
 
@@ -212,7 +212,7 @@ Unmodified signers will sign the delegation information in the delegating zone.
 Only the recursive resolver needs modification to follow referrals as provided by the delegation information.
 
 Such a resolver would explicitly query for the delegations administered as specified in {{delegation-administration}}.
-The number of round trips form the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation {{!RFC9156}}.
+The number of round trips from the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation {{!RFC9156}}.
 Additional implementation in the authoritative name server optimizes resolution and reduces the number of simultaneous in parallel queries to that what would be needed for legacy delegations.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
 
@@ -310,6 +310,7 @@ customer1._deleg   IN  SVCB  1 ( ns.customer1
 Instead of using CNAME, the outsourcing could also been accomplished with an SVCB RRset with a single SVCB RR in AliasMode.
 The configuration below is operationally equivalent to the CNAME configuration above.
 It is RECOMMENDED to use a CNAME over an SVCB RRset with a single SVCB RR in AliasMode ({{Section 10.2 of !RFC9460}}).
+Note that an SVCB RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target SVCB RRset (or CNAME) which may have an `_dns` prefix.
 
     $ORIGIN example.
     @                  IN  SOA   ns zonemaster ...
@@ -412,7 +413,7 @@ If the triggering query name is the same as the name of the target zone apex, th
 No special behavior or processing is needed.
 
 Otherwise, the triggering query is below the target zone apex and a delegation may exist in the target zone.
-In this case two parallel queries are send.
+In this case two parallel queries MUST be sent.
 One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query {{!RFC9156}}), and one *incremental deleg query* with query type SVCB.
 
 The incremental deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a `_deleg` label and the name of the target zone.
@@ -433,7 +434,7 @@ The eventual incremental deleg query response, after following all redirections 
 
    There is no incremental delegation for the subzone, and the referral response for the legacy delegation MUST be processed  as would be done with legacy DNS and DNSSEC processing.
 
-3. The incremental deleg query name does exist, but resulted in an NOERROR no answer responses (also known as a NODATA response).
+3. The incremental deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).
 
    If the legacy query, did result in a referral for the same number of labels as the subdomain that the incremental deleg query was for, then there was no incremental delegation for the subzone, and the referral response for the legacy delegation MUST be processed as would be done with legacy DNS and DNSSEC processing.
 
@@ -443,9 +444,9 @@ The eventual incremental deleg query response, after following all redirections 
    For example if the triggering query is `www.university.ac.example.` and the target zone `example.`, and the legacy response contained an NS RRset for `university.ac.example.`, then the incremental deleg query name is `university.ac._deleg.example.`
    The response to the new incremental deleg query MUST be processed as described above, as if it was the initial incremental deleg query.
 
-   If the legacy query was send minimised and needs a followup query, then parallel to that followup query a new incremental deleg query will be send, adding a single label to the previous incremental deleg query name.
-   For example if the triggering query is `www.university.ac.example.` and the target zone `example.` and the minimised legacy query name was `ac.example.` (which also resulted in a NOERROR no answer response), then the incremental deleg query to be send along in parallel with the followup legacy query will become `university.ac.example.`
-   Processing of the responses of those two new queries will as described above.
+   If the legacy query was sent minimised and needs a followup query, then parallel to that followup query a new incremental deleg query will be sent, adding a single label to the previous incremental deleg query name.
+   For example if the triggering query is `www.university.ac.example.` and the target zone is `example.` and the minimised legacy query name is `ac.example.` (which also resulted in a NOERROR no answer response), then the incremental deleg query to be sent along in parallel with the followup legacy query will become `university.ac.example.`
+   Processing of the responses of those two new queries will be done as described above.
 
 ## `_deleg` label presence {#presence}
 
@@ -453,7 +454,7 @@ Absence of the `_deleg` label in a zone is a clear signal that the zone does not
 Recursive resolvers SHOULD NOT send any additional incremental deleg queries for zones for which it is known that it does not contain the `_deleg` label at the apex.
 The state regarding the presence of the `_deleg` label within a resolver can be "unknown", "known not to be present", or "known to be present".
 
-When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query SHOULD be send in parallel to the next query for the zone.
+When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the zone (though not when the target name server is known to support incremental deleg, which will be discussed in {{authoritative-name-server-support}}).
 The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type A.
 
 The testing query can have three possible outcomes:
@@ -472,7 +473,7 @@ The testing query can have three possible outcomes:
 3. The `_deleg` label does exist within the zone and contains data.
    A NOERROR response is return with an A RRset in the answer section.
 
-   The returned A RRset in the answer section MUST be cached for the duration indicated by the TTL for the RRset, adjusted to the resolver's TTL boundaries.
+   The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
    For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
 
 # Optimized implementation
@@ -601,7 +602,7 @@ If the incremental deleg does not exist, then it is simply absent from the autho
 ## Resolver behavior with authoritative name server support {#behavior-with-auth-support}
 
 Incremental deleg supporting authoritative name servers will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
-If it is known that an authoritative name server supports incremental deleg, than no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
+If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
 A resolver SHOULD register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.
 
 When the authority section of a referral response contains an SVCB RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such SVCB or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that SVCB, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
