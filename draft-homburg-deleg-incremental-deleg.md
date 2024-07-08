@@ -26,7 +26,7 @@ category: std
 docname: draft-homburg-deleg-incremental-deleg-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
-date: 2024-07-04
+date: 2024-07-08
 consensus: true
 v: 3
 area: int
@@ -151,6 +151,13 @@ informative:
     DELEG4UNBOUND:
         target: https://github.com/jessevz/unbound/
         title: "A proof of concept implementation of incremental deleg"
+        author:
+          -
+            name: Jesse van Zutphen
+            ins: J. van Zutphen
+    JZUTPHEN:
+        target: https://nlnetlabs.nl/downloads/publications/extensible-deleg-in-resolvers_2024-07-08.pdf
+        title: "Extensible delegations in DNS Recursive resolvers"
         author:
           -
             name: Jesse van Zutphen
@@ -661,20 +668,20 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
 
 # Comparison with other delegation mechanisms
 
-|---|------|---------|----------|-|----------------------------|-------------------|
-|   | apex | support | `_deleg` | | `<sub>._deleg.<apex> SVCB` | `_deleg.<apex>` A |
-|:-:|:----:|:-------:|:--------:|-|:--------------------------:|:-----------------:|
-| 1 | +    | *       | *        | |                            |                   |
-|---|------|---------|----------|-|----------------------------|-------------------|
-| 2 | -    | +       | *        | |                            |                   |
-|---|------|---------|----------|-|----------------------------|-------------------|
-| 3 | -    | ?       | -        | |                            |                   |
-|---|------|---------|----------|-|----------------------------|-------------------|
-| 4 | -    | ?       | +        | | X                          |                   |
-|---|------|---------|----------|-|----------------------------|-------------------|
-| 5 | -    | ?       | ?        | | X                          | X                 |
-|---|------|---------|----------|-|----------------------------|-------------------|
-{: title="Additional queries in parallel to the legacy query"}
+|---|------|---------|----------|---|----------------------------|-------------------|
+|   | apex | support | `_deleg` |   | `<sub>._deleg.<apex> SVCB` | `_deleg.<apex> A` |
+|:-:|:----:|:-------:|:--------:|---|:--------------------------:|:-----------------:|
+| 1 | +    | *       | *        |   |                            |                   |
+|---|------|---------|----------|---|----------------------------|-------------------|
+| 2 | -    | *       | -        |   |                            |                   |
+|---|------|---------|----------|---|----------------------------|-------------------|
+| 3 | -    | +       | *        |   |                            |                   |
+|---|------|---------|----------|---|----------------------------|-------------------|
+| 4 | -    | ?       | +        |   | X                          |                   |
+|---|------|---------|----------|---|----------------------------|-------------------|
+| 5 | -    | ?       | ?        |   | X                          | X                 |
+|---|------|---------|----------|---|----------------------------|-------------------|
+{: #xtraqueries title="Additional queries in parallel to the legacy query"}
 
 
 ## Comparison with legacy delegations
@@ -704,7 +711,7 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
 
 **Note to the RFC Editor**: please remove this entire section before publication.
 
-Jesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam.
+Jesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam. {{JZUTPHEN}}
 The source code of his implementation is available on github {{DELEG4UNBOUND}}
 
 # Security Considerations
@@ -716,11 +723,11 @@ TODO Security
 Per {{?RFC8552}}, IANA is requested to add the following entry to the DNS "Underscored and Globally Scoped DNS Node Names" registry:
 
 
-|---------|------------|-------------------|
-| RR Type | _NODE NAME | Reference         |
-|---------|:-----------|-------------------|
-| SVCB    | _deleg     | \[this document\] |
-|---------|------------|-------------------|
+|---------|-------------|-------------------|
+| RR Type | \_NODE NAME | Reference         |
+|---------|:------------|-------------------|
+| SVCB    | \_deleg     | \[this document\] |
+|---------|-------------|-------------------|
 {: title="Entry in the Underscored and Globally Scoped DNS Node Names registry"}
 
 --- back
