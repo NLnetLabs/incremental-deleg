@@ -60,91 +60,6 @@ author:
     organization: NLnet Labs
     email: willem@nlnetlabs.nl
 
-contributor:
--
-    ins: P.Špaček
-    name: Petr Špaček
-    organization: ISC
-    email: pspacek@isc.org
--
-    ins: R.Weber
-    name: Ralf Weber
-    organization: Akamai Technologies
-    email: rweber@akamai.com
--
-    ins: D.Lawrence
-    name: David C Lawrence
-    organization: Salesforce
-    email: tale@dd.org
--
-    name: Christian Elmerot
-    organization: Cloudflare
-    email: christian@elmerot.se
--
-    name: Edward Lewis
-    organization: ICANN
-    email: edward.lewis@icann.org
--
-    name: Roy Arends
-    organization: ICANN
-    email: roy.arends@icann.org
--
-    name: Shumon Huque
-    organization: Salesforce
-    email: shuque@gmail.com
--
-    name: Klaus Darilion
-    organization: nic.at
-    email: klaus.darilion@nic.at
--
-    name: Libor Peltan
-    organization: CZ.nic
-    email: libor.peltan@nic.cz
--
-    name: Vladimír Čunát
-    organization: CZ.nic
-    email: vladimir.cunat@nic.cz
--
-    name: Shane Kerr
-    organization: NS1
-    email: shane@time-travellers.org
--
-    name: David Blacka
-    organization: Verisign
-    email: davidb@verisign.com
--
-    name: George Michaelson
-    organization: APNIC
-    email: ggm@algebras.org
--
-    name: Ben Schwartz
-    organization: Meta
-    email: bemasc@meta.com
--
-    name: Jan Včelák
-    organization: NS1
-    email: jvcelak@ns1.com
--
-    name: Peter van Dijk
-    organization: PowerDNS
-    email: peter.van.dijk@powerdns.com
--
-    name: Erik Nygren
-    organization: Akamai Technologies
-    email: erik+ietf@nygren.org
--
-    name: Vandan Adhvaryu
-    organization: Team Internet
-    email: vandan@adhvaryu.uk
--
-    name: Manu Bretelle
-    organization: Meta
-    email: chantr4@gmail.com
--
-    name: Bob Halley
-    organization: Cloudflare
-    email: bhalley@cloudflare.com
-
 normative:
 
 informative:
@@ -461,7 +376,10 @@ Absence of the `_deleg` label in a zone is a clear signal that the zone does not
 Recursive resolvers SHOULD NOT send any additional incremental deleg queries for zones for which it is known that it does not contain the `_deleg` label at the apex.
 The state regarding the presence of the `_deleg` label within a resolver can be "unknown", "known not to be present", or "known to be present".
 
-When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the zone (though not when the target name server is known to support incremental deleg, which will be discussed in {{authoritative-name-server-support}}).
+The state regarding the presence of the `_deleg` label can be deduced from the response of the incremental deleg query, if the target zone is signed with DNSSEC.
+If the target zone is unsigned, the procedure as described in the remainder of this section SHOULD be followed.
+
+When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the unsigned target zone (though not when the target name server is known to support incremental deleg, which will be discussed in {{authoritative-name-server-support}}).
 The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type A.
 
 The testing query can have three possible outcomes:
@@ -666,23 +584,53 @@ Currently this means that query load can be spread out over multiple operators (
 Assumingly SVCB currently supports only a single AliasMode RR in an SVCB RRset because it would otherwise be impossible to interpret the SvcPriority from the SVCB RRsets that is aliased to.
 A possible solution could be to resolve all AliasMode RRs at the delegation point (though limited to a certain amount, say 8) and then let the resolver pick from all the SVCB RRs, ignoring SvcPriority.
 
+## Priming queries
+
+Some zones, such as the root zone, are targeted directly from hints files.
+Information about which authoritative name servers and with capabilities, MAY be provided in an SVCB RRset directly at the `_deleg` label under the apex of the zone.
+Priming queries from a incremental deleg supporting resolver, MUST send an `_deleg.<apex> SVCB` query in parallel to the legacy `<apex> NS` query and process the content as if it was found through an incremental referral response.
+
 # Comparison with other delegation mechanisms
 
-|---|------|---------|----------|---|----------------------------|-------------------|
-|   | apex | support | `_deleg` |   | `<sub>._deleg.<apex> SVCB` | `_deleg.<apex> A` |
-|:-:|:----:|:-------:|:--------:|---|:--------------------------:|:-----------------:|
-| 1 | +    | *       | *        |   |                            |                   |
-|---|------|---------|----------|---|----------------------------|-------------------|
-| 2 | -    | *       | -        |   |                            |                   |
-|---|------|---------|----------|---|----------------------------|-------------------|
-| 3 | -    | +       | *        |   |                            |                   |
-|---|------|---------|----------|---|----------------------------|-------------------|
-| 4 | -    | ?       | +        |   | X                          |                   |
-|---|------|---------|----------|---|----------------------------|-------------------|
-| 5 | -    | ?       | ?        |   | X                          | X                 |
-|---|------|---------|----------|---|----------------------------|-------------------|
+Table {{xtraqueries}} provides an overview of when extra queries, in parallel to the legacy query, are sent.
+
+|---|------|---------|----------|---|----------------------------|-------------------------|
+|   | apex | support | `_deleg` |   | `<sub>._deleg.<apex> SVCB` | `_deleg.<apex> A`       |
+|:-:|:----:|:-------:|:--------:|---|:--------------------------:|:-----------------------:|
+| 1 | Yes  | \*      | \*       |   |                            |                         |
+|---|------|---------|----------|---|----------------------------|-------------------------|
+| 2 | No   | \*      | No       |   |                            |                         |
+|---|------|---------|----------|---|----------------------------|-------------------------|
+| 3 | No   | Yes     | \*       |   |                            |                         |
+|---|------|---------|----------|---|----------------------------|-------------------------|
+| 4 | No   | Unknown | Yes      |   | X                          |                         |
+|---|------|---------|----------|---|----------------------------|-------------------------|
+| 5 | No   | Unknown | Unknown  |   | X                          | only for unsigned zones |
+|---|------|---------|----------|---|----------------------------|-------------------------|
 {: #xtraqueries title="Additional queries in parallel to the legacy query"}
 
+The three headers on the left side of the table mean the following:
+
+{: vspace="0"}
+apex:
+: Whether the query is for the apex of the target zone.
+  "Yes" means an apex query, "No" means a query below the apex which may be delegated
+
+support:
+: Whether or not the target authoritative server supports incremental deleg.
+  "Yes" means it supports it and "Unknown" means support is not detected.
+  "\*" means it does not matter
+
+`_deleg`:
+: Whether or not the `_deleg` label is present in the target zone (and thus incremental delegations)
+
+On the right side of the table are the extra queries, to be sent in parallel with the legacy query.
+The `_deleg` presence test query (most right column) only needs to be sent to unsigned target zones, because its non-existence will be show in the NSEC(3) records showing the non-existence of the incremental delegation (second from right column).
+
+If the query name is the same as the apex of the target zone, no extra queries need to be sent (Row 1).
+If the `_deleg` label is known not to exist in the target zone (Row 2) or if the target name server is known to support incremental deleg (Row 3), no extra queries need to be sent.
+Only if it is unknown that the target name server supports incremental deleg, and the `_deleg` label is known to exist in the target zone (Row 4) or it its not known whether or not the `_deleg` label exists (Row 5), and extra incremental deleg query is sent in parallel to the legacy query.
+If the target zone is unsigned, presence of the `_deleg` label needs to be tested explicitly (Row 5).
 
 ## Comparison with legacy delegations
 
@@ -696,16 +644,15 @@ A possible solution could be to resolve all AliasMode RRs at the delegation poin
 |---------------------|-------------------|
 | Requires implementation in both authoritative name server as well as in the resolver | Only resolver implementation required. But optimized with updated authoritative software. |
 |-----------------------------------------|
+| DNSKEY flag needed to signal DELEG support with all authoritative name servers that serve the parent (delegating) domain. Special requirements for the child domain. | No DNSKEY flag needed. Separation of concerns. |
+|-----------------------------------------|
 | Authoritative name servers need to be updated all at once | Authoritative name servers may be updated gradually for optimization |
 |-----------------------------------------|
-| DNSKEY flag needed to signal DELEG. Special requirements for the child domain. | No DNSKEY flag needed. Separation of concerns. |
+| New semantics about what is authoritative (BOGUS with current DNSSEC validators) | Works with current DNS and DNSSEC semantics. Easier to implement. |
 |-----------------------------------------|
-| New semantics about what is authoritative (BOGUS with current DNSSEC validators) | Works with current DNS semantics. Easier to implement. |
-|-----------------------------------------|
-| No extra queries | An extra query *per zone* to determine presence of the `_deleg` label, and *per authoritative* server when incremental deleg support is not yet detected |
+| No extra queries | An extra query, in parallel to the legacy query, *per zone* to determine presence of the `_deleg` label, and *per authoritative* server when incremental deleg support is not yet detected |
 |---------------------|-------------------|
 {: title="Comparison of [I-D.dnsop-deleg] with [this document]"}
-
 
 # Implementation Status
 
@@ -737,3 +684,5 @@ Per {{?RFC8552}}, IANA is requested to add the following entry to the DNS "Under
 
 The idea to utilize SVCB based RRs to signal capabilities was first proposed by Tim April in {{?I-D.tapril-ns2}}.
 
+The idea to utilize SVCB for extensible delegations (and also the idea described in this document) emerged from the DNS Hackathon at the IETF 118.
+The following participants contributed to this brainstorm session: Vandan Adhvaryu, Roy Arends, David Blacka, Manu Bretelle, Vladimír Čunát, Klaus Darilion, Peter van Dijk, Christian Elmerot, Bob Halley, Shumon Huque, Shane Kerr, David C Lawrence, Edward Lewis, George Michaelson, Erik Nygren, Libor Peltan, Ben Schwartz, Petr Špaček, Jan Včelák and Ralf Weber
