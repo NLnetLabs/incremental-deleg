@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-07T00:25:59.726766+00:00",
+  "timestamp": "2024-07-09T00:23:22.924497+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -82,24 +82,26 @@
       "id": "PR_kwDOMN-KqM50USIQ",
       "title": "Content for review",
       "url": "https://github.com/NLnetLabs/incremental-deleg/pull/2",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "wtoorop",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-07-03T11:59:18Z",
-      "updatedAt": "2024-07-06T16:05:54Z",
+      "updatedAt": "2024-07-08T19:11:41Z",
       "baseRepository": "NLnetLabs/incremental-deleg",
       "baseRefName": "main",
       "baseRefOid": "7f397a52234ed6440480b331e2df11ebf9bbd974",
       "headRepository": "NLnetLabs/incremental-deleg",
       "headRefName": "for-review",
-      "headRefOid": "60905287d9c505fce6db0a8cbb6916e4c728db2c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "f3a76624d2e506e4643844b469c2afbf6da1b9a3",
+      "closedAt": "2024-07-08T19:11:41Z",
+      "mergedAt": "2024-07-08T19:11:41Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "8824b4c8092b4318e0ce7adef838257a56fb5a57"
+      },
       "comments": [],
       "reviews": [
         {
@@ -651,6 +653,124 @@
               "body": "Here it says that a _deleg presence query should be be send when the presence of _deleg is unknown, but in table 1 it says that when there is deleg support in the nameserver no additional query needs to be send even when the _deleg presence is unknown. so i think this statement needs an extra clause that states that this is not needed when it is known that there is nameserver support.",
               "createdAt": "2024-07-06T16:05:54Z",
               "updatedAt": "2024-07-06T16:05:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A2pKI",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-07T08:09:48Z",
+          "updatedAt": "2024-07-07T08:09:48Z",
+          "comments": [
+            {
+              "originalPosition": 130,
+              "body": "Also I feel like comparable implies that it can differ, but im pretty sure it is exactly the same amount of round trips ",
+              "createdAt": "2024-07-07T08:09:48Z",
+              "updatedAt": "2024-07-07T08:09:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A6pEm",
+          "commit": {
+            "abbreviatedOid": "6090528"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Some suggestions to address the comments",
+          "createdAt": "2024-07-08T10:04:32Z",
+          "updatedAt": "2024-07-08T10:41:00Z",
+          "comments": [
+            {
+              "originalPosition": 198,
+              "body": "```suggestion\r\nDNSSEC protection of delegation information prevents that, and is the only countermeasure that also works against on-path attackers.\r\n```",
+              "createdAt": "2024-07-08T10:04:33Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 201,
+              "body": "```suggestion\r\nDirect delegation information (provided by SVCB RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.\r\n```",
+              "createdAt": "2024-07-08T10:05:30Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 203,
+              "body": "```suggestion\r\nWhen the delegation is outsourced, then it's protected when the zones providing the aliasing resource records *and* the zones serving the targets of the aliases are all DNSSEC signed.\r\n```",
+              "createdAt": "2024-07-08T10:06:22Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 215,
+              "body": "```suggestion\r\nThe number of round trips from the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation {{!RFC9156}}.\r\n```",
+              "createdAt": "2024-07-08T10:08:49Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 312,
+              "body": "```suggestion\r\nIt is RECOMMENDED to use a CNAME over an SVCB RRset with a single SVCB RR in AliasMode ({{Section 10.2 of !RFC9460}}).\r\nNote that an SVCB RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target SVCB RRset (or CNAME) which may have an `_dns` prefix.\r\n```",
+              "createdAt": "2024-07-08T10:16:03Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 415,
+              "body": "```suggestion\r\nIn this case two parallel queries MUST be sent.\r\n```",
+              "createdAt": "2024-07-08T10:26:22Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 436,
+              "body": "```suggestion\r\n3. The incremental deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).\r\n```",
+              "createdAt": "2024-07-08T10:27:11Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 446,
+              "body": "```suggestion\r\n   If the legacy query was sent minimised and needs a followup query, then parallel to that followup query a new incremental deleg query will be sent, adding a single label to the previous incremental deleg query name.\r\n```",
+              "createdAt": "2024-07-08T10:28:05Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 447,
+              "body": "```suggestion\r\n   For example if the triggering query is `www.university.ac.example.` and the target zone is `example.` and the minimised legacy query name is `ac.example.` (which also resulted in a NOERROR no answer response), then the incremental deleg query to be sent along in parallel with the followup legacy query will become `university.ac.example.`\r\n```",
+              "createdAt": "2024-07-08T10:29:18Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 448,
+              "body": "```suggestion\r\n   Processing of the responses of those two new queries will be done as described above.\r\n```",
+              "createdAt": "2024-07-08T10:29:41Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 456,
+              "body": "```suggestion\r\nWhen the presence of a `_deleg` label is \"unknown\", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the zone (though not when the target name server is known to support incremental deleg, which will be discussed in {{authoritative-name-server-support}}).\r\n```",
+              "createdAt": "2024-07-08T10:31:34Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 457,
+              "body": "Because that also works with qname minimisation... But there is a use case for it to be SVCB (when the target zone needs priming).",
+              "createdAt": "2024-07-08T10:33:12Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 475,
+              "body": "```suggestion\r\n   The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.\r\n```",
+              "createdAt": "2024-07-08T10:38:50Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 605,
+              "body": "No, besides zone state, there is also per authoritative state, to know whether it has support for `_deleg` or not.",
+              "createdAt": "2024-07-08T10:40:27Z",
+              "updatedAt": "2024-07-08T10:41:01Z"
             }
           ]
         }
