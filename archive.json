@@ -1,0 +1,780 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-10-10T00:27:04.142290+00:00",
+  "repo": "NLnetLabs/incremental-deleg",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOMN-KqM50T3Mz",
+      "title": "PR for review",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/1",
+      "state": "CLOSED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-03T10:57:03Z",
+      "updatedAt": "2024-07-03T11:54:32Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "initial-setup",
+      "baseRefOid": "58d89a72a1c93ae25ff5609e945c5b99f4afb985",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "main",
+      "headRefOid": "9e2ca5cadc24fd5c16c12ab4ebf1ed7b0ef5e3ad",
+      "closedAt": "2024-07-03T11:54:32Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOMN-KqM50USIQ",
+      "title": "Content for review",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/2",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-03T11:59:18Z",
+      "updatedAt": "2024-07-08T19:11:41Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "7f397a52234ed6440480b331e2df11ebf9bbd974",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "for-review",
+      "headRefOid": "f3a76624d2e506e4643844b469c2afbf6da1b9a3",
+      "closedAt": "2024-07-08T19:11:41Z",
+      "mergedAt": "2024-07-08T19:11:41Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "8824b4c8092b4318e0ce7adef838257a56fb5a57"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6Aih2O",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "maertsen",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T13:57:29Z",
+          "updatedAt": "2024-07-03T13:57:30Z",
+          "comments": [
+            {
+              "originalPosition": 528,
+              "body": "```suggestion\r\nFor as long as the resolver knows that the authoritative name server support incremental deleg, no additional parallel direct deleg query (as described in {{recursive-resolver-behavior}}) needs to be sent.\r\n```",
+              "createdAt": "2024-07-03T13:57:29Z",
+              "updatedAt": "2024-07-03T13:57:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6Aii0o",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "maertsen",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T13:59:01Z",
+          "updatedAt": "2024-07-03T13:59:01Z",
+          "comments": [
+            {
+              "originalPosition": 531,
+              "body": "s/is/it/\r\nNot sure what comes after \u201cand\u201d",
+              "createdAt": "2024-07-03T13:59:01Z",
+              "updatedAt": "2024-07-03T13:59:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6AikrI",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "maertsen",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T14:01:54Z",
+          "updatedAt": "2024-07-03T14:01:55Z",
+          "comments": [
+            {
+              "originalPosition": 583,
+              "body": "```suggestion\r\nJesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam.\r\n```",
+              "createdAt": "2024-07-03T14:01:55Z",
+              "updatedAt": "2024-07-03T14:01:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6Ai5YN",
+          "commit": {
+            "abbreviatedOid": "2cf9a12"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T14:34:41Z",
+          "updatedAt": "2024-07-03T14:34:41Z",
+          "comments": [
+            {
+              "originalPosition": 531,
+              "body": "```suggestion\r\nIf a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).\r\n```",
+              "createdAt": "2024-07-03T14:34:41Z",
+              "updatedAt": "2024-07-03T14:34:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6Ai73A",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-03T14:38:46Z",
+          "updatedAt": "2024-07-03T14:38:46Z",
+          "comments": [
+            {
+              "originalPosition": 531,
+              "body": "Thanks, when I wrote it I was thinking: \"and a _deleg is known to be present in the signed zone\", but this is not necessary, because if it wouldn't have been there, then authoritative name server support would also not have been detected. Anyways, resolved in [08385ad](https://github.com/NLnetLabs/incremental-deleg/pull/2/commits/08385adfba80b3512da4d8132cdff551b17f6502)",
+              "createdAt": "2024-07-03T14:38:46Z",
+              "updatedAt": "2024-07-03T14:38:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6ArU5C",
+          "commit": {
+            "abbreviatedOid": "29137fc"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T12:40:07Z",
+          "updatedAt": "2024-07-04T12:40:08Z",
+          "comments": [
+            {
+              "originalPosition": 134,
+              "body": "```suggestion\r\nImplementation in the recursive may be less demanding with respect to (among other things) DNSSEC validation because there is no need to make additional exceptions as to what is authoritative at the parent side of a delegation.\r\n```",
+              "createdAt": "2024-07-04T12:40:08Z",
+              "updatedAt": "2024-07-04T12:40:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6ArXpR",
+          "commit": {
+            "abbreviatedOid": "29137fc"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T12:45:48Z",
+          "updatedAt": "2024-07-04T12:45:49Z",
+          "comments": [
+            {
+              "originalPosition": 227,
+              "body": "Maybe a comment is needed that with CNAME you need _dns and with an AliasMode SVCB you don't.",
+              "createdAt": "2024-07-04T12:45:48Z",
+              "updatedAt": "2024-07-04T12:45:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6ArYtu",
+          "commit": {
+            "abbreviatedOid": "29137fc"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T12:48:00Z",
+          "updatedAt": "2024-07-04T12:48:00Z",
+          "comments": [
+            {
+              "originalPosition": 273,
+              "body": "```suggestion\r\n                  IN  NSEC   customer7._deleg RRSIG NSEC SVCB\r\n```",
+              "createdAt": "2024-07-04T12:48:00Z",
+              "updatedAt": "2024-07-04T12:48:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6Ari3v",
+          "commit": {
+            "abbreviatedOid": "29137fc"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T13:08:17Z",
+          "updatedAt": "2024-07-04T13:08:17Z",
+          "comments": [
+            {
+              "originalPosition": 390,
+              "body": "I think this should be formulated in a more neutral way. There doesn't seem any reason to cache the A RRset. Instead the resolver should record that the _deleg label is known to be present for a duration indicated by the A RRset's TTL value.",
+              "createdAt": "2024-07-04T13:08:17Z",
+              "updatedAt": "2024-07-04T13:08:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6Arv04",
+          "commit": {
+            "abbreviatedOid": "29137fc"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T13:34:40Z",
+          "updatedAt": "2024-07-04T13:34:40Z",
+          "comments": [
+            {
+              "originalPosition": 492,
+              "body": "How does this work. Does the target of the CNAME have to have a _dns prefix?",
+              "createdAt": "2024-07-04T13:34:40Z",
+              "updatedAt": "2024-07-04T13:34:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6ArwfT",
+          "commit": {
+            "abbreviatedOid": "29137fc"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T13:35:57Z",
+          "updatedAt": "2024-07-04T13:35:58Z",
+          "comments": [
+            {
+              "originalPosition": 457,
+              "body": "Why does this get a SOA record when in the unsigned case there is nothing?",
+              "createdAt": "2024-07-04T13:35:58Z",
+              "updatedAt": "2024-07-04T13:35:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6AsR5s",
+          "commit": {
+            "abbreviatedOid": "24649f5"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T14:44:07Z",
+          "updatedAt": "2024-07-04T14:44:07Z",
+          "comments": [
+            {
+              "originalPosition": 457,
+              "body": "I guess we could leave out the SOA. The **signed** NSEC is enough to know the (negative) TTL.",
+              "createdAt": "2024-07-04T14:44:07Z",
+              "updatedAt": "2024-07-04T14:44:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6AsSQY",
+          "commit": {
+            "abbreviatedOid": "24649f5"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T14:44:58Z",
+          "updatedAt": "2024-07-04T14:44:58Z",
+          "comments": [
+            {
+              "originalPosition": 492,
+              "body": "Not in this case, because in this case it is referring to another _deleg set.",
+              "createdAt": "2024-07-04T14:44:58Z",
+              "updatedAt": "2024-07-04T14:44:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6AsTbY",
+          "commit": {
+            "abbreviatedOid": "24649f5"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-04T14:47:36Z",
+          "updatedAt": "2024-07-04T14:47:37Z",
+          "comments": [
+            {
+              "originalPosition": 544,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2024-07-04T14:47:36Z",
+              "updatedAt": "2024-07-04T14:47:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1cI4",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T07:30:08Z",
+          "updatedAt": "2024-07-06T07:30:09Z",
+          "comments": [
+            {
+              "originalPosition": 130,
+              "body": "s/form/from/",
+              "createdAt": "2024-07-06T07:30:08Z",
+              "updatedAt": "2024-07-06T07:30:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1cQn",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T07:35:03Z",
+          "updatedAt": "2024-07-06T07:35:04Z",
+          "comments": [
+            {
+              "originalPosition": 328,
+              "body": "/s/send/sent/",
+              "createdAt": "2024-07-06T07:35:03Z",
+              "updatedAt": "2024-07-06T07:35:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1cYq",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T07:39:51Z",
+          "updatedAt": "2024-07-06T07:39:51Z",
+          "comments": [
+            {
+              "originalPosition": 394,
+              "body": "/s/than/then/  and /s/send/sent/    (sentence is in passive voice, thus its sent and not send)",
+              "createdAt": "2024-07-06T07:39:51Z",
+              "updatedAt": "2024-07-06T07:39:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1clA",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T07:45:55Z",
+          "updatedAt": "2024-07-06T07:45:56Z",
+          "comments": [
+            {
+              "originalPosition": 359,
+              "body": "/s/was send/was sent/  /s/will be send/will be sent/   (both future and past tense is sent).",
+              "createdAt": "2024-07-06T07:45:55Z",
+              "updatedAt": "2024-07-06T07:45:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1c4Q",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T07:57:39Z",
+          "updatedAt": "2024-07-06T07:57:39Z",
+          "comments": [
+            {
+              "originalPosition": 360,
+              "body": "s/and the target zone `example.`/and the target zone is `example.`/ and /s/legacy query name was/legacy query name is/ (mixing of past tense and present tense, the triggering query 'is', but the minimised query 'was')    and  s/to be send/to be sent/   ",
+              "createdAt": "2024-07-06T07:57:39Z",
+              "updatedAt": "2024-07-06T07:57:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1dsJ",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T08:29:09Z",
+          "updatedAt": "2024-07-06T08:29:10Z",
+          "comments": [
+            {
+              "originalPosition": 555,
+              "body": "/s/that is aliased/that are aliased/ (RRsets is plural)",
+              "createdAt": "2024-07-06T08:29:10Z",
+              "updatedAt": "2024-07-06T08:29:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1d0H",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T08:33:52Z",
+          "updatedAt": "2024-07-06T08:33:52Z",
+          "comments": [
+            {
+              "originalPosition": 116,
+              "body": "/s/include/includes/ and  /s/serversfor/servers for/  ",
+              "createdAt": "2024-07-06T08:33:52Z",
+              "updatedAt": "2024-07-06T08:33:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1eQ8",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T08:49:43Z",
+          "updatedAt": "2024-07-06T08:49:43Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "/s/counter measure/countermeasure",
+              "createdAt": "2024-07-06T08:49:43Z",
+              "updatedAt": "2024-07-06T08:49:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1eTy",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T08:51:33Z",
+          "updatedAt": "2024-07-06T08:51:33Z",
+          "comments": [
+            {
+              "originalPosition": 118,
+              "body": "/s/then the delegation/it/ (I feel like the sentence flows beter like this)",
+              "createdAt": "2024-07-06T08:51:33Z",
+              "updatedAt": "2024-07-06T08:51:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1eqk",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T09:05:43Z",
+          "updatedAt": "2024-07-06T09:05:43Z",
+          "comments": [
+            {
+              "originalPosition": 349,
+              "body": "/s/an/a/   and   /s/responses/response/",
+              "createdAt": "2024-07-06T09:05:43Z",
+              "updatedAt": "2024-07-06T09:05:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1et6",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T09:07:52Z",
+          "updatedAt": "2024-07-06T09:07:53Z",
+          "comments": [
+            {
+              "originalPosition": 361,
+              "body": "/s/will as described above/will be done as described above/",
+              "createdAt": "2024-07-06T09:07:52Z",
+              "updatedAt": "2024-07-06T09:07:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1kFo",
+          "commit": {
+            "abbreviatedOid": "6090528"
+          },
+          "author": "gthess",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T12:26:05Z",
+          "updatedAt": "2024-07-06T12:47:00Z",
+          "comments": [
+            {
+              "originalPosition": 457,
+              "body": "Why query type A? The rest of the child._deleg.parent queries are with type SVCB.",
+              "createdAt": "2024-07-06T12:26:06Z",
+              "updatedAt": "2024-07-06T12:47:00Z"
+            },
+            {
+              "originalPosition": 604,
+              "body": "```suggestion\r\nIf it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.\r\n```",
+              "createdAt": "2024-07-06T12:31:13Z",
+              "updatedAt": "2024-07-06T12:47:00Z"
+            },
+            {
+              "originalPosition": 605,
+              "body": "How? The _deleg.parent query will/should have already been fired and that cached record is the \"registered support\". I don't like the wording of registering support because it reads as state needs to be kept per zone. Although that is true, the state is just the cached _deleg.parent answer. And maybe a record type is needed there to get a proper TTL back and not rely on the SOA values.",
+              "createdAt": "2024-07-06T12:34:21Z",
+              "updatedAt": "2024-07-06T12:51:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A1p52",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-06T16:05:54Z",
+          "updatedAt": "2024-07-06T16:05:54Z",
+          "comments": [
+            {
+              "originalPosition": 369,
+              "body": "Here it says that a _deleg presence query should be be send when the presence of _deleg is unknown, but in table 1 it says that when there is deleg support in the nameserver no additional query needs to be send even when the _deleg presence is unknown. so i think this statement needs an extra clause that states that this is not needed when it is known that there is nameserver support.",
+              "createdAt": "2024-07-06T16:05:54Z",
+              "updatedAt": "2024-07-06T16:05:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A2pKI",
+          "commit": {
+            "abbreviatedOid": "a03372a"
+          },
+          "author": "jessevz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-07T08:09:48Z",
+          "updatedAt": "2024-07-07T08:09:48Z",
+          "comments": [
+            {
+              "originalPosition": 130,
+              "body": "Also I feel like comparable implies that it can differ, but im pretty sure it is exactly the same amount of round trips ",
+              "createdAt": "2024-07-07T08:09:48Z",
+              "updatedAt": "2024-07-07T08:09:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6A6pEm",
+          "commit": {
+            "abbreviatedOid": "6090528"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Some suggestions to address the comments",
+          "createdAt": "2024-07-08T10:04:32Z",
+          "updatedAt": "2024-07-08T10:41:00Z",
+          "comments": [
+            {
+              "originalPosition": 198,
+              "body": "```suggestion\r\nDNSSEC protection of delegation information prevents that, and is the only countermeasure that also works against on-path attackers.\r\n```",
+              "createdAt": "2024-07-08T10:04:33Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 201,
+              "body": "```suggestion\r\nDirect delegation information (provided by SVCB RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.\r\n```",
+              "createdAt": "2024-07-08T10:05:30Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 203,
+              "body": "```suggestion\r\nWhen the delegation is outsourced, then it's protected when the zones providing the aliasing resource records *and* the zones serving the targets of the aliases are all DNSSEC signed.\r\n```",
+              "createdAt": "2024-07-08T10:06:22Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 215,
+              "body": "```suggestion\r\nThe number of round trips from the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation {{!RFC9156}}.\r\n```",
+              "createdAt": "2024-07-08T10:08:49Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 312,
+              "body": "```suggestion\r\nIt is RECOMMENDED to use a CNAME over an SVCB RRset with a single SVCB RR in AliasMode ({{Section 10.2 of !RFC9460}}).\r\nNote that an SVCB RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target SVCB RRset (or CNAME) which may have an `_dns` prefix.\r\n```",
+              "createdAt": "2024-07-08T10:16:03Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 415,
+              "body": "```suggestion\r\nIn this case two parallel queries MUST be sent.\r\n```",
+              "createdAt": "2024-07-08T10:26:22Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 436,
+              "body": "```suggestion\r\n3. The incremental deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).\r\n```",
+              "createdAt": "2024-07-08T10:27:11Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 446,
+              "body": "```suggestion\r\n   If the legacy query was sent minimised and needs a followup query, then parallel to that followup query a new incremental deleg query will be sent, adding a single label to the previous incremental deleg query name.\r\n```",
+              "createdAt": "2024-07-08T10:28:05Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 447,
+              "body": "```suggestion\r\n   For example if the triggering query is `www.university.ac.example.` and the target zone is `example.` and the minimised legacy query name is `ac.example.` (which also resulted in a NOERROR no answer response), then the incremental deleg query to be sent along in parallel with the followup legacy query will become `university.ac.example.`\r\n```",
+              "createdAt": "2024-07-08T10:29:18Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 448,
+              "body": "```suggestion\r\n   Processing of the responses of those two new queries will be done as described above.\r\n```",
+              "createdAt": "2024-07-08T10:29:41Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 456,
+              "body": "```suggestion\r\nWhen the presence of a `_deleg` label is \"unknown\", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the zone (though not when the target name server is known to support incremental deleg, which will be discussed in {{authoritative-name-server-support}}).\r\n```",
+              "createdAt": "2024-07-08T10:31:34Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 457,
+              "body": "Because that also works with qname minimisation... But there is a use case for it to be SVCB (when the target zone needs priming).",
+              "createdAt": "2024-07-08T10:33:12Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 475,
+              "body": "```suggestion\r\n   The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.\r\n```",
+              "createdAt": "2024-07-08T10:38:50Z",
+              "updatedAt": "2024-07-08T10:41:00Z"
+            },
+            {
+              "originalPosition": 605,
+              "body": "No, besides zone state, there is also per authoritative state, to know whether it has support for `_deleg` or not.",
+              "createdAt": "2024-07-08T10:40:27Z",
+              "updatedAt": "2024-07-08T10:41:01Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
