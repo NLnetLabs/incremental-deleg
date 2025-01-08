@@ -548,7 +548,7 @@ Incremental deleg supporting authoritative name servers will include the increme
 If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
 A resolver SHOULD register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.
 
-When the authority section of a referral response contains an DELEG RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such DELEG or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that DELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+When the authority section of a referral response contains a DELEG RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such DELEG or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that DELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Subsequent queries SHOULD NOT include incremental deleg queries, as described in {{recursive-resolver-behavior}}, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.
 
 For example, in {{deleg-response}}, the DELEG RRset at the incremental delegation point has TTL 3600.
@@ -557,7 +557,7 @@ All subsequent queries to that authoritative name server SHOULD NOT include incr
 
 If the authority section contains more than one RRset making up the incremental delegation, then the RRset with the longest TTL MUST be taken to determine the duration for which incremental deleg support is registered.
 
-For example, in {{alias-response}}, both a CNAME and an DELEG RRset for the incremental delegation are included in the authority section.
+For example, in {{alias-response}}, both a CNAME and a DELEG RRset for the incremental delegation are included in the authority section.
 The longest TTL must be taken for incremental support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.
 
 With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.
@@ -570,7 +570,7 @@ If a referral is returned that does not contain an incremental delegation nor an
 An DELEG RRset on an incremental delegation point, with a DELEG RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
 All service parameters for such AliasMode (aliasing to the root) DELEG RRs on the incremental delegation point, MUST be ignored.
 
-For example, such an DELEG RRset registered on the wildcard below the `_deleg` label on the apex of a zone, can signal that legacy DNS referrals MUST be used for both signed and *unsigned* zones:
+For example, such a DELEG RRset registered on the wildcard below the `_deleg` label on the apex of a zone, can signal that legacy DNS referrals MUST be used for both signed and *unsigned* zones:
 
 ~~~
 $ORIGIN example.
@@ -594,7 +594,7 @@ This method of signalling that the legacy delegation MUST be used, is RECOMMENDE
 # Priming queries
 
 Some zones, such as the root zone, are targeted directly from hints files.
-Information about which authoritative name servers and with capabilities, MAY be provided in an DELEG RRset directly at the `_deleg` label under the apex of the zone.
+Information about which authoritative name servers and with capabilities, MAY be provided in a DELEG RRset directly at the `_deleg` label under the apex of the zone.
 Priming queries from a incremental deleg supporting resolver, MUST send an `_deleg.<apex> DELEG` query in parallel to the legacy `<apex> NS` query and process the content as if it was found through an incremental referral response.
 
 # Comparison with other delegation mechanisms
