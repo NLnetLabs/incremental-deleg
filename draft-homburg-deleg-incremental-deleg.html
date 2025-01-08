@@ -11,9 +11,9 @@
 <meta content="Willem Toorop" name="author">
 <meta content="
        This document proposes a mechanism for extensible delegations in the DNS.
-The mechanism realizes delegations with SVCB resource record sets placed below a  _deleg  label in the apex of the delegating zone.
+The mechanism realizes delegations with resource record sets placed below a  _deleg  label in the apex of the delegating zone.
 This authoritative delegation point can be aliased to other names using CNAME and DNAME.
-The mechanism inherits extensibility from SVCB. 
+This document proposes a new DNS resource record type, DELEG, which is based on the SVCB and inherits extensibility from it. 
        Support in recursive resolvers suffices for the mechanism to be fully functional.
 The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable with those for DNS Query Name Minimisation.
 Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
@@ -1272,9 +1272,9 @@ li > p:last-of-type:only-child {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document proposes a mechanism for extensible delegations in the DNS.
-The mechanism realizes delegations with SVCB resource record sets placed below a <code>_deleg</code> label in the apex of the delegating zone.
+The mechanism realizes delegations with resource record sets placed below a <code>_deleg</code> label in the apex of the delegating zone.
 This authoritative delegation point can be aliased to other names using CNAME and DNAME.
-The mechanism inherits extensibility from SVCB.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+This document proposes a new DNS resource record type, DELEG, which is based on the SVCB and inherits extensibility from it.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">Support in recursive resolvers suffices for the mechanism to be fully functional.
 The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable with those for DNS Query Name Minimisation.
 Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
@@ -1364,102 +1364,113 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-delegation-administration" class="internal xref">Delegation administration</a></p>
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-the-deleg-resource-record-t" class="internal xref">The DELEG resource record type</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-delegation-administration" class="internal xref">Delegation administration</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.1">
-                    <p id="section-toc.1-1.2.2.1.2.1.1"><a href="#section-2.1.1" class="auto internal xref">2.1.1</a>.  <a href="#name-one-name-server-within-the-" class="internal xref">One name server within the subzone</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
+                    <p id="section-toc.1-1.3.2.1.2.1.1"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-one-name-server-within-the-" class="internal xref">One name server within the subzone</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.2">
-                    <p id="section-toc.1-1.2.2.1.2.2.1"><a href="#section-2.1.2" class="auto internal xref">2.1.2</a>.  <a href="#name-two-name-servers-within-the" class="internal xref">Two name servers within the subzone</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-two-name-servers-within-the" class="internal xref">Two name servers within the subzone</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.3">
-                    <p id="section-toc.1-1.2.2.1.2.3.1"><a href="#section-2.1.3" class="auto internal xref">2.1.3</a>.  <a href="#name-outsourced-to-an-operator" class="internal xref">Outsourced to an operator</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3">
+                    <p id="section-toc.1-1.3.2.1.2.3.1"><a href="#section-3.1.3" class="auto internal xref">3.1.3</a>.  <a href="#name-outsourced-to-an-operator" class="internal xref">Outsourced to an operator</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.4">
-                    <p id="section-toc.1-1.2.2.1.2.4.1"><a href="#section-2.1.4" class="auto internal xref">2.1.4</a>.  <a href="#name-dnssec-signed-name-servers-" class="internal xref">DNSSEC signed name servers within the subzone</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.4">
+                    <p id="section-toc.1-1.3.2.1.2.4.1"><a href="#section-3.1.4" class="auto internal xref">3.1.4</a>.  <a href="#name-dnssec-signed-name-servers-" class="internal xref">DNSSEC signed name servers within the subzone</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-minimal-implementation" class="internal xref">Minimal implementation</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-recursive-resolver-behavior" class="internal xref">Recursive Resolver behavior</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-_deleg-label-presence" class="internal xref"><code>_deleg</code> label presence</a></p>
-</li>
-            </ul>
-</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-optimized-implementation" class="internal xref">Optimized implementation</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-minimal-implementation" class="internal xref">Minimal implementation</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-authoritative-name-server-s" class="internal xref">Authoritative name server support</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-recursive-resolver-behavior" class="internal xref">Recursive Resolver behavior</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-resolver-behavior-with-auth" class="internal xref">Resolver behavior with authoritative name server support</a></p>
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-_deleg-label-presence" class="internal xref"><code>_deleg</code> label presence</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-extra-optimized-implementat" class="internal xref">Extra optimized implementation</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-limitations" class="internal xref">Limitations</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-optimized-implementation" class="internal xref">Optimized implementation</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-outsourcing-to-more-than-on" class="internal xref">Outsourcing to more than one operator</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-authoritative-name-server-s" class="internal xref">Authoritative name server support</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-priming-queries" class="internal xref">Priming queries</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-resolver-behavior-with-auth" class="internal xref">Resolver behavior with authoritative name server support</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-extra-optimized-implementat" class="internal xref">Extra optimized implementation</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-comparison-with-other-deleg" class="internal xref">Comparison with other delegation mechanisms</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-limitations" class="internal xref">Limitations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-comparison-with-legacy-dele" class="internal xref">Comparison with legacy delegations</a></p>
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-outsourcing-to-more-than-on" class="internal xref">Outsourcing to more than one operator</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-comparison-with-name-dns-qu" class="internal xref">Comparison with Name DNS Query Name Minimisation</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-comparison-with" class="internal xref">Comparison with I-D.dnsop-deleg</a></p>
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-priming-queries" class="internal xref">Priming queries</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-comparison-with-other-deleg" class="internal xref">Comparison with other delegation mechanisms</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-comparison-with-legacy-dele" class="internal xref">Comparison with legacy delegations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-comparison-with-name-dns-qu" class="internal xref">Comparison with Name DNS Query Name Minimisation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-comparison-with" class="internal xref">Comparison with I-D.dnsop-deleg</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-deleg-rr-type" class="internal xref">DELEG RR type</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-_deleg-node-name" class="internal xref">_deleg Node Name</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1470,7 +1481,7 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This document describes a delegation mechanism for the Domain Name System (DNS) <span>[<a href="#STD13" class="cite xref">STD13</a>]</span> that addresses several matters that, at the time of writing, are suboptimally supported or not at all.
+<p id="section-1-1">This document describes a delegation mechanism for the Domain Name System (DNS) <span>[<a href="#STD13" class="cite xref">STD13</a>]</span> that addresses several matters that, at the time of writing, are suboptimally supported or not supported at all.
 These matters are elaborated upon in sections <a href="#signaling" class="auto internal xref">1.1</a>, <a href="#outsourcing" class="auto internal xref">1.2</a> and <a href="#dnssec-protection" class="auto internal xref">1.3</a>.
 In addition, the mechanism described in this document aspires to be maximally deployable, which is elaborated upon in <a href="#deployability" class="auto internal xref">Section 1.4</a>.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <div id="signaling">
@@ -1478,8 +1489,10 @@ In addition, the mechanism described in this document aspires to be maximally de
         <h3 id="name-signaling-capabilities-of-t">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-signaling-capabilities-of-t" class="section-name selfRef">Signaling capabilities of the authoritative name servers</a>
         </h3>
-<p id="section-1.1-1">The SVCB Resource Record (RR) type <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> in "dns" service mode <span>[<a href="#RFC9461" class="cite xref">RFC9461</a>]</span> is used in which capability signalling of <span><a href="#RFC7858" class="internal xref">DNS over Transport Layer Protocol</a> [<a href="#RFC7858" class="cite xref">RFC7858</a>]</span> (DoT), <span><a href="#RFC8484" class="internal xref">DNS Queries over HTTPS</a> [<a href="#RFC8484" class="cite xref">RFC8484</a>]</span> and <span><a href="#RFC9250" class="internal xref">DNS over Dedicated QUIC Connections</a> [<a href="#RFC9250" class="cite xref">RFC9250</a>]</span>, on default or alternative ports, are already specified.
-The SVCB RR type is designed to be extensible to support future uses (such as keys for encrypting the TLS ClientHello <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span>.)<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-1">A new DELEG resource record (RR) type is introduced in this document, which is based on and inherits the wire and presentation format from SVCB <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>.
+All Service Binding Mappings, as well as the capability signalling, that are specified in <span>[<a href="#RFC9461" class="cite xref">RFC9461</a>]</span> are also applicable to DELEG, with the exception of the limitations on AliasMode records in <span><a href="https://rfc-editor.org/rfc/rfc9460#section-6" class="relref">Section 6</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>.
+Capability signalling of <span><a href="#RFC7858" class="internal xref">DNS over Transport Layer Protocol</a> [<a href="#RFC7858" class="cite xref">RFC7858</a>]</span> (DoT), <span><a href="#RFC8484" class="internal xref">DNS Queries over HTTPS</a> [<a href="#RFC8484" class="cite xref">RFC8484</a>]</span> and <span><a href="#RFC9250" class="internal xref">DNS over Dedicated QUIC Connections</a> [<a href="#RFC9250" class="cite xref">RFC9250</a>]</span>, on default or alternative ports, can all be used as specified in <span>[<a href="#RFC9461" class="cite xref">RFC9461</a>]</span>.
+The DELEG RR type inherits its extensibility from the SVCB RR type, which is designed to be extensible to support future uses (such as keys for encrypting the TLS ClientHello <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span>.)<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="outsourcing">
@@ -1490,7 +1503,8 @@ The SVCB RR type is designed to be extensible to support future uses (such as ke
 <p id="section-1.2-1">Delegation information is stored at an authoritative location in the zone with this mechanism.
 Legacy methods to redirect this information to another location, possible under the control of another operator, such as (CNAME <span><a href="https://rfc-editor.org/rfc/rfc1034#section-3.6.2" class="relref">Section 3.6.2</a> of [<a href="#RFC1034" class="cite xref">RFC1034</a>]</span>) and DNAME <span>[<a href="#RFC6672" class="cite xref">RFC6672</a>]</span> remain functional.
 One could even outsource all delegation operational practice to another party with an DNAME on the <code>_deleg</code> label on the apex of the delegating zone.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.2-2">Additional to the legacy methods, a delegation may be outsourced to a third party by having an SVCB RRset with a single SVCB RR in AliasMode.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">Additional to the legacy methods, a delegation may be outsourced to a third parties by having RRs in AliasMode.
+Unlike SVCB, DELEG allows for more than a single DELEG RR in AliasMode in a DELEG RRset, enabling outsourcing a delegation to multiple different operators.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dnssec-protection">
@@ -1503,7 +1517,7 @@ An adversary that is able to spoof a referral response, can alter this informati
 The adversary can then perceive all queries for the redirected zone (Privacy concern) and alter all unsigned parts of responses (such as further referrals, which is a Security concern).<a href="#section-1.3-1" class="pilcrow">¶</a></p>
 <p id="section-1.3-2">DNSSEC protection of delegation information prevents that, and is the only countermeasure that also works against on-path attackers.
 At the time of writing, the only way to DNSSEC validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations <span>[<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>, which is done after the fact and has other security concerns (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-08#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>).<a href="#section-1.3-2" class="pilcrow">¶</a></p>
-<p id="section-1.3-3">Direct delegation information (provided by SVCB RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.
+<p id="section-1.3-3">Direct delegation information (provided by DELEG RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.
 Since the information is stored authoritatively in the delegating zone, it will be DNSSEC signed if the zone is signed.
 When the delegation is outsourced, then it's protected when the zones providing the aliasing resource records <em>and</em> the zones serving the targets of the aliases are all DNSSEC signed.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
 </section>
@@ -1519,7 +1533,7 @@ As a consequence, existing DNS software, such as authoritative name servers and 
 Unmodified authoritative name server software will serve the delegation information when queried for.
 Unmodified signers will sign the delegation information in the delegating zone.
 Only the recursive resolver needs modification to follow referrals as provided by the delegation information.<a href="#section-1.4-1" class="pilcrow">¶</a></p>
-<p id="section-1.4-2">Such a resolver would explicitly query for the delegations administered as specified in <a href="#delegation-administration" class="auto internal xref">Section 2</a>.
+<p id="section-1.4-2">Such a resolver would explicitly query for the delegations administered as specified in <a href="#delegation-administration" class="auto internal xref">Section 3</a>.
 The number of round trips from the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation <span>[<a href="#RFC9156" class="cite xref">RFC9156</a>]</span>.
 Additional implementation in the authoritative name server optimizes resolution and reduces the number of simultaneous in parallel queries to that what would be needed for legacy delegations.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.<a href="#section-1.4-2" class="pilcrow">¶</a></p>
@@ -1593,38 +1607,51 @@ With incremental deleg, this is the location given by the delegating name.<a hre
 </div>
 </section>
 </div>
-<div id="delegation-administration">
+<div id="the-deleg-resource-record-type">
 <section id="section-2">
-      <h2 id="name-delegation-administration">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-delegation-administration" class="section-name selfRef">Delegation administration</a>
+      <h2 id="name-the-deleg-resource-record-t">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-the-deleg-resource-record-t" class="section-name selfRef">The DELEG resource record type</a>
       </h2>
-<p id="section-2-1">An extensible delegation is realized with an SVCB Resource Record set (RRset) <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> below a specially for the purpose reserved label with the name <code>_deleg</code> at the apex of the delegating zone.
-The <code>_deleg</code> label scopes the interpretation of the SVCB records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see <span><a href="#iana-considerations" class="internal xref">IANA Considerations</a> (<a href="#iana-considerations" class="auto internal xref">Section 10</a>)</span>).
-The full scoping of delegations includes the labels that are <strong>below</strong> the <code>_label</code> and those, together with the name of the delegating domain, make up the name of the subzone to which the delegation refers.
-For example, if the delegating zone is <code>example.</code>, then a delegation to subzone <code>customer.example.</code> is realized by an SVCB RRset at the name <code>customer._deleg.example.</code> in the parent zone.
-A fully scoped delegating name (such as <code>customer._deleg.example.</code>) is referred to further in this document as the "delegation point".<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">The use of the SVCB RR type requires a mapping document for each service type.
-This document uses the SVCB for the "dns" service type and the contents of the SVCB SvcParams <span class="bcp14">MUST</span> be interpreted as specified in Service Binding Mapping for DNS Servers <span>[<a href="#RFC9461" class="cite xref">RFC9461</a>]</span>.
-At the delegation point (for example <code>customer._deleg.example.</code>), the host names of the authoritative name servers for the subzone, are given in the TargetName RDATA field of SVCB records in ServiceMode.
-Port Prefix Naming <span><a href="https://rfc-editor.org/rfc/rfc9461#section-3" class="relref">Section 3</a> of [<a href="#RFC9461" class="cite xref">RFC9461</a>]</span> is not used at the delegation point, but <span class="bcp14">MUST</span> be used when resolving the aliased to name servers with "dns" service type SVCB RRs in AliasMode.<a href="#section-2-2" class="pilcrow">¶</a></p>
-<p id="section-2-3">Note that if the delegation is outsourcing to a single operator represented in a single SVCB RRset, it is <span class="bcp14">RECOMMENDED</span> to refer to the name of the operator's SVCB RRset with a CNAME on the delegation point instead of an SVCB RR in AliasMode <span><a href="https://rfc-editor.org/rfc/rfc9460#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-1">The DELEG RR type is a variant of SVCB <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> for use with resolvers to perform iterative resolution (<span><a href="https://rfc-editor.org/rfc/rfc1034#section-5.3.3" class="relref">Section 5.3.3</a> of [<a href="#RFC1034" class="cite xref">RFC1034</a>]</span>).
+The DELEG type requires registration in the "Resource Record (RR) TYPEs" registry under the "Domain Name System (DNS) Parameters" registry group (see <span><a href="#deleg-rr-type" class="internal xref">DELEG RR type</a> (<a href="#deleg-rr-type" class="auto internal xref">Section 11.1</a>)</span>).
+The protocol-specific mapping specification for iterative resolutions are the same as those for "DNS Servers" <span>[<a href="#RFC9461" class="cite xref">RFC9461</a>]</span>.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2"><span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.2" class="relref">Section 2.4.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that SVCB RRsets <span class="bcp14">SHOULD</span> only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers <span class="bcp14">SHOULD</span> pick one at random.
+Different from SVCB (<span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.2" class="relref">Section 2.4.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>), DELEG allows for multiple AliasMode RRs to be present in a single DELEG RRset.
+Note however that the target of a DELEG RR in AliasMode is an SVCB RRset for the "dns" service type adhering fully to the Service Binding Mapping for DNS Servers as specified in <span>[<a href="#RFC9461" class="cite xref">RFC9461</a>]</span>.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3"><span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.1" class="relref">Section 2.4.1</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that within an SVCB RRset, all RRs <span class="bcp14">SHOULD</span> have the same mode, and that if an RRset contains a record in AliasMode, the recipient <span class="bcp14">MUST</span> ignore any ServiceMode records in the set.
+Different from SVCB, mixed ServiceMode and AliasMode RRs are allowed in a DELEG RRset.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">At the delegation point (for example <code>customer._deleg.example.</code>), the host names of the authoritative name servers for the subzone, are given in the TargetName RDATA field of DELEG records in ServiceMode.
+Port Prefix Naming <span><a href="https://rfc-editor.org/rfc/rfc9461#section-3" class="relref">Section 3</a> of [<a href="#RFC9461" class="cite xref">RFC9461</a>]</span> is not used at the delegation point, but <span class="bcp14">MUST</span> be used when resolving the aliased to name servers with DELEG RRs in AliasMode.<a href="#section-2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="delegation-administration">
+<section id="section-3">
+      <h2 id="name-delegation-administration">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-delegation-administration" class="section-name selfRef">Delegation administration</a>
+      </h2>
+<p id="section-3-1">An extensible delegation is realized with a DELEG Resource Record set (RRset) <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> below a specially for the purpose reserved label with the name <code>_deleg</code> at the apex of the delegating zone.
+The <code>_deleg</code> label scopes the interpretation of the DELEG records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see <span><a href="#node-name" class="internal xref">_deleg Node Name</a> (<a href="#node-name" class="auto internal xref">Section 11.2</a>)</span>).
+The full scoping of delegations includes the labels that are <strong>below</strong> the <code>_deleg</code> label and those, together with the name of the delegating domain, make up the name of the subzone to which the delegation refers.
+For example, if the delegating zone is <code>example.</code>, then a delegation to subzone <code>customer.example.</code> is realized by a DELEG RRset at the name <code>customer._deleg.example.</code> in the parent zone.
+A fully scoped delegating name (such as <code>customer._deleg.example.</code>) is referred to further in this document as the "delegation point".<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Note that if the delegation is outsourcing to a single operator represented in a single DELEG RR, it is <span class="bcp14">RECOMMENDED</span> to refer to the name of the operator's DELEG RRset with a CNAME on the delegation point instead of a DELEG RR in AliasMode <span><a href="https://rfc-editor.org/rfc/rfc9460#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="examples">
-<section id="section-2.1">
+<section id="section-3.1">
         <h3 id="name-examples">
-<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
         </h3>
 <div id="one-name-server-within-the-subzone">
-<section id="section-2.1.1">
+<section id="section-3.1.1">
           <h4 id="name-one-name-server-within-the-">
-<a href="#section-2.1.1" class="section-number selfRef">2.1.1. </a><a href="#name-one-name-server-within-the-" class="section-name selfRef">One name server within the subzone</a>
+<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-one-name-server-within-the-" class="section-name selfRef">One name server within the subzone</a>
           </h4>
 <span id="name-one-name-server-within-the-s"></span><div id="zone-within">
 <figure id="figure-1">
-            <div class="lang-~ sourcecode" id="section-2.1.1-1.1">
+            <div class="lang-~ sourcecode" id="section-3.1.1-1.1">
 <pre>
 $ORIGIN example.
 @                  IN  SOA   ns zonemaster ...
-customer1._deleg   IN  SVCB  1 ( ns.customer1
+customer1._deleg   IN  DELEG 1 ( ns.customer1
                                  ipv4hint=198.51.100.1,203.0.113.1
                                  ipv6hint=2001:db8:1::1,2001:db8:2::1
                                )
@@ -1637,20 +1664,20 @@ customer1._deleg   IN  SVCB  1 ( ns.customer1
 </section>
 </div>
 <div id="two-name-servers-within-the-subzone">
-<section id="section-2.1.2">
+<section id="section-3.1.2">
           <h4 id="name-two-name-servers-within-the">
-<a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-two-name-servers-within-the" class="section-name selfRef">Two name servers within the subzone</a>
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-two-name-servers-within-the" class="section-name selfRef">Two name servers within the subzone</a>
           </h4>
 <span id="name-two-name-servers-within-the-"></span><div id="zones-within">
 <figure id="figure-2">
-            <div class="alignLeft art-text artwork" id="section-2.1.2-1.1">
+            <div class="alignLeft art-text artwork" id="section-3.1.2-1.1">
 <pre>
 $ORIGIN example.
 @                  IN  SOA   ns zonemaster ...
-customer2._deleg   IN  SVCB  1 ns1.customer2 ( ipv4hint=198.51.100.1
+customer2._deleg   IN  DELEG 1 ns1.customer2 ( ipv4hint=198.51.100.1
                                                ipv6hint=2001:db8:1::1
                                              )
-                   IN  SVCB  1 ns2.customer2 ( ipv4hint=203.0.113.1
+                   IN  DELEG 1 ns2.customer2 ( ipv4hint=203.0.113.1
                                                ipv6hint=2001:db8:2::1
                                              )
 </pre>
@@ -1662,13 +1689,13 @@ customer2._deleg   IN  SVCB  1 ns1.customer2 ( ipv4hint=198.51.100.1
 </section>
 </div>
 <div id="outsourced-to-an-operator">
-<section id="section-2.1.3">
+<section id="section-3.1.3">
           <h4 id="name-outsourced-to-an-operator">
-<a href="#section-2.1.3" class="section-number selfRef">2.1.3. </a><a href="#name-outsourced-to-an-operator" class="section-name selfRef">Outsourced to an operator</a>
+<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-outsourced-to-an-operator" class="section-name selfRef">Outsourced to an operator</a>
           </h4>
 <span id="name-outsourced-with-cname"></span><div id="outsourced-cname">
 <figure id="figure-3">
-            <div class="alignLeft art-text artwork" id="section-2.1.3-1.1">
+            <div class="alignLeft art-text artwork" id="section-3.1.3-1.1">
 <pre>
 $ORIGIN example.
 @                  IN  SOA   ns zonemaster ...
@@ -1679,36 +1706,36 @@ customer3._deleg   IN  CNAME _dns.ns.operator1
 <a href="#name-outsourced-with-cname" class="selfRef">Outsourced with CNAME</a>
             </figcaption></figure>
 </div>
-<p id="section-2.1.3-2">Instead of using CNAME, the outsourcing could also been accomplished with an SVCB RRset with a single SVCB RR in AliasMode.
+<p id="section-3.1.3-2">Instead of using CNAME, the outsourcing could also been accomplished with a DELEG RRset with a single DELEG RR in AliasMode.
 The configuration below is operationally equivalent to the CNAME configuration above.
-It is <span class="bcp14">RECOMMENDED</span> to use a CNAME over an SVCB RRset with a single SVCB RR in AliasMode (<span><a href="https://rfc-editor.org/rfc/rfc9460#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>).
-Note that an SVCB RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming <span><a href="https://rfc-editor.org/rfc/rfc9461#section-3" class="relref">Section 3</a> of [<a href="#RFC9461" class="cite xref">RFC9461</a>]</span>, but that CNAME refers to the domain name of the target SVCB RRset (or CNAME) which may have an <code>_dns</code> prefix.<a href="#section-2.1.3-2" class="pilcrow">¶</a></p>
+It is <span class="bcp14">RECOMMENDED</span> to use a CNAME over a DELEG RRset with a single DELEG RR in AliasMode (<span><a href="https://rfc-editor.org/rfc/rfc9460#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>).
+Note that a DELEG RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming <span><a href="https://rfc-editor.org/rfc/rfc9461#section-3" class="relref">Section 3</a> of [<a href="#RFC9461" class="cite xref">RFC9461</a>]</span>, but that CNAME refers to the domain name of the target DELEG RRset (or CNAME) which may have an <code>_dns</code> prefix.<a href="#section-3.1.3-2" class="pilcrow">¶</a></p>
 <span id="name-outsourced-with-an-aliasmod"></span><div id="outsourced-svcb">
 <figure id="figure-4">
-            <div class="alignLeft art-text artwork" id="section-2.1.3-3.1">
+            <div class="alignLeft art-text artwork" id="section-3.1.3-3.1">
 <pre>
 $ORIGIN example.
 @                  IN  SOA   ns zonemaster ...
-customer3._deleg   IN  SVCB 0 ns.operator1
+customer3._deleg   IN  DELEG 0 ns.operator1
 </pre>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
-<a href="#name-outsourced-with-an-aliasmod" class="selfRef">Outsourced with an AliasMode SVCB RR</a>
+<a href="#name-outsourced-with-an-aliasmod" class="selfRef">Outsourced with an AliasMode DELEG RR</a>
             </figcaption></figure>
 </div>
-<p id="section-2.1.3-4">The operator SVCB RRset could for example be:<a href="#section-2.1.3-4" class="pilcrow">¶</a></p>
+<p id="section-3.1.3-4">The operator DELEG RRset could for example be:<a href="#section-3.1.3-4" class="pilcrow">¶</a></p>
 <span id="name-operator-zone"></span><div id="operator-zone">
 <figure id="figure-5">
-            <div class="alignLeft art-text artwork" id="section-2.1.3-5.1">
+            <div class="alignLeft art-text artwork" id="section-3.1.3-5.1">
 <pre>
 $ORIGIN operator1.example.
 @                  IN  SOA   ns zonemaster ...
-_dns.ns            IN  SVCB  1 ns ( alpn=h2,dot,h3,doq
+_dns.ns            IN  DELEG 1 ns ( alpn=h2,dot,h3,doq
                                     ipv4hint=192.0.2.1
                                     ipv6hint=2001:db8:3::1
                                     dohpath=/q{?dns}
                                   )
-                   IN  SVCB  2 ns ( ipv4hint=192.0.2.2
+                   IN  DELEG 2 ns ( ipv4hint=192.0.2.2
                                     ipv6hint=2001:db8:3::2
                                   )
 ns                 IN  AAAA  2001:db8:3::1
@@ -1721,18 +1748,16 @@ ns                 IN  AAAA  2001:db8:3::1
 <a href="#name-operator-zone" class="selfRef">Operator zone</a>
             </figcaption></figure>
 </div>
-<p id="section-2.1.3-6"><span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.2" class="relref">Section 2.4.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that SVCB RRsets <span class="bcp14">SHOULD</span> only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers <span class="bcp14">SHOULD</span> pick one at random.
-<span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.1" class="relref">Section 2.4.1</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that within an SVCB RRset, all RRs <span class="bcp14">SHOULD</span> have the same mode, and that if an RRset contains a record in AliasMode, the recipient <span class="bcp14">MUST</span> ignore any ServiceMode records in the set.<a href="#section-2.1.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dnssec-signed-name-servers-within-the-subzone">
-<section id="section-2.1.4">
+<section id="section-3.1.4">
           <h4 id="name-dnssec-signed-name-servers-">
-<a href="#section-2.1.4" class="section-number selfRef">2.1.4. </a><a href="#name-dnssec-signed-name-servers-" class="section-name selfRef">DNSSEC signed name servers within the subzone</a>
+<a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-dnssec-signed-name-servers-" class="section-name selfRef">DNSSEC signed name servers within the subzone</a>
           </h4>
 <span id="name-dnssec-signed-incremental-d"></span><div id="dnssec-zone">
 <figure id="figure-6">
-            <div class="alignLeft art-text artwork" id="section-2.1.4-1.1">
+            <div class="alignLeft art-text artwork" id="section-3.1.4-1.1">
 <pre>
 $ORIGIN
 @                 IN  SOA    ns zonemaster ...
@@ -1743,13 +1768,13 @@ $ORIGIN
                   IN  NSEC   customer5._deleg SOA RRSIG NSEC DNSKEY
                   IN  RRSIG  NSEC ...
 
-customer5._deleg  IN  SVCB   1 ns.customer5 alpn=h2,h3 (
+customer5._deleg  IN  DELEG 1 ns.customer5 alpn=h2,h3 (
                                             ipv4hint=198.51.100.5
                                             ipv6hint=2001:db8:5::1
                                             dohpath=/dns-query{?dns}
                                             )
-                  IN  RRSIG  SVCB ...
-                  IN  NSEC   customer7._deleg RRSIG NSEC SVCB
+                  IN  RRSIG  DELEG ...
+                  IN  NSEC   customer7._deleg RRSIG NSEC DELEG
                   IN  RRSIG  NSEC ...
 
 customer7._deleg  IN  CNAME  customer5._deleg
@@ -1784,15 +1809,15 @@ customer7         IN  NS     ns.customer5
 <a href="#name-dnssec-signed-incremental-d" class="selfRef">DNSSEC signed incremental deleg zone</a>
             </figcaption></figure>
 </div>
-<p id="section-2.1.4-2"><code>customer5.example.</code> is delegated to in an extensible way and <code>customer6.example.</code> is delegated only in a legacy way.
-<code>customer7.example.</code>'s delegation is outsourced to customer5's delegation.<a href="#section-2.1.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.1.4-3">The delegation signals that the authoritative name server supports DoH.
+<p id="section-3.1.4-2"><code>customer5.example.</code> is delegated to in an extensible way and <code>customer6.example.</code> is delegated only in a legacy way.
+<code>customer7.example.</code>'s delegation is outsourced to customer5's delegation.<a href="#section-3.1.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-3">The delegation signals that the authoritative name server supports DoH.
 <code>customer5.example.</code>, <code>customer6.example.</code> and <code>example.</code> are all DNSSEC signed.
 The DNSSEC authentication chain links from <code>example.</code> to <code>customer5.example.</code> in the for DNSSEC conventional way with the signed <code>customer5.example. DS</code> RRset in the <code>example.</code> zone.
-Also, <code>customer6.example.</code> is linked to from <code>example.</code> with the signed <code>customer6.example. DS</code> RRset in the <code>example.</code> zone.<a href="#section-2.1.4-3" class="pilcrow">¶</a></p>
-<p id="section-2.1.4-4">Note that both <code>customer5.example.</code> and <code>customer6.example.</code> have legacy delegations in the zone as well.
+Also, <code>customer6.example.</code> is linked to from <code>example.</code> with the signed <code>customer6.example. DS</code> RRset in the <code>example.</code> zone.<a href="#section-3.1.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-4">Note that both <code>customer5.example.</code> and <code>customer6.example.</code> have legacy delegations in the zone as well.
 It is important to have those legacy delegations to maintain support for legacy resolvers, that do not support incremental deleg.
-DNSSEC signers <span class="bcp14">SHOULD</span> construct the NS RRset and glue for the legacy delegation from the SVCB RRset.<a href="#section-2.1.4-4" class="pilcrow">¶</a></p>
+DNSSEC signers <span class="bcp14">SHOULD</span> construct the NS RRset and glue for the legacy delegation from the DELEG RRset.<a href="#section-3.1.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1800,93 +1825,93 @@ DNSSEC signers <span class="bcp14">SHOULD</span> construct the NS RRset and glue
 </section>
 </div>
 <div id="minimal-implementation">
-<section id="section-3">
+<section id="section-4">
       <h2 id="name-minimal-implementation">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-minimal-implementation" class="section-name selfRef">Minimal implementation</a>
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-minimal-implementation" class="section-name selfRef">Minimal implementation</a>
       </h2>
-<p id="section-3-1">Support in recursive resolvers suffices for the mechanism to be fully functional.
-<a href="#recursive-resolver-behavior" class="auto internal xref">Section 3.1</a> specifies the basic algorithm for resolving incremental delegations.
-In <a href="#presence" class="auto internal xref">Section 3.2</a>, an optimization is presented that will reduce the number of (parallel) queries especially for when authoritative name server support is still lacking and there are still many zones that do not contain incremental delegations.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">Support in recursive resolvers suffices for the mechanism to be fully functional.
+<a href="#recursive-resolver-behavior" class="auto internal xref">Section 4.1</a> specifies the basic algorithm for resolving incremental delegations.
+In <a href="#presence" class="auto internal xref">Section 4.2</a>, an optimization is presented that will reduce the number of (parallel) queries especially for when authoritative name server support is still lacking and there are still many zones that do not contain incremental delegations.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div id="recursive-resolver-behavior">
-<section id="section-3.1">
+<section id="section-4.1">
         <h3 id="name-recursive-resolver-behavior">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-recursive-resolver-behavior" class="section-name selfRef">Recursive Resolver behavior</a>
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-recursive-resolver-behavior" class="section-name selfRef">Recursive Resolver behavior</a>
         </h3>
-<p id="section-3.1-1">If the triggering query name is the same as the name of the target zone apex, then no further delegation will occur, and resolution will complete.
-No special behavior or processing is needed.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">Otherwise, the triggering query is below the target zone apex and a delegation may exist in the target zone.
+<p id="section-4.1-1">If the triggering query name is the same as the name of the target zone apex, then no further delegation will occur, and resolution will complete.
+No special behavior or processing is needed.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">Otherwise, the triggering query is below the target zone apex and a delegation may exist in the target zone.
 In this case two parallel queries <span class="bcp14">MUST</span> be sent.
-One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query <span>[<a href="#RFC9156" class="cite xref">RFC9156</a>]</span>), and one <em>incremental deleg query</em> with query type SVCB.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">The incremental deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a <code>_deleg</code> label and the name of the target zone.
+One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query <span>[<a href="#RFC9156" class="cite xref">RFC9156</a>]</span>), and one <em>incremental deleg query</em> with query type DELEG.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">The incremental deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a <code>_deleg</code> label and the name of the target zone.
 For example if the triggering query is <code>www.customer.example.</code> and the target zone <code>example.</code>, then the incremental deleg query name is <code>customer._deleg.example.</code>
-For another example, if the triggering query is <code>www.faculty.university.example.</code> and the target zone <code>example.</code> then the incremental deleg name is <code>university._deleg.example.</code><a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">Normal DNAME, CNAME and SVCB in AliasMode processing should happen as before, though note that when following an SVCB RR in AliasMode, the target name <span class="bcp14">MUST</span> have the <code>_dns</code> label prepended to the TargetName in the SVCB RR.
-The eventual incremental deleg query response, after following all redirections caused by DNAME, CNAME and AliasMode SVCB RRs, has three possible outcomes:<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3.1-5">
-<li id="section-3.1-5.1">
-            <p id="section-3.1-5.1.1">An SVCB RRset in ServiceMode is returned in the response's answer section containing the delegation for the subzone.<a href="#section-3.1-5.1.1" class="pilcrow">¶</a></p>
-<p id="section-3.1-5.1.2">
-The SVCB RRs in the RRset <span class="bcp14">MUST</span> be used to follow the referral.
-The TargetName data field in the SVCB RRs in the RRset <span class="bcp14">MUST</span> be used as the names for the name servers to contact for the subzone, and the ipv4hint and ipv6hint parameters <span class="bcp14">MUST</span> be used as the IP addresses for the TargetName in the same SVCB RR.<a href="#section-3.1-5.1.2" class="pilcrow">¶</a></p>
-<p id="section-3.1-5.1.3">
-The NS RRset and glue, in the response of the legacy query that was sent in parallel to the incremental deleg query, <span class="bcp14">MUST NOT</span> be used, but the signed DS record (or NSEC(3) records indicating that there was no DS) <span class="bcp14">MUST</span> be used in linking the DNSSEC authentication chain as which would conventionally be done with DNSSEC as well.<a href="#section-3.1-5.1.3" class="pilcrow">¶</a></p>
+For another example, if the triggering query is <code>www.faculty.university.example.</code> and the target zone <code>example.</code> then the incremental deleg name is <code>university._deleg.example.</code><a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">Normal DNAME, CNAME and DELEG in AliasMode processing should happen as before, though note that when following a DELEG RR in AliasMode the target RR type is SVCB (see <a href="#the-deleg-resource-record-type" class="auto internal xref">Section 2</a>).
+The eventual incremental deleg query response, after following all redirections caused by DNAME, CNAME and AliasMode DELEG RRs, has three possible outcomes:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.1-5">
+<li id="section-4.1-5.1">
+            <p id="section-4.1-5.1.1">A DELEG RRset in ServiceMode is returned in the response's answer section containing the delegation for the subzone.<a href="#section-4.1-5.1.1" class="pilcrow">¶</a></p>
+<p id="section-4.1-5.1.2">
+The DELEG RRs in the RRset <span class="bcp14">MUST</span> be used to follow the referral.
+The TargetName data field in the DELEG RRs in the RRset <span class="bcp14">MUST</span> be used as the names for the name servers to contact for the subzone, and the ipv4hint and ipv6hint parameters <span class="bcp14">MUST</span> be used as the IP addresses for the TargetName in the same DELEG RR.<a href="#section-4.1-5.1.2" class="pilcrow">¶</a></p>
+<p id="section-4.1-5.1.3">
+The NS RRset and glue, in the response of the legacy query that was sent in parallel to the incremental deleg query, <span class="bcp14">MUST NOT</span> be used, but the signed DS record (or NSEC(3) records indicating that there was no DS) <span class="bcp14">MUST</span> be used in linking the DNSSEC authentication chain as which would conventionally be done with DNSSEC as well.<a href="#section-4.1-5.1.3" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.1-5.2">
-            <p id="section-3.1-5.2.1">The incremental deleg query name does not exist (NXDOMAIN).<a href="#section-3.1-5.2.1" class="pilcrow">¶</a></p>
-<p id="section-3.1-5.2.2">
-There is no incremental delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed  as would be done with legacy DNS and DNSSEC processing.<a href="#section-3.1-5.2.2" class="pilcrow">¶</a></p>
+          <li id="section-4.1-5.2">
+            <p id="section-4.1-5.2.1">The incremental deleg query name does not exist (NXDOMAIN).<a href="#section-4.1-5.2.1" class="pilcrow">¶</a></p>
+<p id="section-4.1-5.2.2">
+There is no incremental delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed  as would be done with legacy DNS and DNSSEC processing.<a href="#section-4.1-5.2.2" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.1-5.3">
-            <p id="section-3.1-5.3.1">The incremental deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).<a href="#section-3.1-5.3.1" class="pilcrow">¶</a></p>
-<p id="section-3.1-5.3.2">
-If the legacy query, did result in a referral for the same number of labels as the subdomain that the incremental deleg query was for, then there was no incremental delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed as would be done with legacy DNS and DNSSEC processing.<a href="#section-3.1-5.3.2" class="pilcrow">¶</a></p>
-<p id="section-3.1-5.3.3">
-Otherwise, the subzone may be more than one label below the delegating zone.<a href="#section-3.1-5.3.3" class="pilcrow">¶</a></p>
-<p id="section-3.1-5.3.4">
+          <li id="section-4.1-5.3">
+            <p id="section-4.1-5.3.1">The incremental deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).<a href="#section-4.1-5.3.1" class="pilcrow">¶</a></p>
+<p id="section-4.1-5.3.2">
+If the legacy query, did result in a referral for the same number of labels as the subdomain that the incremental deleg query was for, then there was no incremental delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed as would be done with legacy DNS and DNSSEC processing.<a href="#section-4.1-5.3.2" class="pilcrow">¶</a></p>
+<p id="section-4.1-5.3.3">
+Otherwise, the subzone may be more than one label below the delegating zone.<a href="#section-4.1-5.3.3" class="pilcrow">¶</a></p>
+<p id="section-4.1-5.3.4">
 If the response to the legacy query resulted in a referral, then a new incremental deleg query <span class="bcp14">MUST</span> be spawned, matching the zone cut of the legacy referral response.
 For example if the triggering query is <code>www.university.ac.example.</code> and the target zone <code>example.</code>, and the legacy response contained an NS RRset for <code>university.ac.example.</code>, then the incremental deleg query name is <code>university.ac._deleg.example.</code>
-The response to the new incremental deleg query <span class="bcp14">MUST</span> be processed as described above, as if it was the initial incremental deleg query.<a href="#section-3.1-5.3.4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5.3.5">
+The response to the new incremental deleg query <span class="bcp14">MUST</span> be processed as described above, as if it was the initial incremental deleg query.<a href="#section-4.1-5.3.4" class="pilcrow">¶</a></p>
+<p id="section-4.1-5.3.5">
 If the legacy query was sent minimised and needs a followup query, then parallel to that followup query a new incremental deleg query will be sent, adding a single label to the previous incremental deleg query name.
 For example if the triggering query is <code>www.university.ac.example.</code> and the target zone is <code>example.</code> and the minimised legacy query name is <code>ac.example.</code> (which also resulted in a NOERROR no answer response), then the incremental deleg query to be sent along in parallel with the followup legacy query will become <code>university.ac.example.</code>
-Processing of the responses of those two new queries will be done as described above.<a href="#section-3.1-5.3.5" class="pilcrow">¶</a></p>
+Processing of the responses of those two new queries will be done as described above.<a href="#section-4.1-5.3.5" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
 </div>
 <div id="presence">
-<section id="section-3.2">
+<section id="section-4.2">
         <h3 id="name-_deleg-label-presence">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-_deleg-label-presence" class="section-name selfRef"><code>_deleg</code> label presence</a>
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-_deleg-label-presence" class="section-name selfRef"><code>_deleg</code> label presence</a>
         </h3>
-<p id="section-3.2-1">Absence of the <code>_deleg</code> label in a zone is a clear signal that the zone does not contain any incremental deleg delegations.
+<p id="section-4.2-1">Absence of the <code>_deleg</code> label in a zone is a clear signal that the zone does not contain any incremental deleg delegations.
 Recursive resolvers <span class="bcp14">SHOULD NOT</span> send any additional incremental deleg queries for zones for which it is known that it does not contain the <code>_deleg</code> label at the apex.
-The state regarding the presence of the <code>_deleg</code> label within a resolver can be "unknown", "known not to be present", or "known to be present".<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The state regarding the presence of the <code>_deleg</code> label can be deduced from the response of the incremental deleg query, if the target zone is signed with DNSSEC.
-If the target zone is unsigned, the procedure as described in the remainder of this section <span class="bcp14">SHOULD</span> be followed.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">When the presence of a <code>_deleg</code> label is "unknown", a <code>_deleg</code> presence test query <span class="bcp14">SHOULD</span> be sent in parallel to the next query for the unsigned target zone (though not when the target name server is known to support incremental deleg, which will be discussed in <a href="#authoritative-name-server-support" class="auto internal xref">Section 4.1</a>).
-The query name for the test query is the <code>_deleg</code> label prepended to the apex of zone for which to test presence, with query type A.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">The testing query can have three possible outcomes:<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3.2-5">
-<li id="section-3.2-5.1">
-            <p id="section-3.2-5.1.1">The <code>_deleg</code> label does not exist within the zone, and an NXDOMAIN response is returned.<a href="#section-3.2-5.1.1" class="pilcrow">¶</a></p>
-<p id="section-3.2-5.1.2">
+The state regarding the presence of the <code>_deleg</code> label within a resolver can be "unknown", "known not to be present", or "known to be present".<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">The state regarding the presence of the <code>_deleg</code> label can be deduced from the response of the incremental deleg query, if the target zone is signed with DNSSEC.
+If the target zone is unsigned, the procedure as described in the remainder of this section <span class="bcp14">SHOULD</span> be followed.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">When the presence of a <code>_deleg</code> label is "unknown", a <code>_deleg</code> presence test query <span class="bcp14">SHOULD</span> be sent in parallel to the next query for the unsigned target zone (though not when the target name server is known to support incremental deleg, which will be discussed in <a href="#authoritative-name-server-support" class="auto internal xref">Section 5.1</a>).
+The query name for the test query is the <code>_deleg</code> label prepended to the apex of zone for which to test presence, with query type A.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">The testing query can have three possible outcomes:<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2-5">
+<li id="section-4.2-5.1">
+            <p id="section-4.2-5.1.1">The <code>_deleg</code> label does not exist within the zone, and an NXDOMAIN response is returned.<a href="#section-4.2-5.1.1" class="pilcrow">¶</a></p>
+<p id="section-4.2-5.1.2">
 The non-existence of the <code>_deleg</code> label <span class="bcp14">MUST</span> be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the boundaries for TTL values that the resolver has (<span><a href="https://rfc-editor.org/rfc/rfc8767#section-4" class="relref">Section 4</a> of [<a href="#RFC8767" class="cite xref">RFC8767</a>]</span>).
-For the period the non-existence of the <code>_deleg</code> label is cached, the label is "known not to be present" and the resolver <span class="bcp14">SHOULD NOT</span> send any (additional) incremental deleg queries.<a href="#section-3.2-5.1.2" class="pilcrow">¶</a></p>
+For the period the non-existence of the <code>_deleg</code> label is cached, the label is "known not to be present" and the resolver <span class="bcp14">SHOULD NOT</span> send any (additional) incremental deleg queries.<a href="#section-4.2-5.1.2" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.2-5.2">
-            <p id="section-3.2-5.2.1">The <code>_deleg</code> label does exist within the zone but contains no data.
-A NOERROR response is returned with no RRs in the answer section.<a href="#section-3.2-5.2.1" class="pilcrow">¶</a></p>
-<p id="section-3.2-5.2.2">
+          <li id="section-4.2-5.2">
+            <p id="section-4.2-5.2.1">The <code>_deleg</code> label does exist within the zone but contains no data.
+A NOERROR response is returned with no RRs in the answer section.<a href="#section-4.2-5.2.1" class="pilcrow">¶</a></p>
+<p id="section-4.2-5.2.2">
 The existence of the <code>_deleg</code> name <span class="bcp14">MUST</span> be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
-For the period the existence of the empty non-terminal at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.2-5.2.2" class="pilcrow">¶</a></p>
+For the period the existence of the empty non-terminal at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-4.2-5.2.2" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.2-5.3">
-            <p id="section-3.2-5.3.1">The <code>_deleg</code> label does exist within the zone and contains data.
-A NOERROR response is return with an A RRset in the answer section.<a href="#section-3.2-5.3.1" class="pilcrow">¶</a></p>
-<p id="section-3.2-5.3.2">
+          <li id="section-4.2-5.3">
+            <p id="section-4.2-5.3.1">The <code>_deleg</code> label does exist within the zone and contains data.
+A NOERROR response is return with an A RRset in the answer section.<a href="#section-4.2-5.3.1" class="pilcrow">¶</a></p>
+<p id="section-4.2-5.3.2">
 The resolver <span class="bcp14">MUST</span> record that the <code>_deleg</code> label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
-For the period any RRset at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-3.2-5.3.2" class="pilcrow">¶</a></p>
+For the period any RRset at the <code>_deleg</code> label is cached, the label is "known to be present" and the resolver <span class="bcp14">MUST</span> send additional incremental deleg queries as described in TODO.<a href="#section-4.2-5.3.2" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -1894,23 +1919,23 @@ For the period any RRset at the <code>_deleg</code> label is cached, the label i
 </section>
 </div>
 <div id="optimized-implementation">
-<section id="section-4">
+<section id="section-5">
       <h2 id="name-optimized-implementation">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-optimized-implementation" class="section-name selfRef">Optimized implementation</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-optimized-implementation" class="section-name selfRef">Optimized implementation</a>
       </h2>
-<p id="section-4-1">Support for authoritative name servers enables optimized query behavior by resolvers with reduced (simultaneous) queries.
-<a href="#authoritative-name-server-support" class="auto internal xref">Section 4.1</a> specifies how incremental deleg supporting authoritative name servers return referral responses for delegations.
-In <a href="#behavior-with-auth-support" class="auto internal xref">Section 4.2</a> we specify how resolvers can benefit from those authoritative servers.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">Support for authoritative name servers enables optimized query behavior by resolvers with reduced (simultaneous) queries.
+<a href="#authoritative-name-server-support" class="auto internal xref">Section 5.1</a> specifies how incremental deleg supporting authoritative name servers return referral responses for delegations.
+In <a href="#behavior-with-auth-support" class="auto internal xref">Section 5.2</a> we specify how resolvers can benefit from those authoritative servers.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <div id="authoritative-name-server-support">
-<section id="section-4.1">
+<section id="section-5.1">
         <h3 id="name-authoritative-name-server-s">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-authoritative-name-server-s" class="section-name selfRef">Authoritative name server support</a>
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-authoritative-name-server-s" class="section-name selfRef">Authoritative name server support</a>
         </h3>
-<p id="section-4.1-1">Incremental delegations supporting authoritative name servers include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses to legacy DNS queries.
-For example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer5.example. A</code>, will return the following referral response:<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">Incremental delegations supporting authoritative name servers include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses to legacy DNS queries.
+For example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer5.example. A</code>, will return the following referral response:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <span id="name-an-incremental-deleg-referr"></span><div id="deleg-response">
 <figure id="figure-7">
-          <div class="alignLeft art-text artwork" id="section-4.1-2.1">
+          <div class="alignLeft art-text artwork" id="section-5.1-2.1">
 <pre>
 ;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, rcode: NOERROR, id: 54349
 ;; flags: qr ; QUERY: 1, ANSWER: 0, AUTHORITY: 5, ADDITIONAL: 2
@@ -1923,12 +1948,12 @@ For example, querying the zone from <a href="#dnssec-zone" class="auto internal 
 customer5.example.      3600    IN      NS      ns.customer5.example.
 customer5.example.      3600    IN      DS      ...
 customer5.example.      3600    IN      RRSIG   DS ...
-customer5._deleg.example.       3600    IN      SVCB    1 (
+customer5._deleg.example.       3600    IN      DELEG 1 (
                 ns.customer5.example. alpn=h2,h3
                 ipv4hint=198.51.100.5 ipv6hint=2001:db8:5::1
                 dohpath=/dns-query{?dns}
                 )
-customer5._deleg.example.       3600    IN      RRSIG   SVCB ...
+customer5._deleg.example.       3600    IN      RRSIG   DELEG ...
 
 ;; ADDITIONAL SECTION:
 ns.customer5.example.   3600    IN      A       198.51.100.5
@@ -1945,11 +1970,11 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 <a href="#name-an-incremental-deleg-referr" class="selfRef">An incremental deleg referral response</a>
           </figcaption></figure>
 </div>
-<p id="section-4.1-3">The referral response in <a href="#deleg-response" class="auto internal xref">Figure 7</a> includes the signed SVCB RRset in the authority section.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1-4">As another example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer6.example. A</code>, will return the following referral response:<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">The referral response in <a href="#deleg-response" class="auto internal xref">Figure 7</a> includes the signed DELEG RRset in the authority section.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">As another example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer6.example. A</code>, will return the following referral response:<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <span id="name-referral-response-without-i"></span><div id="no-incr-deleg-response">
 <figure id="figure-8">
-          <div class="alignLeft art-text artwork" id="section-4.1-5.1">
+          <div class="alignLeft art-text artwork" id="section-5.1-5.1">
 <pre>
 ;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, rcode: NOERROR, id: 36574
 ;; flags: qr ; QUERY: 1, ANSWER: 0, AUTHORITY: 9, ADDITIONAL: 2
@@ -1963,7 +1988,7 @@ customer6.example.      3600    IN      NS      ns.customer6.example.
 customer6.example.      3600    IN      DS      ...
 customer6.example.      3600    IN      RRSIG   DS ...
 customer5._deleg.example.       1234    IN      NSEC    (
-                customer7._deleg.example.  RRSIG NSEC SVCB )
+                customer7._deleg.example.  RRSIG NSEC DELEG )
 customer5._deleg.example.       1234    IN      RRSIG   NSEC ...
 example.        1234    IN      NSEC    (
                 customer5._deleg.example.  NS SOA RRSIG NSEC DNSKEY )
@@ -1984,11 +2009,11 @@ ns.customer6.example.   3600    IN      AAAA    2001:db8:6::1
 <a href="#name-referral-response-without-i" class="selfRef">Referral response without incremental deleg</a>
           </figcaption></figure>
 </div>
-<p id="section-4.1-6">Next to the legacy delegation, the incremental deleg supporting authoritative returns the NSEC(3) RRs needed to show that there was no incremental delegation in the referral response in <a href="#no-incr-deleg-response" class="auto internal xref">Figure 8</a>.<a href="#section-4.1-6" class="pilcrow">¶</a></p>
-<p id="section-4.1-7">Querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer7.example. A</code>, will return the following referral response:<a href="#section-4.1-7" class="pilcrow">¶</a></p>
+<p id="section-5.1-6">Next to the legacy delegation, the incremental deleg supporting authoritative returns the NSEC(3) RRs needed to show that there was no incremental delegation in the referral response in <a href="#no-incr-deleg-response" class="auto internal xref">Figure 8</a>.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+<p id="section-5.1-7">Querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer7.example. A</code>, will return the following referral response:<a href="#section-5.1-7" class="pilcrow">¶</a></p>
 <span id="name-aliasing-referral-response"></span><div id="alias-response">
 <figure id="figure-9">
-          <div class="alignLeft art-text artwork" id="section-4.1-8.1">
+          <div class="alignLeft art-text artwork" id="section-5.1-8.1">
 <pre>
 ;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, rcode: NOERROR, id: 9456
 ;; flags: qr ; QUERY: 1, ANSWER: 0, AUTHORITY: 7, ADDITIONAL: 2
@@ -2004,10 +2029,10 @@ customer7.example.      3600    IN      RRSIG   DS ...
 customer7._deleg.example.       3600    IN      CNAME   (
                 customer5._deleg.example. )
 customer7._deleg.example.       3600    IN      RRSIG   CNAME ...
-customer5._deleg.example.       3600    IN      SVCB    1 (
+customer5._deleg.example.       3600    IN      DELEG   1 (
                 ns.customer5.example. alpn=h2,h3
                 ipv4hint=198.51.100.5 ipv6hint=2001:db8:5::1 )
-customer5._deleg.example.       3600    IN      RRSIG   SVCB ...
+customer5._deleg.example.       3600    IN      RRSIG   DELEG ...
 
 ;; ADDITIONAL SECTION:
 ns.customer5.example.   3600    IN      A       198.51.100.5
@@ -2024,53 +2049,53 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 <a href="#name-aliasing-referral-response" class="selfRef">Aliasing referral response</a>
           </figcaption></figure>
 </div>
-<p id="section-4.1-9">The incremental delegation of <code>customer7.example.</code> is aliased to the one that is also used by <code>customer5.example.</code>
-Since both delegations are in the same zone, the authoritative name server for <code>example.</code> returns both the CNAME realising the alias, as well as the SVCB RRset which is the target of the alias in <a href="#alias-response" class="auto internal xref">Figure 9</a>.
-In other cases an returned CNAME or SVCB RR in AliasMode may need further chasing by the resolver.<a href="#section-4.1-9" class="pilcrow">¶</a></p>
-<p id="section-4.1-10">With unsigned zones, only if an incremental deleg delegation exists, the SVCB RRset (or CNAME) will be present in the authority section of referral responses.
+<p id="section-5.1-9">The incremental delegation of <code>customer7.example.</code> is aliased to the one that is also used by <code>customer5.example.</code>
+Since both delegations are in the same zone, the authoritative name server for <code>example.</code> returns both the CNAME realising the alias, as well as the DELEG RRset which is the target of the alias in <a href="#alias-response" class="auto internal xref">Figure 9</a>.
+In other cases an returned CNAME or DELEG RR in AliasMode may need further chasing by the resolver.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
+<p id="section-5.1-10">With unsigned zones, only if an incremental deleg delegation exists, the DELEG RRset (or CNAME) will be present in the authority section of referral responses.
 
-If the incremental deleg does not exist, then it is simply absent from the authority section and the referral response is indistinguishable from an non supportive authoritative.<a href="#section-4.1-10" class="pilcrow">¶</a></p>
+If the incremental deleg does not exist, then it is simply absent from the authority section and the referral response is indistinguishable from an non supportive authoritative.<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="behavior-with-auth-support">
-<section id="section-4.2">
+<section id="section-5.2">
         <h3 id="name-resolver-behavior-with-auth">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-resolver-behavior-with-auth" class="section-name selfRef">Resolver behavior with authoritative name server support</a>
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-resolver-behavior-with-auth" class="section-name selfRef">Resolver behavior with authoritative name server support</a>
         </h3>
-<p id="section-4.2-1">Incremental deleg supporting authoritative name servers will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
+<p id="section-5.2-1">Incremental deleg supporting authoritative name servers will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
 If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
-A resolver <span class="bcp14">SHOULD</span> register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">When the authority section of a referral response contains an SVCB RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such SVCB or CNAME RRset, then the resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that SVCB, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
-Subsequent queries <span class="bcp14">SHOULD NOT</span> include incremental deleg queries, as described in <a href="#recursive-resolver-behavior" class="auto internal xref">Section 3.1</a>, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.2-3">For example, in <a href="#deleg-response" class="auto internal xref">Figure 7</a>, the SVCB RRset at the incremental delegation point has TTL 3600.
+A resolver <span class="bcp14">SHOULD</span> register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">When the authority section of a referral response contains an DELEG RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such DELEG or CNAME RRset, then the resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that DELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+Subsequent queries <span class="bcp14">SHOULD NOT</span> include incremental deleg queries, as described in <a href="#recursive-resolver-behavior" class="auto internal xref">Section 4.1</a>, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">For example, in <a href="#deleg-response" class="auto internal xref">Figure 7</a>, the DELEG RRset at the incremental delegation point has TTL 3600.
 The resolver should register that the contacted authoritative name server supports incremental deleg for (at least) 3600 seconds (one hour).
-All subsequent queries to that authoritative name server <span class="bcp14">SHOULD NOT</span> include incremental deleg queries to be send in parallel.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2-4">If the authority section contains more than one RRset making up the incremental delegation, then the RRset with the longest TTL <span class="bcp14">MUST</span> be taken to determine the duration for which incremental deleg support is registered.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
-<p id="section-4.2-5">For example, in <a href="#alias-response" class="auto internal xref">Figure 9</a>, both a CNAME and an SVCB RRset for the incremental delegation are included in the authority section.
-The longest TTL must be taken for incremental support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
-<p id="section-4.2-6">With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
-<p id="section-4.2-7">If the resolver knows that the authoritative name server supports incremental deleg, <em>and</em> a DNSSEC signed zone is being served, then all referrals <span class="bcp14">MUST</span> contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
-If a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver <span class="bcp14">MUST</span> send an additional incremental deleg query to find the incremental delegation (or denial of its existence).<a href="#section-4.2-7" class="pilcrow">¶</a></p>
+All subsequent queries to that authoritative name server <span class="bcp14">SHOULD NOT</span> include incremental deleg queries to be send in parallel.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">If the authority section contains more than one RRset making up the incremental delegation, then the RRset with the longest TTL <span class="bcp14">MUST</span> be taken to determine the duration for which incremental deleg support is registered.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">For example, in <a href="#alias-response" class="auto internal xref">Figure 9</a>, both a CNAME and an DELEG RRset for the incremental delegation are included in the authority section.
+The longest TTL must be taken for incremental support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.2-6">With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
+<p id="section-5.2-7">If the resolver knows that the authoritative name server supports incremental deleg, <em>and</em> a DNSSEC signed zone is being served, then all referrals <span class="bcp14">MUST</span> contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
+If a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver <span class="bcp14">MUST</span> send an additional incremental deleg query to find the incremental delegation (or denial of its existence).<a href="#section-5.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="extra-optimized-implementation">
-<section id="section-5">
+<section id="section-6">
       <h2 id="name-extra-optimized-implementat">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-extra-optimized-implementat" class="section-name selfRef">Extra optimized implementation</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-extra-optimized-implementat" class="section-name selfRef">Extra optimized implementation</a>
       </h2>
-<p id="section-5-1">An SVCB RRset on an incremental delegation point, with a SVCB RR in AliasMode, aliasing to the root zone, <span class="bcp14">MUST</span> be interpreted to mean that the legacy delegation information <span class="bcp14">MUST</span> be used to follow the referral.
-All service parameters for such AliasMode (aliasing to the root) SVCB RRs on the incremental delegation point, <span class="bcp14">MUST</span> be ignored.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">For example, such an SVCB RRset registered on the wildcard below the <code>_deleg</code> label on the apex of a zone, can signal that legacy DNS referrals <span class="bcp14">MUST</span> be used for both signed and <em>unsigned</em> zones:<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-6-1">An DELEG RRset on an incremental delegation point, with a DELEG RR in AliasMode, aliasing to the root zone, <span class="bcp14">MUST</span> be interpreted to mean that the legacy delegation information <span class="bcp14">MUST</span> be used to follow the referral.
+All service parameters for such AliasMode (aliasing to the root) DELEG RRs on the incremental delegation point, <span class="bcp14">MUST</span> be ignored.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">For example, such an DELEG RRset registered on the wildcard below the <code>_deleg</code> label on the apex of a zone, can signal that legacy DNS referrals <span class="bcp14">MUST</span> be used for both signed and <em>unsigned</em> zones:<a href="#section-6-2" class="pilcrow">¶</a></p>
 <span id="name-wildcard-incremental-deleg-"></span><div id="wildcard-deleg">
 <figure id="figure-10">
-        <div class="alignLeft art-text artwork" id="section-5-3.1">
+        <div class="alignLeft art-text artwork" id="section-6-3.1">
 <pre>
 $ORIGIN example.
 @                  IN  SOA   ns zonemaster ...
-*._deleg    86400  IN  SVCB  0 .
-customer1._deleg   IN  SVCB  1 ( ns.customer1
+*._deleg    86400  IN  DELEG 0 .
+customer1._deleg   IN  DELEG 1 ( ns.customer1
                                  ipv4hint=198.51.100.1,203.0.113.1
                                  ipv6hint=2001:db8:1::1,2001:db8:2::1
                                )
@@ -2081,48 +2106,44 @@ customer3._deleg   IN  CNAME _dns.ns.operator1
 <a href="#name-wildcard-incremental-deleg-" class="selfRef">Wildcard incremental deleg to control duration of detected support</a>
         </figcaption></figure>
 </div>
-<p id="section-5-4">Resolvers <span class="bcp14">SHOULD</span> register that an authoritative name server supports incremental deleg, if such an SVCB RRset is returned in the authority section of referral responses, for the duration of the TTL if the SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+<p id="section-6-4">Resolvers <span class="bcp14">SHOULD</span> register that an authoritative name server supports incremental deleg, if such a DELEG RRset is returned in the authority section of referral responses, for the duration of the TTL if the DELEG RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Note that this will also be included in referral responses for unsigned zones, which would otherwise not have signalling of incremental deleg support by the authoritative name server.
 Also, signed zones need fewer RRs to indicate that no incremental delegation exists.
-The wildcard expansion already shows the closest encloser (i.e. <code>_deleg.&lt;apex&gt;</code>), so only one additional NSEC(3) is needed to show non-existence of the queried for name below the closest encloser.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">This method of signalling that the legacy delegation <span class="bcp14">MUST</span> be used, is <span class="bcp14">RECOMMENDED</span>.<a href="#section-5-5" class="pilcrow">¶</a></p>
+The wildcard expansion already shows the closest encloser (i.e. <code>_deleg.&lt;apex&gt;</code>), so only one additional NSEC(3) is needed to show non-existence of the queried for name below the closest encloser.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5">This method of signalling that the legacy delegation <span class="bcp14">MUST</span> be used, is <span class="bcp14">RECOMMENDED</span>.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="limitations">
-<section id="section-6">
+<section id="section-7">
       <h2 id="name-limitations">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
       </h2>
 <div id="outsourcing-to-more-than-one-operator">
-<section id="section-6.1">
+<section id="section-7.1">
         <h3 id="name-outsourcing-to-more-than-on">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-outsourcing-to-more-than-on" class="section-name selfRef">Outsourcing to more than one operator</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-outsourcing-to-more-than-on" class="section-name selfRef">Outsourcing to more than one operator</a>
         </h3>
-<p id="section-6.1-1"><span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.1" class="relref">Section 2.4.1</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that within an SVCB RRset, all RRs <span class="bcp14">SHOULD</span> have the same mode, and that if an RRset contains a record in AliasMode, the recipient <span class="bcp14">MUST</span> ignore any ServiceMode records in the set.
-<span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.2" class="relref">Section 2.4.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that SVCB RRsets <span class="bcp14">SHOULD</span> only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers <span class="bcp14">SHOULD</span> pick one at random.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">Currently this means that query load can be spread out over multiple operators (even though that is <span class="bcp14">NOT RECOMMENDED</span>), but operationally it would make more sense to allow a resolver to select from all the name servers from all the operators.
-Assumingly SVCB currently supports only a single AliasMode RR in an SVCB RRset because it would otherwise be impossible to interpret the SvcPriority from the SVCB RRsets that is aliased to.
-A possible solution could be to resolve all AliasMode RRs at the delegation point (though limited to a certain amount, say 8) and then let the resolver pick from all the SVCB RRs, ignoring SvcPriority.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">TODO<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="priming-queries">
-<section id="section-6.2">
+<section id="section-7.2">
         <h3 id="name-priming-queries">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-priming-queries" class="section-name selfRef">Priming queries</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-priming-queries" class="section-name selfRef">Priming queries</a>
         </h3>
-<p id="section-6.2-1">Some zones, such as the root zone, are targeted directly from hints files.
-Information about which authoritative name servers and with capabilities, <span class="bcp14">MAY</span> be provided in an SVCB RRset directly at the <code>_deleg</code> label under the apex of the zone.
-Priming queries from a incremental deleg supporting resolver, <span class="bcp14">MUST</span> send an <code>_deleg.&lt;apex&gt; SVCB</code> query in parallel to the legacy <code>&lt;apex&gt; NS</code> query and process the content as if it was found through an incremental referral response.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">Some zones, such as the root zone, are targeted directly from hints files.
+Information about which authoritative name servers and with capabilities, <span class="bcp14">MAY</span> be provided in an DELEG RRset directly at the <code>_deleg</code> label under the apex of the zone.
+Priming queries from a incremental deleg supporting resolver, <span class="bcp14">MUST</span> send an <code>_deleg.&lt;apex&gt; DELEG</code> query in parallel to the legacy <code>&lt;apex&gt; NS</code> query and process the content as if it was found through an incremental referral response.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="comparison-with-other-delegation-mechanisms">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-comparison-with-other-deleg">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-comparison-with-other-deleg" class="section-name selfRef">Comparison with other delegation mechanisms</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-comparison-with-other-deleg" class="section-name selfRef">Comparison with other delegation mechanisms</a>
       </h2>
-<p id="section-7-1">Table <a href="#xtraqueries" class="auto internal xref">Table 1</a> provides an overview of when extra queries, in parallel to the legacy query, are sent.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">Table <a href="#xtraqueries" class="auto internal xref">Table 1</a> provides an overview of when extra queries, in parallel to the legacy query, are sent.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <span id="name-additional-queries-in-paral"></span><div id="xtraqueries">
 <table class="center" id="table-1">
         <caption>
@@ -2136,7 +2157,7 @@ Priming queries from a incremental deleg supporting resolver, <span class="bcp14
             <th class="text-center" rowspan="1" colspan="1">support</th>
             <th class="text-center" rowspan="1" colspan="1">_deleg</th>
             <th class="text-left" rowspan="1" colspan="1"> </th>
-            <th class="text-center" rowspan="1" colspan="1">&lt;sub&gt;._deleg.&lt;apex&gt; SVCB</th>
+            <th class="text-center" rowspan="1" colspan="1">&lt;sub&gt;._deleg.&lt;apex&gt; DELEG</th>
             <th class="text-center" rowspan="1" colspan="1">_deleg.&lt;apex&gt; A</th>
           </tr>
         </thead>
@@ -2189,52 +2210,52 @@ Priming queries from a incremental deleg supporting resolver, <span class="bcp14
         </tbody>
       </table>
 </div>
-<p id="section-7-3">The three headers on the left side of the table mean the following:<a href="#section-7-3" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlNewline" id="section-7-4">
-        <dt id="section-7-4.1">apex:</dt>
-        <dd style="margin-left: 1.5em" id="section-7-4.2">
-          <p id="section-7-4.2.1">Whether the query is for the apex of the target zone.
-"Yes" means an apex query, "No" means a query below the apex which may be delegated<a href="#section-7-4.2.1" class="pilcrow">¶</a></p>
+<p id="section-8-3">The three headers on the left side of the table mean the following:<a href="#section-8-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-8-4">
+        <dt id="section-8-4.1">apex:</dt>
+        <dd style="margin-left: 1.5em" id="section-8-4.2">
+          <p id="section-8-4.2.1">Whether the query is for the apex of the target zone.
+"Yes" means an apex query, "No" means a query below the apex which may be delegated<a href="#section-8-4.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-7-4.3">support:</dt>
-        <dd style="margin-left: 1.5em" id="section-7-4.4">
-          <p id="section-7-4.4.1">Whether or not the target authoritative server supports incremental deleg.
+<dt id="section-8-4.3">support:</dt>
+        <dd style="margin-left: 1.5em" id="section-8-4.4">
+          <p id="section-8-4.4.1">Whether or not the target authoritative server supports incremental deleg.
 "Yes" means it supports it and "Unknown" means support is not detected.
-"*" means it does not matter<a href="#section-7-4.4.1" class="pilcrow">¶</a></p>
+"*" means it does not matter<a href="#section-8-4.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-7-4.5">
+<dt id="section-8-4.5">
 <code>_deleg</code>:</dt>
-        <dd style="margin-left: 1.5em" id="section-7-4.6">
-          <p id="section-7-4.6.1">Whether or not the <code>_deleg</code> label is present in the target zone (and thus incremental delegations)<a href="#section-7-4.6.1" class="pilcrow">¶</a></p>
+        <dd style="margin-left: 1.5em" id="section-8-4.6">
+          <p id="section-8-4.6.1">Whether or not the <code>_deleg</code> label is present in the target zone (and thus incremental delegations)<a href="#section-8-4.6.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-7-5">On the right side of the table are the extra queries, to be sent in parallel with the legacy query.
-The <code>_deleg</code> presence test query (most right column) only needs to be sent to unsigned target zones, because its non-existence will be show in the NSEC(3) records showing the non-existence of the incremental delegation (second from right column).<a href="#section-7-5" class="pilcrow">¶</a></p>
-<p id="section-7-6">If the query name is the same as the apex of the target zone, no extra queries need to be sent (Row 1).
+<p id="section-8-5">On the right side of the table are the extra queries, to be sent in parallel with the legacy query.
+The <code>_deleg</code> presence test query (most right column) only needs to be sent to unsigned target zones, because its non-existence will be show in the NSEC(3) records showing the non-existence of the incremental delegation (second from right column).<a href="#section-8-5" class="pilcrow">¶</a></p>
+<p id="section-8-6">If the query name is the same as the apex of the target zone, no extra queries need to be sent (Row 1).
 If the <code>_deleg</code> label is known not to exist in the target zone (Row 2) or if the target name server is known to support incremental deleg (Row 3), no extra queries need to be sent.
 Only if it is unknown that the target name server supports incremental deleg, and the <code>_deleg</code> label is known to exist in the target zone (Row 4) or it its not known whether or not the <code>_deleg</code> label exists (Row 5), and extra incremental deleg query is sent in parallel to the legacy query.
-If the target zone is unsigned, presence of the <code>_deleg</code> label needs to be tested explicitly (Row 5).<a href="#section-7-6" class="pilcrow">¶</a></p>
+If the target zone is unsigned, presence of the <code>_deleg</code> label needs to be tested explicitly (Row 5).<a href="#section-8-6" class="pilcrow">¶</a></p>
 <div id="comparison-with-legacy-delegations">
-<section id="section-7.1">
+<section id="section-8.1">
         <h3 id="name-comparison-with-legacy-dele">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-comparison-with-legacy-dele" class="section-name selfRef">Comparison with legacy delegations</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-comparison-with-legacy-dele" class="section-name selfRef">Comparison with legacy delegations</a>
       </h3>
 </section>
 </div>
 <div id="comparison-with-name-dns-query-name-minimisation">
-<section id="section-7.2">
+<section id="section-8.2">
         <h3 id="name-comparison-with-name-dns-qu">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-comparison-with-name-dns-qu" class="section-name selfRef">Comparison with Name DNS Query Name Minimisation</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-comparison-with-name-dns-qu" class="section-name selfRef">Comparison with Name DNS Query Name Minimisation</a>
       </h3>
 </section>
 </div>
 <div id="comparison-with-i-ddnsop-deleg">
-<section id="section-7.3">
+<section id="section-8.3">
         <h3 id="name-comparison-with">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-comparison-with" class="section-name selfRef">Comparison with <span class="cite xref">[I-D.dnsop-deleg]</span></a>
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-comparison-with" class="section-name selfRef">Comparison with <span class="cite xref">[I-D.dnsop-deleg]</span></a>
         </h3>
 <span id="name-comparison-of-i-ddnsop-dele"></span><table class="center" id="table-2">
           <caption>
@@ -2275,60 +2296,94 @@ If the target zone is unsigned, presence of the <code>_deleg</code> label needs 
 </section>
 </div>
 <div id="implementation-status">
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-implementation-status">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
       </h2>
-<p id="section-8-1"><strong>Note to the RFC Editor</strong>: please remove this entire section before publication.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">Jesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam. <span>[<a href="#JZUTPHEN" class="cite xref">JZUTPHEN</a>]</span>
-The source code of his implementation is available on github <span>[<a href="#DELEG4UNBOUND" class="cite xref">DELEG4UNBOUND</a>]</span><a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-9-1"><strong>Note to the RFC Editor</strong>: please remove this entire section before publication.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">Jesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam. <span>[<a href="#JZUTPHEN" class="cite xref">JZUTPHEN</a>]</span>
+The source code of his implementation is available on github <span>[<a href="#DELEG4UNBOUND" class="cite xref">DELEG4UNBOUND</a>]</span><a href="#section-9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-9">
+<section id="section-10">
       <h2 id="name-security-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-9-1">TODO Security<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-10-1">TODO Security<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-10">
+<section id="section-11">
       <h2 id="name-iana-considerations">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-10-1">Per <span>[<a href="#RFC8552" class="cite xref">RFC8552</a>]</span>, IANA is requested to add the following entry to the DNS "Underscored and Globally Scoped DNS Node Names" registry:<a href="#section-10-1" class="pilcrow">¶</a></p>
-<span id="name-entry-in-the-underscored-an"></span><table class="center" id="table-3">
-        <caption>
-<a href="#table-3" class="selfRef">Table 3</a>:
-<a href="#name-entry-in-the-underscored-an" class="selfRef">Entry in the Underscored and Globally Scoped DNS Node Names registry</a>
-        </caption>
+<div id="deleg-rr-type">
+<section id="section-11.1">
+        <h3 id="name-deleg-rr-type">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-deleg-rr-type" class="section-name selfRef">DELEG RR type</a>
+        </h3>
+<p id="section-11.1-1">IANA is requested to update the "Resource Record (RR) TYPEs" registry under the "Domain Name System (DNS) Parameters" registry group as follows:<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
 <thead>
-          <tr>
-            <th class="text-left" rowspan="1" colspan="1">RR Type</th>
-            <th class="text-left" rowspan="1" colspan="1">_NODE NAME</th>
-            <th class="text-left" rowspan="1" colspan="1">Reference</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">SVCB</td>
-            <td class="text-left" rowspan="1" colspan="1">_deleg</td>
-            <td class="text-left" rowspan="1" colspan="1">[this document]</td>
-          </tr>
-        </tbody>
-      </table>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">TYPE</th>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Meaning</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">DELEG</td>
+              <td class="text-left" rowspan="1" colspan="1">TBD</td>
+              <td class="text-left" rowspan="1" colspan="1">Delegation</td>
+              <td class="text-left" rowspan="1" colspan="1">[this document]</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+</div>
+<div id="node-name">
+<section id="section-11.2">
+        <h3 id="name-_deleg-node-name">
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-_deleg-node-name" class="section-name selfRef">_deleg Node Name</a>
+        </h3>
+<p id="section-11.2-1">Per <span>[<a href="#RFC8552" class="cite xref">RFC8552</a>]</span>, IANA is requested to add the following entry to the DNS "Underscored and Globally Scoped DNS Node Names" registry:<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+<span id="name-entry-in-the-underscored-an"></span><table class="center" id="table-4">
+          <caption>
+<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#name-entry-in-the-underscored-an" class="selfRef">Entry in the Underscored and Globally Scoped DNS Node Names registry</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">RR Type</th>
+              <th class="text-left" rowspan="1" colspan="1">_NODE NAME</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">DELEG</td>
+              <td class="text-left" rowspan="1" colspan="1">_deleg</td>
+              <td class="text-left" rowspan="1" colspan="1">[this document]</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+</div>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-11">
+<section id="section-12">
       <h2 id="name-references">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-11.1">
+<section id="section-12.1">
         <h3 id="name-normative-references">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
@@ -2385,9 +2440,9 @@ The source code of his implementation is available on github <span>[<a href="#DE
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-11.2">
+<section id="section-12.2">
         <h3 id="name-informative-references">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="DELEG4UNBOUND">[DELEG4UNBOUND]</dt>
