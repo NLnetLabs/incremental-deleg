@@ -806,7 +806,7 @@ Table of Contents
 
 6.  Extra optimized implementation
 
-   An DELEG RRset on an incremental delegation point, with a DELEG RR in
+   A DELEG RRset on an incremental delegation point, with a DELEG RR in
    AliasMode, aliasing to the root zone, MUST be interpreted to mean
    that the legacy delegation information MUST be used to follow the
    referral.  All service parameters for such AliasMode (aliasing to the

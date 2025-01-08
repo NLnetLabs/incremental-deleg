@@ -2077,7 +2077,7 @@ If a referral is returned that does not contain an incremental delegation nor an
       <h2 id="name-extra-optimized-implementat">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-extra-optimized-implementat" class="section-name selfRef">Extra optimized implementation</a>
       </h2>
-<p id="section-6-1">An DELEG RRset on an incremental delegation point, with a DELEG RR in AliasMode, aliasing to the root zone, <span class="bcp14">MUST</span> be interpreted to mean that the legacy delegation information <span class="bcp14">MUST</span> be used to follow the referral.
+<p id="section-6-1">A DELEG RRset on an incremental delegation point, with a DELEG RR in AliasMode, aliasing to the root zone, <span class="bcp14">MUST</span> be interpreted to mean that the legacy delegation information <span class="bcp14">MUST</span> be used to follow the referral.
 All service parameters for such AliasMode (aliasing to the root) DELEG RRs on the incremental delegation point, <span class="bcp14">MUST</span> be ignored.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">For example, such a DELEG RRset registered on the wildcard below the <code>_deleg</code> label on the apex of a zone, can signal that legacy DNS referrals <span class="bcp14">MUST</span> be used for both signed and <em>unsigned</em> zones:<a href="#section-6-2" class="pilcrow">¶</a></p>
 <span id="name-wildcard-incremental-deleg-"></span><div id="wildcard-deleg">
