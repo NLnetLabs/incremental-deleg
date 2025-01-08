@@ -86,9 +86,9 @@ informative:
 --- abstract
 
 This document proposes a mechanism for extensible delegations in the DNS.
-The mechanism realizes delegations with SVCB resource record sets placed below a `_deleg` label in the apex of the delegating zone.
+The mechanism realizes delegations with resource record sets placed below a `_deleg` label in the apex of the delegating zone.
 This authoritative delegation point can be aliased to other names using CNAME and DNAME.
-The mechanism inherits extensibility from SVCB.
+This document proposes a new DNS resource record type, DELEG, which is based on the SVCB and inherits extensibility from it.
 
 Support in recursive resolvers suffices for the mechanism to be fully functional.
 The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable with those for DNS Query Name Minimisation.
@@ -99,14 +99,16 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
 
 # Introduction
 
-This document describes a delegation mechanism for the Domain Name System (DNS) {{!STD13}} that addresses several matters that, at the time of writing, are suboptimally supported or not at all.
+This document describes a delegation mechanism for the Domain Name System (DNS) {{!STD13}} that addresses several matters that, at the time of writing, are suboptimally supported or not supported at all.
 These matters are elaborated upon in sections {{<signaling}}, {{<outsourcing}} and {{<dnssec-protection}}.
 In addition, the mechanism described in this document aspires to be maximally deployable, which is elaborated upon in {{deployability}}.
 
 ## Signaling capabilities of the authoritative name servers {#signaling}
 
-The SVCB Resource Record (RR) type {{!RFC9460}} in "dns" service mode {{!RFC9461}} is used in which capability signalling of {{!RFC7858 (DNS over Transport Layer Protocol)}} (DoT), {{!RFC8484 (DNS Queries over HTTPS)}} and {{!RFC9250 (DNS over Dedicated QUIC Connections)}}, on default or alternative ports, are already specified.
-The SVCB RR type is designed to be extensible to support future uses (such as keys for encrypting the TLS ClientHello {{?I-D.ietf-tls-esni}}.)
+A new DELEG resource record (RR) type is introduced in this document, which is based on and inherits the wire and presentation format from SVCB {{!RFC9460}}.
+All Service Binding Mappings, as well as the capability signalling, that are specified in {{!RFC9461}} are also applicable to DELEG, with the exception of the limitations on AliasMode records in {{Section 6 of !RFC9460}}.
+Capability signalling of {{!RFC7858 (DNS over Transport Layer Protocol)}} (DoT), {{!RFC8484 (DNS Queries over HTTPS)}} and {{!RFC9250 (DNS over Dedicated QUIC Connections)}}, on default or alternative ports, can all be used as specified in {{!RFC9461}}.
+The DELEG RR type inherits its extensibility from the SVCB RR type, which is designed to be extensible to support future uses (such as keys for encrypting the TLS ClientHello {{?I-D.ietf-tls-esni}}.)
 
 ## Outsourcing operation of the delegation {#outsourcing}
 
@@ -114,7 +116,8 @@ Delegation information is stored at an authoritative location in the zone with t
 Legacy methods to redirect this information to another location, possible under the control of another operator, such as (CNAME {{Section 3.6.2 of RFC1034}}) and DNAME {{!RFC6672}} remain functional.
 One could even outsource all delegation operational practice to another party with an DNAME on the `_deleg` label on the apex of the delegating zone.
 
-Additional to the legacy methods, a delegation may be outsourced to a third party by having an SVCB RRset with a single SVCB RR in AliasMode.
+Additional to the legacy methods, a delegation may be outsourced to a third parties by having RRs in AliasMode.
+Unlike SVCB, DELEG allows for more than a single DELEG RR in AliasMode in a DELEG RRset, enabling outsourcing a delegation to multiple different operators.
 
 ## DNSSEC protection of the delegation {#dnssec-protection}
 
@@ -125,7 +128,7 @@ The adversary can then perceive all queries for the redirected zone (Privacy con
 DNSSEC protection of delegation information prevents that, and is the only countermeasure that also works against on-path attackers.
 At the time of writing, the only way to DNSSEC validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations {{?I-D.ietf-dnsop-ns-revalidation}}, which is done after the fact and has other security concerns ({{Section 7 of ?I-D.ietf-dnsop-ns-revalidation}}).
 
-Direct delegation information (provided by SVCB RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.
+Direct delegation information (provided by DELEG RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.
 Since the information is stored authoritatively in the delegating zone, it will be DNSSEC signed if the zone is signed.
 When the delegation is outsourced, then it's protected when the zones providing the aliasing resource records *and* the zones serving the targets of the aliases are all DNSSEC signed.
 
@@ -186,20 +189,33 @@ Triggering query:
 Target zone:
 : The zone for which the authoritative servers, that a resolver contacts while iterating, are authoritative.
 
+# The DELEG resource record type
+
+The DELEG RR type is a variant of SVCB {{!RFC9460}} for use with resolvers to perform iterative resolution ({{Section 5.3.3 of RFC1034}}).
+The DELEG type requires registration in the "Resource Record (RR) TYPEs" registry under the "Domain Name System (DNS) Parameters" registry group (see {{deleg-rr-type (DELEG RR type)}}).
+The protocol-specific mapping specification for iterative resolutions are the same as those for "DNS Servers" {{!RFC9461}}.
+
+{{Section 2.4.2 of !RFC9460}} states that SVCB RRsets SHOULD only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers SHOULD pick one at random.
+Different from SVCB ({{Section 2.4.2 of RFC9460}}), DELEG allows for multiple AliasMode RRs to be present in a single DELEG RRset.
+Note however that the target of a DELEG RR in AliasMode is an SVCB RRset for the "dns" service type adhering fully to the Service Binding Mapping for DNS Servers as specified in {{!RFC9461}}.
+
+{{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
+Different from SVCB, mixed ServiceMode and AliasMode RRs are allowed in a DELEG RRset.
+
+<!-- TODO: Describe how priorities work; First pick one AliasMode or all ServiceModeo RRs from within the DELEG RRset; Then within resulting SVCB or DELEG in ServiceMode RRset adhere to ServicePriority) -->
+
+At the delegation point (for example `customer._deleg.example.`), the host names of the authoritative name servers for the subzone, are given in the TargetName RDATA field of DELEG records in ServiceMode.
+Port Prefix Naming {{Section 3 of RFC9461}} is not used at the delegation point, but MUST be used when resolving the aliased to name servers with DELEG RRs in AliasMode.
+
 # Delegation administration
 
-An extensible delegation is realized with an SVCB Resource Record set (RRset) {{!RFC9460}} below a specially for the purpose reserved label with the name `_deleg` at the apex of the delegating zone.
-The `_deleg` label scopes the interpretation of the SVCB records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see {{iana-considerations (IANA Considerations)}}).
-The full scoping of delegations includes the labels that are **below** the `_label` and those, together with the name of the delegating domain, make up the name of the subzone to which the delegation refers.
-For example, if the delegating zone is `example.`, then a delegation to subzone `customer.example.` is realized by an SVCB RRset at the name `customer._deleg.example.` in the parent zone.
+An extensible delegation is realized with a DELEG Resource Record set (RRset) {{!RFC9460}} below a specially for the purpose reserved label with the name `_deleg` at the apex of the delegating zone.
+The `_deleg` label scopes the interpretation of the DELEG records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see {{node-name (\_deleg Node Name)}}).
+The full scoping of delegations includes the labels that are **below** the `_deleg` label and those, together with the name of the delegating domain, make up the name of the subzone to which the delegation refers.
+For example, if the delegating zone is `example.`, then a delegation to subzone `customer.example.` is realized by a DELEG RRset at the name `customer._deleg.example.` in the parent zone.
 A fully scoped delegating name (such as `customer._deleg.example.`) is referred to further in this document as the "delegation point".
 
-The use of the SVCB RR type requires a mapping document for each service type.
-This document uses the SVCB for the "dns" service type and the contents of the SVCB SvcParams MUST be interpreted as specified in Service Binding Mapping for DNS Servers {{!RFC9461}}.
-At the delegation point (for example `customer._deleg.example.`), the host names of the authoritative name servers for the subzone, are given in the TargetName RDATA field of SVCB records in ServiceMode.
-Port Prefix Naming {{Section 3 of RFC9461}} is not used at the delegation point, but MUST be used when resolving the aliased to name servers with "dns" service type SVCB RRs in AliasMode.
-
-Note that if the delegation is outsourcing to a single operator represented in a single SVCB RRset, it is RECOMMENDED to refer to the name of the operator's SVCB RRset with a CNAME on the delegation point instead of an SVCB RR in AliasMode {{Section 10.2 of !RFC9460}}.
+Note that if the delegation is outsourcing to a single operator represented in a single DELEG RR, it is RECOMMENDED to refer to the name of the operator's DELEG RRset with a CNAME on the delegation point instead of a DELEG RR in AliasMode {{Section 10.2 of !RFC9460}}.
 
 ## Examples
 
@@ -208,7 +224,7 @@ Note that if the delegation is outsourcing to a single operator represented in a
 ~~~~
 $ORIGIN example.
 @                  IN  SOA   ns zonemaster ...
-customer1._deleg   IN  SVCB  1 ( ns.customer1
+customer1._deleg   IN  DELEG 1 ( ns.customer1
                                  ipv4hint=198.51.100.1,203.0.113.1
                                  ipv6hint=2001:db8:1::1,2001:db8:2::1
                                )
@@ -219,10 +235,10 @@ customer1._deleg   IN  SVCB  1 ( ns.customer1
 
     $ORIGIN example.
     @                  IN  SOA   ns zonemaster ...
-    customer2._deleg   IN  SVCB  1 ns1.customer2 ( ipv4hint=198.51.100.1
+    customer2._deleg   IN  DELEG 1 ns1.customer2 ( ipv4hint=198.51.100.1
                                                    ipv6hint=2001:db8:1::1
                                                  )
-                       IN  SVCB  1 ns2.customer2 ( ipv4hint=203.0.113.1
+                       IN  DELEG 1 ns2.customer2 ( ipv4hint=203.0.113.1
                                                    ipv6hint=2001:db8:2::1
                                                  )
 {: #zones-within title="Two name servers within the subzone"}
@@ -234,26 +250,26 @@ customer1._deleg   IN  SVCB  1 ( ns.customer1
     customer3._deleg   IN  CNAME _dns.ns.operator1
 {: #outsourced-cname title="Outsourced with CNAME"}
 
-Instead of using CNAME, the outsourcing could also been accomplished with an SVCB RRset with a single SVCB RR in AliasMode.
+Instead of using CNAME, the outsourcing could also been accomplished with a DELEG RRset with a single DELEG RR in AliasMode.
 The configuration below is operationally equivalent to the CNAME configuration above.
-It is RECOMMENDED to use a CNAME over an SVCB RRset with a single SVCB RR in AliasMode ({{Section 10.2 of !RFC9460}}).
-Note that an SVCB RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target SVCB RRset (or CNAME) which may have an `_dns` prefix.
+It is RECOMMENDED to use a CNAME over a DELEG RRset with a single DELEG RR in AliasMode ({{Section 10.2 of !RFC9460}}).
+Note that a DELEG RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target DELEG RRset (or CNAME) which may have an `_dns` prefix.
 
     $ORIGIN example.
     @                  IN  SOA   ns zonemaster ...
-    customer3._deleg   IN  SVCB 0 ns.operator1
-{: #outsourced-svcb title="Outsourced with an AliasMode SVCB RR"}
+    customer3._deleg   IN  DELEG 0 ns.operator1
+{: #outsourced-svcb title="Outsourced with an AliasMode DELEG RR"}
 
-The operator SVCB RRset could for example be:
+The operator DELEG RRset could for example be:
 
     $ORIGIN operator1.example.
     @                  IN  SOA   ns zonemaster ...
-    _dns.ns            IN  SVCB  1 ns ( alpn=h2,dot,h3,doq
+    _dns.ns            IN  DELEG 1 ns ( alpn=h2,dot,h3,doq
                                         ipv4hint=192.0.2.1
                                         ipv6hint=2001:db8:3::1
                                         dohpath=/q{?dns}
                                       )
-                       IN  SVCB  2 ns ( ipv4hint=192.0.2.2
+                       IN  DELEG 2 ns ( ipv4hint=192.0.2.2
                                         ipv6hint=2001:db8:3::2
                                       )
     ns                 IN  AAAA  2001:db8:3::1
@@ -261,9 +277,6 @@ The operator SVCB RRset could for example be:
                        IN  A     192.0.2.1
                        IN  A     192.0.2.2
 {: #operator-zone title="Operator zone"}
-
-{{Section 2.4.2 of !RFC9460}} states that SVCB RRsets SHOULD only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers SHOULD pick one at random.
-{{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
 
 ### DNSSEC signed name servers within the subzone
 
@@ -277,13 +290,13 @@ $ORIGIN
                   IN  NSEC   customer5._deleg SOA RRSIG NSEC DNSKEY
                   IN  RRSIG  NSEC ...
 
-customer5._deleg  IN  SVCB   1 ns.customer5 alpn=h2,h3 (
+customer5._deleg  IN  DELEG 1 ns.customer5 alpn=h2,h3 (
                                             ipv4hint=198.51.100.5
                                             ipv6hint=2001:db8:5::1
                                             dohpath=/dns-query{?dns}
                                             )
-                  IN  RRSIG  SVCB ...
-                  IN  NSEC   customer7._deleg RRSIG NSEC SVCB
+                  IN  RRSIG  DELEG ...
+                  IN  NSEC   customer7._deleg RRSIG NSEC DELEG
                   IN  RRSIG  NSEC ...
 
 customer7._deleg  IN  CNAME  customer5._deleg
@@ -325,7 +338,7 @@ Also, `customer6.example.` is linked to from `example.` with the signed `custome
 
 Note that both `customer5.example.` and `customer6.example.` have legacy delegations in the zone as well.
 It is important to have those legacy delegations to maintain support for legacy resolvers, that do not support incremental deleg.
-DNSSEC signers SHOULD construct the NS RRset and glue for the legacy delegation from the SVCB RRset.
+DNSSEC signers SHOULD construct the NS RRset and glue for the legacy delegation from the DELEG RRset.
 
 
 # Minimal implementation
@@ -341,19 +354,19 @@ No special behavior or processing is needed.
 
 Otherwise, the triggering query is below the target zone apex and a delegation may exist in the target zone.
 In this case two parallel queries MUST be sent.
-One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query {{!RFC9156}}), and one *incremental deleg query* with query type SVCB.
+One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query {{!RFC9156}}), and one *incremental deleg query* with query type DELEG.
 
 The incremental deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a `_deleg` label and the name of the target zone.
 For example if the triggering query is `www.customer.example.` and the target zone `example.`, then the incremental deleg query name is `customer._deleg.example.`
 For another example, if the triggering query is `www.faculty.university.example.` and the target zone `example.` then the incremental deleg name is `university._deleg.example.`
 
-Normal DNAME, CNAME and SVCB in AliasMode processing should happen as before, though note that when following an SVCB RR in AliasMode, the target name MUST have the `_dns` label prepended to the TargetName in the SVCB RR.
-The eventual incremental deleg query response, after following all redirections caused by DNAME, CNAME and AliasMode SVCB RRs, has three possible outcomes:
+Normal DNAME, CNAME and DELEG in AliasMode processing should happen as before, though note that when following a DELEG RR in AliasMode the target RR type is SVCB (see {{the-deleg-resource-record-type}}).
+The eventual incremental deleg query response, after following all redirections caused by DNAME, CNAME and AliasMode DELEG RRs, has three possible outcomes:
 
-1. An SVCB RRset in ServiceMode is returned in the response's answer section containing the delegation for the subzone.
+1. A DELEG RRset in ServiceMode is returned in the response's answer section containing the delegation for the subzone.
 
-   The SVCB RRs in the RRset MUST be used to follow the referral.
-   The TargetName data field in the SVCB RRs in the RRset MUST be used as the names for the name servers to contact for the subzone, and the ipv4hint and ipv6hint parameters MUST be used as the IP addresses for the TargetName in the same SVCB RR.
+   The DELEG RRs in the RRset MUST be used to follow the referral.
+   The TargetName data field in the DELEG RRs in the RRset MUST be used as the names for the name servers to contact for the subzone, and the ipv4hint and ipv6hint parameters MUST be used as the IP addresses for the TargetName in the same DELEG RR.
 
    The NS RRset and glue, in the response of the legacy query that was sent in parallel to the incremental deleg query, MUST NOT be used, but the signed DS record (or NSEC(3) records indicating that there was no DS) MUST be used in linking the DNSSEC authentication chain as which would conventionally be done with DNSSEC as well.
 
@@ -429,12 +442,12 @@ For example, querying the zone from {{dnssec-zone}} for `www.customer5.example. 
 customer5.example.      3600    IN      NS      ns.customer5.example.
 customer5.example.      3600    IN      DS      ...
 customer5.example.      3600    IN      RRSIG   DS ...
-customer5._deleg.example.       3600    IN      SVCB    1 (
+customer5._deleg.example.       3600    IN      DELEG 1 (
                 ns.customer5.example. alpn=h2,h3
                 ipv4hint=198.51.100.5 ipv6hint=2001:db8:5::1
                 dohpath=/dns-query{?dns}
                 )
-customer5._deleg.example.       3600    IN      RRSIG   SVCB ...
+customer5._deleg.example.       3600    IN      RRSIG   DELEG ...
 
 ;; ADDITIONAL SECTION:
 ns.customer5.example.   3600    IN      A       198.51.100.5
@@ -448,7 +461,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ~~~
 {: #deleg-response title="An incremental deleg referral response"}
 
-The referral response in {{deleg-response}} includes the signed SVCB RRset in the authority section.
+The referral response in {{deleg-response}} includes the signed DELEG RRset in the authority section.
 
 As another example, querying the zone from {{dnssec-zone}} for `www.customer6.example. A`, will return the following referral response:
 
@@ -465,7 +478,7 @@ customer6.example.      3600    IN      NS      ns.customer6.example.
 customer6.example.      3600    IN      DS      ...
 customer6.example.      3600    IN      RRSIG   DS ...
 customer5._deleg.example.       1234    IN      NSEC    (
-                customer7._deleg.example.  RRSIG NSEC SVCB )
+                customer7._deleg.example.  RRSIG NSEC DELEG )
 customer5._deleg.example.       1234    IN      RRSIG   NSEC ...
 example.        1234    IN      NSEC    (
                 customer5._deleg.example.  NS SOA RRSIG NSEC DNSKEY )
@@ -502,10 +515,10 @@ customer7.example.      3600    IN      RRSIG   DS ...
 customer7._deleg.example.       3600    IN      CNAME   (
                 customer5._deleg.example. )
 customer7._deleg.example.       3600    IN      RRSIG   CNAME ...
-customer5._deleg.example.       3600    IN      SVCB    1 (
+customer5._deleg.example.       3600    IN      DELEG   1 (
                 ns.customer5.example. alpn=h2,h3
                 ipv4hint=198.51.100.5 ipv6hint=2001:db8:5::1 )
-customer5._deleg.example.       3600    IN      RRSIG   SVCB ...
+customer5._deleg.example.       3600    IN      RRSIG   DELEG ...
 
 ;; ADDITIONAL SECTION:
 ns.customer5.example.   3600    IN      A       198.51.100.5
@@ -520,11 +533,11 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 {: #alias-response title="Aliasing referral response"}
 
 The incremental delegation of `customer7.example.` is aliased to the one that is also used by `customer5.example.`
-Since both delegations are in the same zone, the authoritative name server for `example.` returns both the CNAME realising the alias, as well as the SVCB RRset which is the target of the alias in {{alias-response}}.
-In other cases an returned CNAME or SVCB RR in AliasMode may need further chasing by the resolver.
+Since both delegations are in the same zone, the authoritative name server for `example.` returns both the CNAME realising the alias, as well as the DELEG RRset which is the target of the alias in {{alias-response}}.
+In other cases an returned CNAME or DELEG RR in AliasMode may need further chasing by the resolver.
 <!-- TODO: Add an AliasMode referral without expansion within the zone -->
 
-With unsigned zones, only if an incremental deleg delegation exists, the SVCB RRset (or CNAME) will be present in the authority section of referral responses.
+With unsigned zones, only if an incremental deleg delegation exists, the DELEG RRset (or CNAME) will be present in the authority section of referral responses.
 <!-- TODO: Add a referral response for an unsigned zone -->
 If the incremental deleg does not exist, then it is simply absent from the authority section and the referral response is indistinguishable from an non supportive authoritative.
 <!-- TODO: Add a non incremental deleg referral response for an unsigned zone -->
@@ -535,16 +548,16 @@ Incremental deleg supporting authoritative name servers will include the increme
 If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
 A resolver SHOULD register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.
 
-When the authority section of a referral response contains an SVCB RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such SVCB or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that SVCB, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+When the authority section of a referral response contains an DELEG RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such DELEG or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that DELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Subsequent queries SHOULD NOT include incremental deleg queries, as described in {{recursive-resolver-behavior}}, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.
 
-For example, in {{deleg-response}}, the SVCB RRset at the incremental delegation point has TTL 3600.
+For example, in {{deleg-response}}, the DELEG RRset at the incremental delegation point has TTL 3600.
 The resolver should register that the contacted authoritative name server supports incremental deleg for (at least) 3600 seconds (one hour).
 All subsequent queries to that authoritative name server SHOULD NOT include incremental deleg queries to be send in parallel.
 
 If the authority section contains more than one RRset making up the incremental delegation, then the RRset with the longest TTL MUST be taken to determine the duration for which incremental deleg support is registered.
 
-For example, in {{alias-response}}, both a CNAME and an SVCB RRset for the incremental delegation are included in the authority section.
+For example, in {{alias-response}}, both a CNAME and an DELEG RRset for the incremental delegation are included in the authority section.
 The longest TTL must be taken for incremental support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.
 
 With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.
@@ -554,16 +567,16 @@ If a referral is returned that does not contain an incremental delegation nor an
 
 # Extra optimized implementation
 
-An SVCB RRset on an incremental delegation point, with a SVCB RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
-All service parameters for such AliasMode (aliasing to the root) SVCB RRs on the incremental delegation point, MUST be ignored.
+An DELEG RRset on an incremental delegation point, with a DELEG RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
+All service parameters for such AliasMode (aliasing to the root) DELEG RRs on the incremental delegation point, MUST be ignored.
 
-For example, such an SVCB RRset registered on the wildcard below the `_deleg` label on the apex of a zone, can signal that legacy DNS referrals MUST be used for both signed and *unsigned* zones:
+For example, such an DELEG RRset registered on the wildcard below the `_deleg` label on the apex of a zone, can signal that legacy DNS referrals MUST be used for both signed and *unsigned* zones:
 
 ~~~
 $ORIGIN example.
 @                  IN  SOA   ns zonemaster ...
-*._deleg    86400  IN  SVCB  0 .
-customer1._deleg   IN  SVCB  1 ( ns.customer1
+*._deleg    86400  IN  DELEG 0 .
+customer1._deleg   IN  DELEG 1 ( ns.customer1
                                  ipv4hint=198.51.100.1,203.0.113.1
                                  ipv6hint=2001:db8:1::1,2001:db8:2::1
                                )
@@ -571,7 +584,7 @@ customer3._deleg   IN  CNAME _dns.ns.operator1
 ~~~
 {: #wildcard-deleg title="Wildcard incremental deleg to control duration of detected support"}
 
-Resolvers SHOULD register that an authoritative name server supports incremental deleg, if such an SVCB RRset is returned in the authority section of referral responses, for the duration of the TTL if the SVCB RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+Resolvers SHOULD register that an authoritative name server supports incremental deleg, if such a DELEG RRset is returned in the authority section of referral responses, for the duration of the TTL if the DELEG RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Note that this will also be included in referral responses for unsigned zones, which would otherwise not have signalling of incremental deleg support by the authoritative name server.
 Also, signed zones need fewer RRs to indicate that no incremental delegation exists.
 The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`), so only one additional NSEC(3) is needed to show non-existence of the queried for name below the closest encloser.
@@ -582,36 +595,31 @@ This method of signalling that the legacy delegation MUST be used, is RECOMMENDE
 
 ## Outsourcing to more than one operator
 
-{{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
-{{Section 2.4.2 of !RFC9460}} states that SVCB RRsets SHOULD only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers SHOULD pick one at random.
-
-Currently this means that query load can be spread out over multiple operators (even though that is NOT RECOMMENDED), but operationally it would make more sense to allow a resolver to select from all the name servers from all the operators.
-Assumingly SVCB currently supports only a single AliasMode RR in an SVCB RRset because it would otherwise be impossible to interpret the SvcPriority from the SVCB RRsets that is aliased to.
-A possible solution could be to resolve all AliasMode RRs at the delegation point (though limited to a certain amount, say 8) and then let the resolver pick from all the SVCB RRs, ignoring SvcPriority.
+TODO
 
 ## Priming queries
 
 Some zones, such as the root zone, are targeted directly from hints files.
-Information about which authoritative name servers and with capabilities, MAY be provided in an SVCB RRset directly at the `_deleg` label under the apex of the zone.
-Priming queries from a incremental deleg supporting resolver, MUST send an `_deleg.<apex> SVCB` query in parallel to the legacy `<apex> NS` query and process the content as if it was found through an incremental referral response.
+Information about which authoritative name servers and with capabilities, MAY be provided in an DELEG RRset directly at the `_deleg` label under the apex of the zone.
+Priming queries from a incremental deleg supporting resolver, MUST send an `_deleg.<apex> DELEG` query in parallel to the legacy `<apex> NS` query and process the content as if it was found through an incremental referral response.
 
 # Comparison with other delegation mechanisms
 
 Table {{xtraqueries}} provides an overview of when extra queries, in parallel to the legacy query, are sent.
 
-|---|------|---------|----------|---|----------------------------|-------------------------|
-|   | apex | support | `_deleg` |   | `<sub>._deleg.<apex> SVCB` | `_deleg.<apex> A`       |
-|:-:|:----:|:-------:|:--------:|---|:--------------------------:|:-----------------------:|
-| 1 | Yes  | \*      | \*       |   |                            |                         |
-|---|------|---------|----------|---|----------------------------|-------------------------|
-| 2 | No   | \*      | No       |   |                            |                         |
-|---|------|---------|----------|---|----------------------------|-------------------------|
-| 3 | No   | Yes     | \*       |   |                            |                         |
-|---|------|---------|----------|---|----------------------------|-------------------------|
-| 4 | No   | Unknown | Yes      |   | X                          |                         |
-|---|------|---------|----------|---|----------------------------|-------------------------|
-| 5 | No   | Unknown | Unknown  |   | X                          | only for unsigned zones |
-|---|------|---------|----------|---|----------------------------|-------------------------|
+|---|------|---------|----------|---|-----------------------------|-------------------------|
+|   | apex | support | `_deleg` |   | `<sub>._deleg.<apex> DELEG` | `_deleg.<apex> A`       |
+|:-:|:----:|:-------:|:--------:|---|:---------------------------:|:-----------------------:|
+| 1 | Yes  | \*      | \*       |   |                             |                         |
+|---|------|---------|----------|---|-----------------------------|-------------------------|
+| 2 | No   | \*      | No       |   |                             |                         |
+|---|------|---------|----------|---|-----------------------------|-------------------------|
+| 3 | No   | Yes     | \*       |   |                             |                         |
+|---|------|---------|----------|---|-----------------------------|-------------------------|
+| 4 | No   | Unknown | Yes      |   | X                           |                         |
+|---|------|---------|----------|---|-----------------------------|-------------------------|
+| 5 | No   | Unknown | Unknown  |   | X                           | only for unsigned zones |
+|---|------|---------|----------|---|-----------------------------|-------------------------|
 {: #xtraqueries title="Additional queries in parallel to the legacy query"}
 
 The three headers on the left side of the table mean the following:
@@ -672,13 +680,25 @@ TODO Security
 
 # IANA Considerations
 
+## DELEG RR type {#deleg-rr-type}
+
+IANA is requested to update the "Resource Record (RR) TYPEs" registry under the "Domain Name System (DNS) Parameters" registry group as follows:
+
+|-------|-------|------------|-------------------|
+| TYPE  | Value | Meaning    | Reference         |
+|-------|:------|:-----------|-------------------|
+| DELEG | TBD   | Delegation | \[this document\] |
+|-------|-------|------------|-------------------|
+
+## \_deleg Node Name {#node-name}
+
 Per {{?RFC8552}}, IANA is requested to add the following entry to the DNS "Underscored and Globally Scoped DNS Node Names" registry:
 
 
 |---------|-------------|-------------------|
 | RR Type | \_NODE NAME | Reference         |
 |---------|:------------|-------------------|
-| SVCB    | \_deleg     | \[this document\] |
+| DELEG   | \_deleg     | \[this document\] |
 |---------|-------------|-------------------|
 {: title="Entry in the Underscored and Globally Scoped DNS Node Names registry"}
 
