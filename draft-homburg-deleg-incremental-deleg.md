@@ -26,7 +26,7 @@ category: std
 docname: draft-homburg-deleg-incremental-deleg-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
-date: 2024-07-08
+date: 2025-01-08
 consensus: true
 v: 3
 area: int
