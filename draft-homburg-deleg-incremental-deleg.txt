@@ -4,8 +4,10 @@
 
 DNS Delegation                                                P. Homburg
 Internet-Draft                                                NLnet Labs
-Intended status: Standards Track                           J. V. Zutphen
-Expires: 9 January 2025                          University of Amsterdam
+Intended status: Standards Track                             T. Wicinski
+Expires: 9 January 2025                               Cox Communications
+                                                           J. V. Zutphen
+                                                 University of Amsterdam
                                                                W. Toorop
                                                               NLnet Labs
                                                              8 July 2024
@@ -1060,16 +1062,16 @@ Table of Contents
    [I-D.ietf-dnsop-ns-revalidation]
               Huque, S., Vixie, P. A., and W. Toorop, "Delegation
               Revalidation by DNS Resolvers", Work in Progress,
-              Internet-Draft, draft-ietf-dnsop-ns-revalidation-07, 8
-              July 2024, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-dnsop-ns-revalidation-07>.
+              Internet-Draft, draft-ietf-dnsop-ns-revalidation-08, 8
+              January 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-dnsop-ns-revalidation-08>.
 
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
               Encrypted Client Hello", Work in Progress, Internet-Draft,
-              draft-ietf-tls-esni-18, 4 March 2024,
+              draft-ietf-tls-esni-22, 15 September 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              esni-18>.
+              esni-22>.
 
    [I-D.tapril-ns2]
               April, T., "Parameterized Nameserver Delegation with NS2
@@ -1111,6 +1113,11 @@ Authors' Addresses
    Philip Homburg
    NLnet Labs
    Email: philip@nlnetlabs.nl
+
+
+   Tim Wicinski
+   Cox Communications
+   Email: tjw.ietf@gmail.com
 
 
    Jesse van Zutphen

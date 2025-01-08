@@ -6,6 +6,7 @@
 <meta content="initial-scale=1.0" name="viewport">
 <title>Incrementally Deployable Extensible Delegation for DNS</title>
 <meta content="Philip Homburg" name="author">
+<meta content="Tim Wicinski" name="author">
 <meta content="Jesse van Zutphen" name="author">
 <meta content="Willem Toorop" name="author">
 <meta content="
@@ -18,7 +19,7 @@ The number of subsequent interactions between the recursive resolver and the aut
 Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed. 
     " name="description">
-<meta content="xml2rfc 3.22.0" name="generator">
+<meta content="xml2rfc 3.25.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="DNS" name="keyword">
 <meta content="Resolver" name="keyword">
@@ -28,18 +29,18 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
 <meta content="Extensible" name="keyword">
 <meta content="draft-homburg-deleg-incremental-deleg-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.22.0
-    Python 3.12.3
+  xml2rfc 3.25.0
+    Python 3.12.8
     ConfigArgParse 1.7
-    google-i18n-address 3.1.0
+    google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.4
-    lxml 4.9.4
-    platformdirs 4.2.2
-    pycountry 22.3.5
-    PyYAML 6.0.1
+    Jinja2 3.1.5
+    lxml 5.3.0
+    platformdirs 4.3.6
+    pycountry 24.6.1
+    PyYAML 6.0.2
     requests 2.32.3
-    setuptools 69.5.1
+    setuptools 70.3.0
     wcwidth 0.2.13
 -->
 <link href="draft-homburg-deleg-incremental-deleg.xml" rel="alternate" type="application/rfc+xml">
@@ -1173,7 +1174,7 @@ section .olCompact {
 tt, code {
   background-color: transparent;
 }
-p tt, p code, li tt, li code {
+p tt, p code, li tt, li code, dt tt, dt code {
   background-color: #f8f8f8;
 }
 /* Tweak the pre margin -- 0px doesn't come out well */
@@ -1251,6 +1252,10 @@ li > p:last-of-type:only-child {
 <div class="author">
       <div class="author-name">P. Homburg</div>
 <div class="org">NLnet Labs</div>
+</div>
+<div class="author">
+      <div class="author-name">T. Wicinski</div>
+<div class="org">Cox Communications</div>
 </div>
 <div class="author">
       <div class="author-name">J. V. Zutphen</div>
@@ -1497,7 +1502,7 @@ One could even outsource all delegation operational practice to another party wi
 An adversary that is able to spoof a referral response, can alter this information and redirect all traffic for the delegation to a rogue name server undetected.
 The adversary can then perceive all queries for the redirected zone (Privacy concern) and alter all unsigned parts of responses (such as further referrals, which is a Security concern).<a href="#section-1.3-1" class="pilcrow">¶</a></p>
 <p id="section-1.3-2">DNSSEC protection of delegation information prevents that, and is the only countermeasure that also works against on-path attackers.
-At the time of writing, the only way to DNSSEC validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations <span>[<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>, which is done after the fact and has other security concerns (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-07#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>).<a href="#section-1.3-2" class="pilcrow">¶</a></p>
+At the time of writing, the only way to DNSSEC validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations <span>[<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>, which is done after the fact and has other security concerns (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-08#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>).<a href="#section-1.3-2" class="pilcrow">¶</a></p>
 <p id="section-1.3-3">Direct delegation information (provided by SVCB RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.
 Since the information is stored authoritatively in the delegating zone, it will be DNSSEC signed if the zone is signed.
 When the delegation is outsourced, then it's protected when the zones providing the aliasing resource records <em>and</em> the zones serving the targets of the aliases are all DNSSEC signed.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
@@ -2315,6 +2320,7 @@ The source code of his implementation is available on github <span>[<a href="#DE
       </table>
 </section>
 </div>
+<div id="sec-combined-references">
 <section id="section-11">
       <h2 id="name-references">
 <a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
@@ -2394,11 +2400,11 @@ The source code of his implementation is available on github <span>[<a href="#DE
 <dd class="break"></dd>
 <dt id="I-D.ietf-dnsop-ns-revalidation">[I-D.ietf-dnsop-ns-revalidation]</dt>
         <dd>
-<span class="refAuthor">Huque, S.</span>, <span class="refAuthor">Vixie, P. A.</span>, and <span class="refAuthor">W. Toorop</span>, <span class="refTitle">"Delegation Revalidation by DNS Resolvers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dnsop-ns-revalidation-07</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-07">https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-07</a>&gt;</span>. </dd>
+<span class="refAuthor">Huque, S.</span>, <span class="refAuthor">Vixie, P. A.</span>, and <span class="refAuthor">W. Toorop</span>, <span class="refTitle">"Delegation Revalidation by DNS Resolvers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dnsop-ns-revalidation-08</span>, <time datetime="2025-01-08" class="refDate">8 January 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-08">https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-08</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-tls-esni">[I-D.ietf-tls-esni]</dt>
         <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-18</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-18">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-18</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-22</span>, <time datetime="2024-09-15" class="refDate">15 September 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-22">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-22</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.tapril-ns2">[I-D.tapril-ns2]</dt>
         <dd>
@@ -2420,6 +2426,7 @@ The source code of his implementation is available on github <span>[<a href="#DE
 </section>
 </div>
 </section>
+</div>
 <div id="acknowledgments">
 <section id="appendix-A">
       <h2 id="name-acknowledgments">
@@ -2441,6 +2448,14 @@ The following participants contributed to this brainstorm session: Vandan Adhvar
 <div class="email">
 <span>Email:</span>
 <a href="mailto:philip@nlnetlabs.nl" class="email">philip@nlnetlabs.nl</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Tim Wicinski</span></div>
+<div dir="auto" class="left"><span class="org">Cox Communications</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:tjw.ietf@gmail.com" class="email">tjw.ietf@gmail.com</a>
 </div>
 </address>
 <address class="vcard">
