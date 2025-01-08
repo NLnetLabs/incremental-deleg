@@ -51,6 +51,11 @@ author:
     fullname: Philip Homburg
     organization: NLnet Labs
     email: philip@nlnetlabs.nl
+
+ -
+    fullname: Tim Wicinski
+    organization: Cox Communications
+    email: tjw.ietf@gmail.com
  -
     fullname: Jesse van Zutphen
     organization: University of Amsterdam
