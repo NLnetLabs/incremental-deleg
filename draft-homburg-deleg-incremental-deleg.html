@@ -1414,15 +1414,7 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-extra-optimized-implementat" class="internal xref">Extra optimized implementation</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-limitations" class="internal xref">Limitations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-outsourcing-to-more-than-on" class="internal xref">Outsourcing to more than one operator</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-priming-queries" class="internal xref">Priming queries</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-priming-queries" class="internal xref">Priming queries</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-comparison-with-other-deleg" class="internal xref">Comparison with other delegation mechanisms</a></p>
@@ -2065,13 +2057,13 @@ If the incremental deleg does not exist, then it is simply absent from the autho
 <p id="section-5.2-1">Incremental deleg supporting authoritative name servers will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
 If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
 A resolver <span class="bcp14">SHOULD</span> register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">When the authority section of a referral response contains an DELEG RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such DELEG or CNAME RRset, then the resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that DELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+<p id="section-5.2-2">When the authority section of a referral response contains a DELEG RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such DELEG or CNAME RRset, then the resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that DELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Subsequent queries <span class="bcp14">SHOULD NOT</span> include incremental deleg queries, as described in <a href="#recursive-resolver-behavior" class="auto internal xref">Section 4.1</a>, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">For example, in <a href="#deleg-response" class="auto internal xref">Figure 7</a>, the DELEG RRset at the incremental delegation point has TTL 3600.
 The resolver should register that the contacted authoritative name server supports incremental deleg for (at least) 3600 seconds (one hour).
 All subsequent queries to that authoritative name server <span class="bcp14">SHOULD NOT</span> include incremental deleg queries to be send in parallel.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <p id="section-5.2-4">If the authority section contains more than one RRset making up the incremental delegation, then the RRset with the longest TTL <span class="bcp14">MUST</span> be taken to determine the duration for which incremental deleg support is registered.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
-<p id="section-5.2-5">For example, in <a href="#alias-response" class="auto internal xref">Figure 9</a>, both a CNAME and an DELEG RRset for the incremental delegation are included in the authority section.
+<p id="section-5.2-5">For example, in <a href="#alias-response" class="auto internal xref">Figure 9</a>, both a CNAME and a DELEG RRset for the incremental delegation are included in the authority section.
 The longest TTL must be taken for incremental support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 <p id="section-5.2-6">With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
 <p id="section-5.2-7">If the resolver knows that the authoritative name server supports incremental deleg, <em>and</em> a DNSSEC signed zone is being served, then all referrals <span class="bcp14">MUST</span> contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
@@ -2087,7 +2079,7 @@ If a referral is returned that does not contain an incremental delegation nor an
       </h2>
 <p id="section-6-1">An DELEG RRset on an incremental delegation point, with a DELEG RR in AliasMode, aliasing to the root zone, <span class="bcp14">MUST</span> be interpreted to mean that the legacy delegation information <span class="bcp14">MUST</span> be used to follow the referral.
 All service parameters for such AliasMode (aliasing to the root) DELEG RRs on the incremental delegation point, <span class="bcp14">MUST</span> be ignored.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">For example, such an DELEG RRset registered on the wildcard below the <code>_deleg</code> label on the apex of a zone, can signal that legacy DNS referrals <span class="bcp14">MUST</span> be used for both signed and <em>unsigned</em> zones:<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-2">For example, such a DELEG RRset registered on the wildcard below the <code>_deleg</code> label on the apex of a zone, can signal that legacy DNS referrals <span class="bcp14">MUST</span> be used for both signed and <em>unsigned</em> zones:<a href="#section-6-2" class="pilcrow">¶</a></p>
 <span id="name-wildcard-incremental-deleg-"></span><div id="wildcard-deleg">
 <figure id="figure-10">
         <div class="alignLeft art-text artwork" id="section-6-3.1">
@@ -2113,29 +2105,14 @@ The wildcard expansion already shows the closest encloser (i.e. <code>_deleg.&lt
 <p id="section-6-5">This method of signalling that the legacy delegation <span class="bcp14">MUST</span> be used, is <span class="bcp14">RECOMMENDED</span>.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="limitations">
-<section id="section-7">
-      <h2 id="name-limitations">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
-      </h2>
-<div id="outsourcing-to-more-than-one-operator">
-<section id="section-7.1">
-        <h3 id="name-outsourcing-to-more-than-on">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-outsourcing-to-more-than-on" class="section-name selfRef">Outsourcing to more than one operator</a>
-        </h3>
-<p id="section-7.1-1">TODO<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="priming-queries">
-<section id="section-7.2">
-        <h3 id="name-priming-queries">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-priming-queries" class="section-name selfRef">Priming queries</a>
-        </h3>
-<p id="section-7.2-1">Some zones, such as the root zone, are targeted directly from hints files.
-Information about which authoritative name servers and with capabilities, <span class="bcp14">MAY</span> be provided in an DELEG RRset directly at the <code>_deleg</code> label under the apex of the zone.
-Priming queries from a incremental deleg supporting resolver, <span class="bcp14">MUST</span> send an <code>_deleg.&lt;apex&gt; DELEG</code> query in parallel to the legacy <code>&lt;apex&gt; NS</code> query and process the content as if it was found through an incremental referral response.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
+<section id="section-7">
+      <h2 id="name-priming-queries">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-priming-queries" class="section-name selfRef">Priming queries</a>
+      </h2>
+<p id="section-7-1">Some zones, such as the root zone, are targeted directly from hints files.
+Information about which authoritative name servers and with capabilities, <span class="bcp14">MAY</span> be provided in a DELEG RRset directly at the <code>_deleg</code> label under the apex of the zone.
+Priming queries from a incremental deleg supporting resolver, <span class="bcp14">MUST</span> send an <code>_deleg.&lt;apex&gt; DELEG</code> query in parallel to the legacy <code>&lt;apex&gt; NS</code> query and process the content as if it was found through an incremental referral response.<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="comparison-with-other-delegation-mechanisms">

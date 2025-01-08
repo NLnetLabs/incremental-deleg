@@ -105,9 +105,7 @@ Table of Contents
      5.1.  Authoritative name server support
      5.2.  Resolver behavior with authoritative name server support
    6.  Extra optimized implementation
-   7.  Limitations
-     7.1.  Outsourcing to more than one operator
-     7.2.  Priming queries
+   7.  Priming queries
    8.  Comparison with other delegation mechanisms
      8.1.  Comparison with legacy delegations
      8.2.  Comparison with Name DNS Query Name Minimisation
@@ -763,7 +761,7 @@ Table of Contents
    returned referral responses from that authoritative name server,
    contains incremental delegegation information.
 
-   When the authority section of a referral response contains an DELEG
+   When the authority section of a referral response contains a DELEG
    RRset or a CNAME on the incremental delegation name, or valid NSEC(3)
    RRs showing the non-existence of such DELEG or CNAME RRset, then the
    resolver SHOULD register that the contacted authoritative name server
@@ -787,7 +785,7 @@ Table of Contents
    taken to determine the duration for which incremental deleg support
    is registered.
 
-   For example, in Figure 9, both a CNAME and an DELEG RRset for the
+   For example, in Figure 9, both a CNAME and a DELEG RRset for the
    incremental delegation are included in the authority section.  The
    longest TTL must be taken for incremental support registration,
    though because the TTL of both RRsets is 3600, it does not matter in
@@ -814,7 +812,7 @@ Table of Contents
    referral.  All service parameters for such AliasMode (aliasing to the
    root) DELEG RRs on the incremental delegation point, MUST be ignored.
 
-   For example, such an DELEG RRset registered on the wildcard below the
+   For example, such a DELEG RRset registered on the wildcard below the
    _deleg label on the apex of a zone, can signal that legacy DNS
    referrals MUST be used for both signed and _unsigned_ zones:
 
@@ -846,21 +844,15 @@ Table of Contents
    This method of signalling that the legacy delegation MUST be used, is
    RECOMMENDED.
 
-7.  Limitations
-
-7.1.  Outsourcing to more than one operator
-
-   TODO
-
-7.2.  Priming queries
+7.  Priming queries
 
    Some zones, such as the root zone, are targeted directly from hints
    files.  Information about which authoritative name servers and with
-   capabilities, MAY be provided in an DELEG RRset directly at the
-   _deleg label under the apex of the zone.  Priming queries from a
-   incremental deleg supporting resolver, MUST send an _deleg.<apex>
-   DELEG query in parallel to the legacy <apex> NS query and process the
-   content as if it was found through an incremental referral response.
+   capabilities, MAY be provided in a DELEG RRset directly at the _deleg
+   label under the apex of the zone.  Priming queries from a incremental
+   deleg supporting resolver, MUST send an _deleg.<apex> DELEG query in
+   parallel to the legacy <apex> NS query and process the content as if
+   it was found through an incremental referral response.
 
 8.  Comparison with other delegation mechanisms
 
