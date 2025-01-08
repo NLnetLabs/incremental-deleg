@@ -567,7 +567,7 @@ If a referral is returned that does not contain an incremental delegation nor an
 
 # Extra optimized implementation
 
-An DELEG RRset on an incremental delegation point, with a DELEG RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
+A DELEG RRset on an incremental delegation point, with a DELEG RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
 All service parameters for such AliasMode (aliasing to the root) DELEG RRs on the incremental delegation point, MUST be ignored.
 
 For example, such a DELEG RRset registered on the wildcard below the `_deleg` label on the apex of a zone, can signal that legacy DNS referrals MUST be used for both signed and *unsigned* zones:
