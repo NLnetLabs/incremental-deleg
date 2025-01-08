@@ -591,13 +591,7 @@ The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`)
 
 This method of signalling that the legacy delegation MUST be used, is RECOMMENDED.
 
-# Limitations
-
-## Outsourcing to more than one operator
-
-TODO
-
-## Priming queries
+# Priming queries
 
 Some zones, such as the root zone, are targeted directly from hints files.
 Information about which authoritative name servers and with capabilities, MAY be provided in an DELEG RRset directly at the `_deleg` label under the apex of the zone.
