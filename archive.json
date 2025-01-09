@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-07T00:28:18.282314+00:00",
+  "timestamp": "2025-01-09T00:27:55.654482+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -57,7 +57,7 @@
       "url": "https://github.com/NLnetLabs/incremental-deleg/issues/3",
       "state": "OPEN",
       "author": "moonshiner",
-      "authorAssociation": "NONE",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "I've been reading through the document more carefully and I do like this. \r\nBut I keep bumping against how similar these terms are.  have you considered calling the former \"ideleg\" ? \r\n\r\nalso \"Delegation\" - does the 9499 definition not as good as the one in STD13 for Legacy Delegations?\r\n\r\nI have some minor edits i will send along, but I also have some other thoughts - like moving the motivation (1.2->1.4) out of the intro into its own section\r\n\r\nmore as I do some experiments\r\n\r\n",
