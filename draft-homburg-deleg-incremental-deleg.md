@@ -197,7 +197,7 @@ The protocol-specific mapping specification for iterative resolutions are the sa
 
 {{Section 2.4.2 of !RFC9460}} states that SVCB RRsets SHOULD only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers SHOULD pick one at random.
 Different from SVCB ({{Section 2.4.2 of RFC9460}}), DELEG allows for multiple AliasMode RRs to be present in a single DELEG RRset.
-Note however that the target of a DELEG RR in AliasMode is an SVCB RRset for the "dns" service type adhering fully to the Service Binding Mapping for DNS Servers as specified in {{!RFC9461}}.
+Note however that the target of a DELEG RR in AliasMode is a SVCB RRset for the "dns" service type adhering fully to the Service Binding Mapping for DNS Servers as specified in {{!RFC9461}}.
 
 {{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
 Different from SVCB, mixed ServiceMode and AliasMode RRs are allowed in a DELEG RRset.
@@ -414,7 +414,7 @@ The testing query can have three possible outcomes:
    For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
 
 3. The `_deleg` label does exist within the zone and contains data.
-   A NOERROR response is return with an A RRset in the answer section.
+   A NOERROR response is returned with an A RRset in the answer section.
 
    The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
    For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
@@ -545,8 +545,8 @@ If the incremental deleg does not exist, then it is simply absent from the autho
 ## Resolver behavior with authoritative name server support {#behavior-with-auth-support}
 
 Incremental deleg supporting authoritative name servers will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
-If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be send in parallel to the legacy delegation query.
-A resolver SHOULD register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegegation information.
+If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be sent in parallel to the legacy delegation query.
+A resolver SHOULD register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegation information.
 
 When the authority section of a referral response contains a DELEG RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such DELEG or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that DELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Subsequent queries SHOULD NOT include incremental deleg queries, as described in {{recursive-resolver-behavior}}, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.
@@ -560,7 +560,7 @@ If the authority section contains more than one RRset making up the incremental 
 For example, in {{alias-response}}, both a CNAME and a DELEG RRset for the incremental delegation are included in the authority section.
 The longest TTL must be taken for incremental support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.
 
-With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which a incremental delegation exists.
+With DNSSEC signed zones, support is apparent with all referral responses, with unsigned zones only from referral responses for which an incremental delegation exists.
 
 If the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC signed zone is being served, then all referrals MUST contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
 If a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).
@@ -636,7 +636,7 @@ The `_deleg` presence test query (most right column) only needs to be sent to un
 
 If the query name is the same as the apex of the target zone, no extra queries need to be sent (Row 1).
 If the `_deleg` label is known not to exist in the target zone (Row 2) or if the target name server is known to support incremental deleg (Row 3), no extra queries need to be sent.
-Only if it is unknown that the target name server supports incremental deleg, and the `_deleg` label is known to exist in the target zone (Row 4) or it its not known whether or not the `_deleg` label exists (Row 5), and extra incremental deleg query is sent in parallel to the legacy query.
+Only if it is unknown that the target name server supports incremental deleg, and the `_deleg` label is known to exist in the target zone (Row 4) or it is not known whether or not the `_deleg` label exists (Row 5), and extra incremental deleg query is sent in parallel to the legacy query.
 If the target zone is unsigned, presence of the `_deleg` label needs to be tested explicitly (Row 5).
 
 ## Comparison with legacy delegations
