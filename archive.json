@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-14T00:26:44.562803+00:00",
+  "timestamp": "2025-01-16T00:27:23.106785+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -792,6 +792,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOMN-KqM6H7BYw",
+      "title": "minor edits",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/4",
+      "state": "OPEN",
+      "author": "moonshiner",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Minor editorial updates while reading.  \r\n\r\nTODO text to come. ",
+      "createdAt": "2025-01-15T22:58:54Z",
+      "updatedAt": "2025-01-15T22:58:55Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "5c2e6fef0fe0fc83b1ad673d2bbe664300c68028",
+      "headRepository": "moonshiner/incremental-deleg",
+      "headRefName": "main",
+      "headRefOid": "d5b8b3beb57565586acb7e0dd41ed666c353cb9e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
