@@ -282,7 +282,7 @@ Table of Contents
    present, clients or recursive resolvers SHOULD pick one at random.
    Different from SVCB (Section 2.4.2 of [RFC9460]), DELEG allows for
    multiple AliasMode RRs to be present in a single DELEG RRset.  Note
-   however that the target of a DELEG RR in AliasMode is an SVCB RRset
+   however that the target of a DELEG RR in AliasMode is a SVCB RRset
    for the "dns" service type adhering fully to the Service Binding
    Mapping for DNS Servers as specified in [RFC9461].
 
@@ -602,7 +602,8 @@ Table of Contents
        queries as described in TODO.
 
    3.  The _deleg label does exist within the zone and contains data.  A
-       NOERROR response is return with an A RRset in the answer section.
+       NOERROR response is returned with an A RRset in the answer
+       section.
 
        The resolver MUST record that the _deleg label is known to be
        present for a duration indicated by A RRset's TTL value, adjusted
@@ -755,11 +756,11 @@ Table of Contents
    showing the non-existence) in the authority section of referral
    responses.  If it is known that an authoritative name server supports
    incremental deleg, then no direct queries for the incremental
-   delegation need to be send in parallel to the legacy delegation
+   delegation need to be sent in parallel to the legacy delegation
    query.  A resolver SHOULD register that an authoritative name server
    supports incremental deleg when the authority section, of the
    returned referral responses from that authoritative name server,
-   contains incremental delegegation information.
+   contains incremental delegation information.
 
    When the authority section of a referral response contains a DELEG
    RRset or a CNAME on the incremental delegation name, or valid NSEC(3)
@@ -793,7 +794,7 @@ Table of Contents
 
    With DNSSEC signed zones, support is apparent with all referral
    responses, with unsigned zones only from referral responses for which
-   a incremental delegation exists.
+   an incremental delegation exists.
 
    If the resolver knows that the authoritative name server supports
    incremental deleg, _and_ a DNSSEC signed zone is being served, then
@@ -906,7 +907,7 @@ Table of Contents
    is known to support incremental deleg (Row 3), no extra queries need
    to be sent.  Only if it is unknown that the target name server
    supports incremental deleg, and the _deleg label is known to exist in
-   the target zone (Row 4) or it its not known whether or not the _deleg
+   the target zone (Row 4) or it is not known whether or not the _deleg
    label exists (Row 5), and extra incremental deleg query is sent in
    parallel to the legacy query.  If the target zone is unsigned,
    presence of the _deleg label needs to be tested explicitly (Row 5).
