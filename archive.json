@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-16T00:27:23.106785+00:00",
+  "timestamp": "2025-01-19T00:29:42.770244+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -62,9 +62,24 @@
       "labels": [],
       "body": "I've been reading through the document more carefully and I do like this. \r\nBut I keep bumping against how similar these terms are.  have you considered calling the former \"ideleg\" ? \r\n\r\nalso \"Delegation\" - does the 9499 definition not as good as the one in STD13 for Legacy Delegations?\r\n\r\nI have some minor edits i will send along, but I also have some other thoughts - like moving the motivation (1.2->1.4) out of the intro into its own section\r\n\r\nmore as I do some experiments\r\n\r\n",
       "createdAt": "2024-10-25T23:13:11Z",
-      "updatedAt": "2024-10-25T23:13:11Z",
+      "updatedAt": "2025-01-17T07:53:49Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Maybe \"Incremental zone delegation\" ?  it's more accurate and perhaps makes the difference with \"incremental deleg\" clearer?\n",
+          "createdAt": "2025-01-16T12:26:42Z",
+          "updatedAt": "2025-01-16T12:26:42Z"
+        },
+        {
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "body": "For legacy delegations, the 9499 definition does not make it clear that we only refer to STD13. The 9499 is wide enough that it may include deleg.\n\nThe naming is very annoying. And referring to the other proposal as the DELEG type proposal also doesn't work anymore. Is there confusion between 'Incremental deleg' and 'Incremental delegation'? Usually it is quite clear from the context was is meant.",
+          "createdAt": "2025-01-17T07:53:48Z",
+          "updatedAt": "2025-01-17T07:53:48Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -798,24 +813,26 @@
       "id": "PR_kwDOMN-KqM6H7BYw",
       "title": "minor edits",
       "url": "https://github.com/NLnetLabs/incremental-deleg/pull/4",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "moonshiner",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Minor editorial updates while reading.  \r\n\r\nTODO text to come. ",
       "createdAt": "2025-01-15T22:58:54Z",
-      "updatedAt": "2025-01-15T22:58:55Z",
+      "updatedAt": "2025-01-16T12:21:36Z",
       "baseRepository": "NLnetLabs/incremental-deleg",
       "baseRefName": "main",
       "baseRefOid": "5c2e6fef0fe0fc83b1ad673d2bbe664300c68028",
       "headRepository": "moonshiner/incremental-deleg",
       "headRefName": "main",
       "headRefOid": "d5b8b3beb57565586acb7e0dd41ed666c353cb9e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-01-16T12:21:36Z",
+      "mergedAt": "2025-01-16T12:21:36Z",
+      "mergedBy": "moonshiner",
+      "mergeCommit": {
+        "oid": "1b6aaa344d12d2484b229513bf8820af80054d58"
+      },
       "comments": [],
       "reviews": []
     }
