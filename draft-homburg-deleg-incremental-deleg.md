@@ -603,7 +603,7 @@ Priming queries from a incremental deleg supporting resolver, MUST send an `_del
 
 # How does incremental deleg meet the requirements
 
-This section will discuss how incremental deleg meets the requirements for a new delegation mechanism as decribed in {{?I-D.ietf-deleg-requirements-02}}
+This section will discuss how incremental deleg meets the requirements for a new delegation mechanism as described in {{?I-D.ietf-deleg-requirements-02}}
 
 + H1. DELEG must not disrupt the existing registration model of domains.
 
