@@ -656,7 +656,7 @@ This section will discuss how incremental deleg meets the requirements for a new
 + S2. DELEG should make clear all of the necessary details for contacting a service
 
   Most of the needed SVCB parameters are already defined in existing standards.
-  The exception is a replacemenet for the DS records, which is described in {{?I-D.homburg-deleg-incremental-dnssec}}.
+  The exception is a replacement for the DS records, which is described in {{?I-D.homburg-deleg-incremental-dnssec}}.
 
 + S3. DELEG should minimize transaction cost in its usage.
 
