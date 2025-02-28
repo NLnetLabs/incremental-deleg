@@ -638,8 +638,8 @@ This section will discuss how incremental deleg meets the requirements for a new
 
 + H6. DELEG must be incrementally deployable and not require any sort of flag day of universal change.
 
-  Incremental deleg-aware zones can be added without upgrading authoritatives.
-  Incremental deleg-aware zones still work with old resolvers and validators.
+  Incremental deleg zones can be added without upgrading authoritatives.
+  Incremental deleg zones still work with old resolvers and validators.
   Basically any combination of old and new should work, though with
   reduced efficiency for some combinations.
 
