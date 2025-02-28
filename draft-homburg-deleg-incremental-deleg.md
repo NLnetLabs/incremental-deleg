@@ -351,7 +351,7 @@ Support in recursive resolvers suffices for the mechanism to be fully functional
 {{recursive-resolver-behavior}} specifies the basic algorithm for resolving incremental delegations.
 In {{presence}}, an optimization is presented that will reduce the number of (parallel) queries especially for when authoritative name server support is still lacking and there are still many zones that do not contain incremental delegations.
 
-## Recursive Resolver behavior
+## Recursive Resolver behavior {#recursive-resolver-behavior}
 
 If the triggering query name is the same as the name of the target zone apex, then no further delegation will occur, and resolution will complete.
 No special behavior or processing is needed.
@@ -600,6 +600,96 @@ This method of signalling that the legacy delegation MUST be used, is RECOMMENDE
 Some zones, such as the root zone, are targeted directly from hints files.
 Information about which authoritative name servers and with capabilities, MAY be provided in a IDELEG RRset directly at the `_deleg` label under the apex of the zone.
 Priming queries from a incremental deleg supporting resolver, MUST send an `_deleg.<apex> IDELEG` query in parallel to the legacy `<apex> NS` query and process the content as if it was found through an incremental referral response.
+
+# How does incremental deleg meet the requirements
+
+This section will discuss how incremental deleg meets the requirements for a new delegation mechanism as described in {{?I-D.ietf-deleg-requirements-02}}
+
++ H1. DELEG must not disrupt the existing registration model of domains.
+
+  The existing zone structure including the concept of delegations from
+  a parent zone to a child zone is left unchanged.
+
++ H2. DELEG must be backwards compatible with the existing ecosystem.
+
+  The new delegations do not interfere with legacy software.
+
+  The behavior of incremental deleg-aware resolvers includes a fallback to NS
+  records if no incremental delegation is present (See {{recursive-resolver-behavior}}).
+
++ H3. DELEG must not negatively impact most DNS software.
+
+  Incremental deleg introduces a new RR type.
+  Software that parses zone file format needs to be changed to support the new
+  type.
+  Though unknown type notation {{!RFC3597}} can be used in some cases if no support for the new RR type is present.
+  Existing authoritatives can serve incremental deleg zones (though less efficiently), existing signers can sign incremental deleg zones, existing diagnostic tools can query incremental deleg zones.
+  Non-recursive DNSSEC validators can operate independently from (possibly legacy) recursive resolvers.
+
++ H4. DELEG must be able to secure delegations with DNSSEC.
+
+  Incremental delegations are automatically secured with DNSSEC
+  (if the parent zone is signed). A replacement for DS records is described in {{?I-D.homburg-deleg-incremental-dnssec}}.
+
++ H5. DELEG must support updates to delegation information with the same relative ease as currently exists with NS records.
+
+  Incremental delegations are affected by TTL like any other
+  DNS record.
+
++ H6. DELEG must be incrementally deployable and not require any sort of flag day of universal change.
+
+  Incremental deleg zones can be added without upgrading authoritatives.
+  Incremental deleg zones still work with old resolvers and validators.
+  Basically any combination of old and new should work, though with
+  reduced efficiency for some combinations.
+
++ H7. DELEG must allow multiple independent operators to simultaneously serve a zone.
+
+  Incremental deleg allows for multiple IDELEG records. This allows
+  multiple operators to serve the zone.
+
++ S1. DELEG should facilitate the use of new DNS transport mechanisms
+
+  New transports are already defined for the DNS mode of SVCB ({{!RFC9461}}).
+  The same parameters are used for IDELEG.
+
++ S2. DELEG should make clear all of the necessary details for contacting a service
+
+  Most of the needed SVCB parameters are already defined in existing standards.
+  The exception is a replacement for the DS records, which is described in {{?I-D.homburg-deleg-incremental-dnssec}}.
+
++ S3. DELEG should minimize transaction cost in its usage.
+
+  Assuming Qname-minimisation, there are no extra queries needed in most cases
+  if the authoritative name server has incremental deleg support. The exception
+  is when the parent zone is not signed and has no incremental deleg records.
+  In that case, one extra query is needed when the parent zone is first
+  contacted (and every TTL).
+
+  Additional queries may be needed to resolve aliases.
+
++ S4. DELEG should simplify management of a zone's DNS service.
+
+  Zone management can be simplified using the alias mode of IDELEG.
+  This allows the zone operator to change the details of the delegation
+  without involving the parent zone.
+
+  Draft {{?I-D.homburg-deleg-incremental-dnssec}} defines the dnskeyref parameter which offers the same simplification for DNSSEC delegations.
+
++ S5. DELEG should allow for backward compatibility to the conventional NS-based delegation mechanism.
+
+  NS records and glue can be extracted from the IDELEG record assuming no aliasing is used.
+
+  The ds parameter in {{?I-D.homburg-deleg-incremental-dnssec}} has the same value as the rdata of a DS record.
+
++ S6. DELEG should be extensible and allow for the easy incremental addition of new delegation features after initial deployment.
+
+  SVCB-style records are extensible by design.
+
++ S7. DELEG should be able to convey a security model for delegations stronger than currently exists with DNSSEC.
+
+  Increment delegations are protected by DNSSEC, unlike
+  NS records at the parent zone.
 
 # Comparison with other delegation mechanisms
 
