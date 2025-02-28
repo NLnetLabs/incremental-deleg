@@ -623,7 +623,7 @@ This section will discuss how incremental deleg meets the requirements for a new
   Software that parses zone file format needs to be changed to support the new
   type.
   Though unknown type notation {{!RFC3597}} can be used in some cases if no support for the new RR type is present.
-  Existing authoritatives can serve incremental deleg-aware zones (though less efficiently), existing signers can sign incremental deleg-aware zones, existing diagnostic tools can query incremental deleg-aware zones.
+  Existing authoritatives can serve incremental deleg zones (though less efficiently), existing signers can sign incremental deleg zones, existing diagnostic tools can query incremental deleg zones.
   Non-recursive DNSSEC validators can operate independently from (possibly legacy) recursive resolvers.
 
 + H4. DELEG must be able to secure delegations with DNSSEC.
