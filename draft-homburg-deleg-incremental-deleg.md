@@ -619,7 +619,7 @@ This section will discuss how incremental deleg meets the requirements for a new
 
 + H3. DELEG must not negatively impact most DNS software.
 
-  Incremental deleg introduces a new Rtype.
+  Incremental deleg introduces a new RR type.
   Software that parses zone file format needs to be changed to support the new
   type.
   Though unknown type notation ({{!RFC3597}}) can be used in some cases if no support for the new Rtype is present.
