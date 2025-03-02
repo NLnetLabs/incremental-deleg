@@ -205,8 +205,9 @@ Note however that the target of a IDELEG RR in AliasMode is a SVCB RRset for the
 
 {{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
 Different from SVCB, mixed ServiceMode and AliasMode RRs are allowed in a IDELEG RRset.
-
-<!-- TODO: Describe how priorities work; First pick one AliasMode or all ServiceMode RRs from within the IDELEG RRset; Then within resulting SVCB or IDELEG in ServiceMode RRset adhere to ServicePriority) -->
+When an mixed ServiceMode and AliasMode IDELEG RRset is encountered by a resolver, the resolver first picks one of the AliasMode RRs or all ServiceMode RRs, giving all ServiceMode RRs equal weight as each single AliasMode RR.
+When the result of that choice is an AliasMode RR, then that RR is followed and the resulting IDELEG RRset is reevaluated.
+When the result of that choice is all ServiceMode RRs, then within that set the resolver adheres to ServicePriority value.
 
 At the delegation point (for example `customer._deleg.example.`), the host names of the authoritative name servers for the subzone, are given in the TargetName RDATA field of IDELEG records in ServiceMode.
 Port Prefix Naming {{Section 3 of RFC9461}} is not used at the delegation point, but MUST be used when resolving the aliased to name servers with IDELEG RRs in AliasMode.
