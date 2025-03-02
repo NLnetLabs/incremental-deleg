@@ -206,7 +206,7 @@ Note however that the target of a IDELEG RR in AliasMode is a SVCB RRset for the
 {{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
 Different from SVCB, mixed ServiceMode and AliasMode RRs are allowed in a IDELEG RRset.
 
-<!-- TODO: Describe how priorities work; First pick one AliasMode or all ServiceModeo RRs from within the IDELEG RRset; Then within resulting SVCB or IDELEG in ServiceMode RRset adhere to ServicePriority) -->
+<!-- TODO: Describe how priorities work; First pick one AliasMode or all ServiceMode RRs from within the IDELEG RRset; Then within resulting SVCB or IDELEG in ServiceMode RRset adhere to ServicePriority) -->
 
 At the delegation point (for example `customer._deleg.example.`), the host names of the authoritative name servers for the subzone, are given in the TargetName RDATA field of IDELEG records in ServiceMode.
 Port Prefix Naming {{Section 3 of RFC9461}} is not used at the delegation point, but MUST be used when resolving the aliased to name servers with IDELEG RRs in AliasMode.
@@ -227,31 +227,31 @@ Note that if the delegation is outsourcing to a single operator represented in a
 
 ~~~~
 $ORIGIN example.
-@                  IN  SOA    ns zonemaster ...
-customer1._deleg   IN  IDELEG 1 ( ns.customer1
+@                 IN  SOA    ns zonemaster ...
+customer1._deleg  IN  IDELEG 1 ( ns.customer1
                                  ipv4hint=198.51.100.1,203.0.113.1
                                  ipv6hint=2001:db8:1::1,2001:db8:2::1
-                                )
+                               )
 ~~~
 {: #zone-within title="One name server within the subzone"}
 
 ### Two name servers within the subzone
 
     $ORIGIN example.
-    @                  IN  SOA    ns zonemaster ...
-    customer2._deleg   IN  IDELEG 1 ns1.customer2 ( ipv4hint=198.51.100.1
+    @                 IN  SOA    ns zonemaster ...
+    customer2._deleg  IN  IDELEG 1 ns1.customer2 ( ipv4hint=198.51.100.1
                                                    ipv6hint=2001:db8:1::1
-                                                  )
-                       IN  IDELEG 1 ns2.customer2 ( ipv4hint=203.0.113.1
+                                                 )
+                      IN  IDELEG 1 ns2.customer2 ( ipv4hint=203.0.113.1
                                                    ipv6hint=2001:db8:2::1
-                                                  )
+                                                 )
 {: #zones-within title="Two name servers within the subzone"}
 
 ### Outsourced to an operator
 
     $ORIGIN example.
-    @                  IN  SOA   ns zonemaster ...
-    customer3._deleg   IN  CNAME _dns.ns.operator1
+    @                 IN  SOA   ns zonemaster ...
+    customer3._deleg  IN  CNAME _dns.ns.operator1
 {: #outsourced-cname title="Outsourced with CNAME"}
 
 Instead of using CNAME, the outsourcing could also been accomplished with a IDELEG RRset with a single IDELEG RR in AliasMode.
@@ -260,26 +260,26 @@ It is RECOMMENDED to use a CNAME over a IDELEG RRset with a single IDELEG RR in 
 Note that a IDELEG RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target IDELEG RRset (or CNAME) which may have an `_dns` prefix.
 
     $ORIGIN example.
-    @                  IN  SOA    ns zonemaster ...
-    customer3._deleg   IN  IDELEG 0 ns.operator1
+    @                 IN  SOA    ns zonemaster ...
+    customer3._deleg  IN  IDELEG 0 ns.operator1
 {: #outsourced-svcb title="Outsourced with an AliasMode IDELEG RR"}
 
 The operator IDELEG RRset could for example be:
 
     $ORIGIN operator1.example.
-    @                  IN  SOA    ns zonemaster ...
-    _dns.ns            IN  IDELEG 1 ns ( alpn=h2,dot,h3,doq
+    @                 IN  SOA    ns zonemaster ...
+    _dns.ns           IN  IDELEG 1 ns ( alpn=h2,dot,h3,doq
                                         ipv4hint=192.0.2.1
                                         ipv6hint=2001:db8:3::1
                                         dohpath=/q{?dns}
-                                       )
-                       IN  IDELEG 2 ns ( ipv4hint=192.0.2.2
+                                      )
+                      IN  IDELEG 2 ns ( ipv4hint=192.0.2.2
                                         ipv6hint=2001:db8:3::2
-                                       )
-    ns                 IN  AAAA   2001:db8:3::1
-                       IN  AAAA   2001:db8:3::2
-                       IN  A      192.0.2.1
-                       IN  A      192.0.2.2
+                                      )
+    ns                IN  AAAA   2001:db8:3::1
+                      IN  AAAA   2001:db8:3::2
+                      IN  A      192.0.2.1
+                      IN  A      192.0.2.2
 {: #operator-zone title="Operator zone"}
 
 ### DNSSEC signed name servers within the subzone
@@ -415,13 +415,13 @@ The testing query can have three possible outcomes:
    A NOERROR response is returned with no RRs in the answer section.
 
    The existence of the `_deleg` name MUST be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
-   For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
+   For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
 
 3. The `_deleg` label does exist within the zone and contains data.
    A NOERROR response is returned with an A RRset in the answer section.
 
    The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
-   For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
+   For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
 
 # Optimized implementation
 
@@ -460,7 +460,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ;; Query time: 0 msec
 ;; EDNS: version 0; flags: do ; udp: 1232
 ;; SERVER: 192.0.2.53
-;; WHEN: Mon Jul  1 20:36:25 2024
+;; WHEN: Mon Feb 24 20:36:25 2025
 ;; MSG SIZE  rcvd: 456
 ~~~
 {: #deleg-response title="An incremental deleg referral response"}
@@ -495,7 +495,7 @@ ns.customer6.example.   3600    IN      AAAA    2001:db8:6::1
 ;; Query time: 0 msec
 ;; EDNS: version 0; flags: do ; udp: 1232
 ;; SERVER: 192.0.2.53
-;; WHEN: Tue Jul  2 10:23:53 2024
+;; WHEN: Tue Feb 25 10:23:53 2025
 ;; MSG SIZE  rcvd: 744
 ~~~
 {: #no-incr-deleg-response title="Referral response without incremental deleg"}
@@ -531,7 +531,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ;; Query time: 0 msec
 ;; EDNS: version 0; flags: do ; udp: 1232
 ;; SERVER: 192.0.2.53
-;; WHEN: Tue Jul  2 10:55:07 2024
+;; WHEN: Tue Feb 25 10:55:07 2025
 ;; MSG SIZE  rcvd: 593
 ~~~
 {: #alias-response title="Aliasing referral response"}
@@ -578,13 +578,13 @@ For example, such a IDELEG RRset registered on the wildcard below the `_deleg` l
 
 ~~~
 $ORIGIN example.
-@                  IN  SOA   ns zonemaster ...
-*._deleg    86400  IN  IDELEG 0 .
-customer1._deleg   IN  IDELEG 1 ( ns.customer1
+@                 IN  SOA   ns zonemaster ...
+*._deleg   86400  IN  IDELEG 0 .
+customer1._deleg  IN  IDELEG 1 ( ns.customer1
                                  ipv4hint=198.51.100.1,203.0.113.1
                                  ipv6hint=2001:db8:1::1,2001:db8:2::1
                                )
-customer3._deleg   IN  CNAME _dns.ns.operator1
+customer3._deleg  IN  CNAME _dns.ns.operator1
 ~~~
 {: #wildcard-deleg title="Wildcard incremental deleg to control duration of detected support"}
 
