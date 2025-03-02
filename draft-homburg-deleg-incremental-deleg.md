@@ -695,34 +695,34 @@ This section will discuss how incremental deleg meets the requirements for a new
 
 Table {{xtraqueries}} provides an overview of when extra queries, in parallel to the legacy query, are sent.
 
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-|   | apex | support | `_deleg` |   | `<sub>._deleg.<apex> IDELEG` | `_deleg.<apex> A`       |
-|:-:|:----:|:-------:|:--------:|---|:---------------------------:|:-----------------------:|
-| 1 | Yes  | \*      | \*       |   |                             |                         |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-| 2 | No   | \*      | No       |   |                             |                         |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-| 3 | No   | Yes     | \*       |   |                             |                         |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-| 4 | No   | Unknown | Yes      |   | X                           |                         |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-| 5 | No   | Unknown | Unknown  |   | X                           | only for unsigned zones |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+|   | apex query | auth support | `_deleg` presence |   | `<sub>._deleg.<apex> IDELEG` | `_deleg.<apex> A`       |
+|:-:|:----------:|:------------:|:-----------------:|---|:----------------------------:|:-----------------------:|
+| 1 | Yes        | \*           | \*                |   |                              |                         |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+| 2 | No         | \*           | No                |   |                              |                         |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+| 3 | No         | Yes          | \*                |   |                              |                         |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+| 4 | No         | Unknown      | Yes               |   | X                            |                         |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+| 5 | No         | Unknown      | Unknown           |   | X                            | only for unsigned zones |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
 {: #xtraqueries title="Additional queries in parallel to the legacy query"}
 
 The three headers on the left side of the table mean the following:
 
 {: vspace="0"}
-apex:
+apex query:
 : Whether the query is for the apex of the target zone.
   "Yes" means an apex query, "No" means a query below the apex which may be delegated
 
-support:
+auth support:
 : Whether or not the target authoritative server supports incremental deleg.
   "Yes" means it supports it and "Unknown" means support is not detected.
   "\*" means it does not matter
 
-`_deleg`:
+`_deleg` presence:
 : Whether or not the `_deleg` label is present in the target zone (and thus incremental delegations)
 
 On the right side of the table are the extra queries, to be sent in parallel with the legacy query.
@@ -740,19 +740,21 @@ If the target zone is unsigned, presence of the `_deleg` label needs to be teste
 ## Comparison with {{?I-D.wesplaap-deleg}}
 
 {: cols="50%l 50%l"}
-|---------------------|-------------------|
+|-------------------------|-------------------|
 | \[?I-D.wesplaap-deleg\] | \[this document\] |
-|---------------------|-------------------|
-| Requires implementation in both authoritative name server as well as in the resolver | Only resolver implementation required. But optimized with updated authoritative software. |
-|-----------------------------------------|
+|-------------------------|-------------------|
+| Requires implementation in both authoritative name server as well as in the resolver, DNSSEC signers and validators and all other DNS software | Only resolver implementation required. But optimized with updated authoritative software. |
+|-------------------------|-------------------|
+| DELEG resolvers need to contact DELEG authoritatives directly | IDELEG resolvers can query for the incremental delegation data, therefore direct contact with IDELEG supporting authoritatives is not necessary. All legacy infrastructure (including forwarders etc.) is supported. |
+|-------------------------|-------------------|
 | DNSKEY flag needed to signal IDELEG support with all authoritative name servers that serve the parent (delegating) domain. Special requirements for the child domain. | No DNSKEY flag needed. Separation of concerns. |
-|-----------------------------------------|
+|-------------------------|-------------------|
 | Authoritative name servers need to be updated all at once | Authoritative name servers may be updated gradually for optimization |
-|-----------------------------------------|
+|-------------------------|-------------------|
 | New semantics about what is authoritative (BOGUS with current DNSSEC validators) | Works with current DNS and DNSSEC semantics. Easier to implement. |
-|-----------------------------------------|
-| No extra queries | An extra query, in parallel to the legacy query, *per authoritative* server when incremental deleg support is not yet detected, and *per unsigned zone* to determine presence of the `_deleg` label |
-|---------------------|-------------------|
+|-------------------------|-------------------|
+| No extra queries | One extra query, in parallel to the legacy query, *per authoritative* server when incremental deleg support is not yet detected, and one extra query *per unsigned zone* to determine presence of the `_deleg` label |
+|-------------------------|-------------------|
 {: title="Comparison of [I-D.wesplaap-deleg] with [this document]"}
 
 # Implementation Status
