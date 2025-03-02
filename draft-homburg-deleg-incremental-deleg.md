@@ -402,7 +402,7 @@ The state regarding the presence of the `_deleg` label can be deduced from the r
 If the target zone is unsigned, the procedure as described in the remainder of this section SHOULD be followed.
 
 When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the unsigned target zone (though not when the target name server is known to support incremental deleg, which will be discussed in {{authoritative-name-server-support}}).
-The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type A.
+The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type IDELEG.
 
 The testing query can have three possible outcomes:
 
@@ -418,10 +418,14 @@ The testing query can have three possible outcomes:
    For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
 
 3. The `_deleg` label does exist within the zone and contains data.
-   A NOERROR response is returned with an A RRset in the answer section.
+   A NOERROR response is returned with an IDELEG RRset in the answer section.
 
    The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
    For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
+
+   If the zone is reached by following a referral, then besides the TTL, the content of the IDELEG RRset MUST be ignored.
+   For zones that are only to be reached through delegation, a Resource Record of `_deleg IN IDELEG 0 .` is RECOMMENDED.
+   Note that zones that are not reached by following referrals, but configured directly in the resolver, MAY have information about which authoritative name servers and with capabilities provided at an IDELEG RRset at the `_deleg` label (see {{priming-queries}}).
 
 # Optimized implementation
 
@@ -595,7 +599,7 @@ The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`)
 
 This method of signalling that the legacy delegation MUST be used, is RECOMMENDED.
 
-# Priming queries
+# Priming queries {#priming-queries}
 
 Some zones, such as the root zone, are targeted directly from hints files.
 Information about which authoritative name servers and with capabilities, MAY be provided in a IDELEG RRset directly at the `_deleg` label under the apex of the zone.
