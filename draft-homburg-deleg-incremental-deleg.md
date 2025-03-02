@@ -26,7 +26,7 @@ category: std
 docname: draft-homburg-deleg-incremental-deleg-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
-date: 2025-01-08
+date: 2025-03-03
 consensus: true
 v: 3
 area: int
@@ -112,7 +112,7 @@ The IDELEG RR type inherits its extensibility from the SVCB RR type, which is de
 
 ## *Note to the RFC Editor*: please remove this subsection before publication.
 
-The name IDELEG is chosen to avoid confusion with {{?I-D.draft-wesplaap-deleg}}.
+The name IDELEG is chosen to avoid confusion with {{?I-D.wesplaap-deleg}}.
 
 ## Outsourcing operation of the delegation {#outsourcing}
 
@@ -737,11 +737,11 @@ If the target zone is unsigned, presence of the `_deleg` label needs to be teste
 
 ## Comparison with Name DNS Query Name Minimisation
 
-## Comparison with {{?I-D.dnsop-deleg}}
+## Comparison with {{?I-D.wesplaap-deleg}}
 
 {: cols="50%l 50%l"}
 |---------------------|-------------------|
-| \[I-D.dnsop-deleg\] | \[this document\] |
+| \[?I-D.wesplaap-deleg\] | \[this document\] |
 |---------------------|-------------------|
 | Requires implementation in both authoritative name server as well as in the resolver | Only resolver implementation required. But optimized with updated authoritative software. |
 |-----------------------------------------|
@@ -753,7 +753,7 @@ If the target zone is unsigned, presence of the `_deleg` label needs to be teste
 |-----------------------------------------|
 | No extra queries | An extra query, in parallel to the legacy query, *per authoritative* server when incremental deleg support is not yet detected, and *per unsigned zone* to determine presence of the `_deleg` label |
 |---------------------|-------------------|
-{: title="Comparison of [I-D.dnsop-deleg] with [this document]"}
+{: title="Comparison of [I-D.wesplaap-deleg] with [this document]"}
 
 # Implementation Status
 
