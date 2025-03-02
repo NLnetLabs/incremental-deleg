@@ -84,25 +84,25 @@ informative:
             ins: J. van Zutphen
     IDELEG4NSD:
         target: https://github.com/WP-Official/nsd
-	title: "A proof of concept support for IDELEG in the NSD authoritative name server software"
-	author:
-	  -
-	    name: Wouter Petri
-	    ins: W. Petri
+        title: "A proof of concept support for IDELEG in the NSD authoritative name server software"
+        author:
+          -
+            name: Wouter Petri
+            ins: W. Petri
     WPETRI:
         target: https://nlnetlabs.nl/downloads/publications/extensible-delegations-in-authoritative-nameservers_2025-02-09.pdf
-	title: "Extensible delegations in authoritative nameservers"
-	author:
-	  -
-	    name: Wouter Petri
-	    ins: W. Petri
+        title: "Extensible delegations in authoritative nameservers"
+        author:
+          -
+            name: Wouter Petri
+            ins: W. Petri
     IDELEG4LDNS:
         target: https://github.com/NLnetLabs/ldns/tree/features/ideleg
-	title: "A proof of concept support for IDELEG in the ldns DNS library and tools"
-	author:
-	  -
-	    name: Willem Toorop
-	    ins: W. Toorop
+        title: "A proof of concept support for IDELEG in the ldns DNS library and tools"
+        author:
+          -
+            name: Willem Toorop
+            ins: W. Toorop
 
 --- abstract
 
