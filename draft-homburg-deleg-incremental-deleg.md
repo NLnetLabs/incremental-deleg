@@ -51,7 +51,6 @@ author:
     fullname: Philip Homburg
     organization: NLnet Labs
     email: philip@nlnetlabs.nl
-
  -
     fullname: Tim Wicinski
     organization: Cox Communications
@@ -69,12 +68,15 @@ normative:
 
 informative:
     IDELEG4UNBOUND:
-        target: https://github.com/jessevz/unbound/
+        target: https://github.com/NLnetLabs/unbound/tree/ideleg
         title: "A proof of concept implementation of incremental deleg"
         author:
           -
             name: Jesse van Zutphen
             ins: J. van Zutphen
+	  -
+	    name: Philip Homburg
+	    ins: P. Homburg
     JZUTPHEN:
         target: https://nlnetlabs.nl/downloads/publications/extensible-deleg-in-resolvers_2024-07-08.pdf
         title: "Extensible delegations in DNS Recursive resolvers"
@@ -783,9 +785,11 @@ If the target zone is unsigned, presence of the `_deleg` label needs to be teste
 We are using RR type code 65280 for experiments.
 
 Jesse van Zutphen has built a proof of concept implementation supporting incremental delegations as specified in a previous version of this document {{?I-D.homburg-deleg-incremental-deleg-00}} for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam {{JZUTPHEN}}.
-The source code of his implementation is available on github {{IDELEG4UNBOUND}}.
+Jesse's implementation has been adapted to query for the IDELEG RR types (with code point 65280).
+This version is available in the `ideleg` branch of the `NLnetLabs/unbound` github repository {{IDELEG4UNBOUND}}.
+Note that this implementation does not yet support {{behavior-with-auth-support (optimized behaviour)}}, and also does not yet follow AliasMode IDELEG RRs.
 
-The ldns DNS library and tools software has been extended with support for IDELEG, which is available on github on the `features/ideleg` branch {{IDELEG4LDNS}}.
+The ldns DNS library and tools software has been extended with support for IDELEG, which is available in the `features/ideleg` branch of the `NLnetLabs/ldns` github repository {{IDELEG4LDNS}}.
 This includes support for IDELEG in the DNS lookup utility `drill`, as well as in the DNSSEC zone signer `ldns-signzone` and all other tools and examples included with the ldns software.
 
 Wouter Petri has built a proof of concept support for IDELEG in the NSD authoritative name server software as part of a research project for the Security and Network Engineering master program of the University of Amsterdam {{WPETRI}}.
