@@ -156,7 +156,7 @@ Implementation in the recursive may be less demanding with respect to (among oth
 
 {::boilerplate bcp14-tagged}
 
-This document follows terminology as defined in {{?RFC9499}}.
+This document follows terminology as defined in {{?BCP219}}.
 
 Throughout this document we will also use terminology with the meaning as defined below:
 
