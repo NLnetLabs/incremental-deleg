@@ -549,7 +549,7 @@ If the incremental deleg does not exist, then it is simply absent from the autho
 ## Resolver behavior with authoritative name server support {#behavior-with-auth-support}
 
 Incremental deleg supporting authoritative name servers will include the incremental delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
-For an unsigned zone, a deleg supporting authoritative cannot return that an incremental delegation is absent (because of lack of an authenticated denial of existence), however with support from the served zone (the zone has an `*._deleg IN IDELEG 0 .` RR provisioned), the authoritative name server can signal support also for unsigned zones (see {{extra-optimized (Extra optimized implementation)}}).
+For an unsigned zone, an incremental deleg supporting authoritative cannot return that an incremental delegation is absent (because of lack of an authenticated denial of existence), however with support from the served zone (the zone has an `*._deleg IN IDELEG 0 .` RR provisioned), the authoritative name server can signal support also for unsigned zones (see {{extra-optimized (Extra optimized implementation)}}).
 
 If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be sent in parallel to the legacy delegation query.
 A resolver SHOULD register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegation information.
