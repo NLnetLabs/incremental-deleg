@@ -426,7 +426,7 @@ The state regarding the presence of the `_deleg` label can be deduced from the r
 If the target zone is unsigned, the procedure as described in the remainder of this section SHOULD be followed.
 
 When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the unsigned target zone (though not when the target name server is known to support incremental deleg, which will be discussed in {{authoritative-name-server-support}}).
-The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type A.
+The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type NS.
 
 The testing query can have three possible outcomes:
 
@@ -441,11 +441,11 @@ The testing query can have three possible outcomes:
    The existence of the `_deleg` name MUST be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
    For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
 
-3. The `_deleg` label does exist within the zone and contains data.
-   A NOERROR response is returned with an A RRset in the answer section.
+3. The `_deleg` label does exist within the zone, but is an delegation.
+   A NOERROR legacy referral response is returned with an NS RRset in the authority section.
 
-   The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
-   For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
+   The resolver MUST record that the zone does not have valid incremental delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries.
+   For the period indicated by the NS RRset's TTL value, the zone is considered to **not** to have valid incremental delegations, and MUST NOT send any (additional) incremental deleg queries.
 
 # Optimized implementation
 
@@ -619,7 +619,7 @@ The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`)
 
 This method of signalling that the legacy delegation MUST be used, is RECOMMENDED.
 
-# Priming queries
+# Priming queries {#priming-queries}
 
 Some zones, such as the root zone, are targeted directly from hints files.
 Information about which authoritative name servers and with capabilities, MAY be provided in a IDELEG RRset directly at the `_deleg` label under the apex of the zone.
