@@ -755,7 +755,7 @@ Resolvers that support only legacy referrals will be on the internet for the for
 
 Legacy referrals can be deduced from the incremental delegation.
 An authoritative could (in some cases) synthesize the legacy referral from the incremental delegation, however this is not RECOMMENDED.
-It introduces an element of dynamism which is currently not part of authoritative name server behavior specification.
+It introduces an element of dynamism which is at the time of writing not part of authoritative name server behavior specification.
 Moreover, authoritative name servers could transfer the zone data to non incremental deleg supporting and aware name servers, which would not have this feature.
 We leave provisioning of legacy referrals from incremental delegations (for now) out of scope for this document.
 
