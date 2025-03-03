@@ -74,9 +74,9 @@ informative:
           -
             name: Jesse van Zutphen
             ins: J. van Zutphen
-	  -
-	    name: Philip Homburg
-	    ins: P. Homburg
+          -
+            name: Philip Homburg
+            ins: P. Homburg
     JZUTPHEN:
         target: https://nlnetlabs.nl/downloads/publications/extensible-deleg-in-resolvers_2024-07-08.pdf
         title: "Extensible delegations in DNS Recursive resolvers"
