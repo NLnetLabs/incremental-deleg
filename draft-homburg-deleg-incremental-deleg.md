@@ -444,7 +444,7 @@ The testing query can have three possible outcomes:
 3. The `_deleg` label does exist within the zone, but is an delegation.
    A NOERROR legacy referral response is returned with an NS RRset in the authority section.
 
-   The resolver MUST record that the zone does not have valid incremental delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
+   The resolver MUST record that the zone does not have valid incremental delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries.
    For the period indicated by the NS RRset's TTL value, the zone is considered to **not** to have valid incremental delegations, and MUST NOT send any (additional) incremental deleg queries.
 
 # Optimized implementation
