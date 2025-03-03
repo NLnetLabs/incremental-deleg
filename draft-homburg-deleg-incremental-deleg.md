@@ -735,7 +735,40 @@ If the target zone is unsigned, presence of the `_deleg` label needs to be teste
 
 ## Comparison with legacy delegations
 
+### The delegation point
+
+Legacy delegations are realized by an non-authoritative NS RRset at the name of the delegated zone, but in the delegating zone (the parent side of the zone cut).
+However, there is another NS RRset by the same name, but now authoritative, in the delegated zone (the child side of the zone cut).
+Some resolvers prefer to use the authoritative child side NS RRset (see {{Section 5.4.1 of !RFC2181}}) for contacting the authoritative name servers of the delegated zone, and will use it to reach the zone if they encounter the child side NS RRset authoritatively in responses.
+Some resolvers query explicitly for the authoritative child side NS RRset {{I-D.ietf-dnsop-ns-revalidation}}.
+However, these NS RRsets can differ in content leading to errors and inconsistencies (see {{Section 3 of I-D.ietf-dnsop-ns-revalidation}}).
+
+Incremental deleg eliminates these issues by placing the referral information, not at the name of the delegated zone, but authoritatively in the delegating zone.
+
+Having the referral information at an authoritative location brings clarity.
+There can be no misinterpretation about who is providing the referral (the delegating zone, or the delegated zone).
+In an future world where all delegations would be incremental delegations, all names will only be authoritative data, derivable from the name, for resolvers and other applications alike.
+
+### Legacy referrals
+
+Resolvers that support only legacy referrals will be on the internet for the foreseeable future, therefore a legacy referral MUST always be provided alongside the incremental referral.
+
+Legacy referrals can be deduced from the incremental delegation.
+An authoritative could (in some cases) synthesize the legacy referral from the incremental delegation, however this is not RECOMMENDED.
+It introduces an element of dynamism which is at the time of writing not part of authoritative name server behavior specification.
+Moreover, authoritative name servers could transfer the zone data to non incremental deleg supporting and aware name servers, which would not have this feature.
+We leave provisioning of legacy referrals from incremental delegations (for now) out of scope for this document.
+
+### Number of queries
+
+Legacy resolvers that do not do DNS Query Name Minimisation, will get a referral in a single query.
+The resolution process with incremental delegations must find the exact zone cut explicitly, comparable with DNS Query Name Minimisation.
+The query increase to find the zone cut (and referral) is comparable to that of a resolver performing DNS Query Name minimisation.
+
 ## Comparison with Name DNS Query Name Minimisation
+
+There are no extra queries needed in most cases if the authoritative name server has incremental deleg support. The exception is when the parent zone is not signed and has no incremental deleg records.
+In that case, one extra query is needed when the parent zone is first contacted (and every TTL)
 
 ## Comparison with {{?I-D.wesplaap-deleg}}
 
