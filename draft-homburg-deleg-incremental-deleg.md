@@ -26,7 +26,7 @@ category: std
 docname: draft-homburg-deleg-incremental-deleg-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
-date: 2025-01-08
+date: 2025-03-03
 consensus: true
 v: 3
 area: int
@@ -51,7 +51,6 @@ author:
     fullname: Philip Homburg
     organization: NLnet Labs
     email: philip@nlnetlabs.nl
-
  -
     fullname: Tim Wicinski
     organization: Cox Communications
@@ -68,13 +67,16 @@ author:
 normative:
 
 informative:
-    DELEG4UNBOUND:
-        target: https://github.com/jessevz/unbound/
+    IDELEG4UNBOUND:
+        target: https://github.com/NLnetLabs/unbound/tree/ideleg
         title: "A proof of concept implementation of incremental deleg"
         author:
           -
             name: Jesse van Zutphen
             ins: J. van Zutphen
+	  -
+	    name: Philip Homburg
+	    ins: P. Homburg
     JZUTPHEN:
         target: https://nlnetlabs.nl/downloads/publications/extensible-deleg-in-resolvers_2024-07-08.pdf
         title: "Extensible delegations in DNS Recursive resolvers"
@@ -82,6 +84,27 @@ informative:
           -
             name: Jesse van Zutphen
             ins: J. van Zutphen
+    IDELEG4NSD:
+        target: https://github.com/WP-Official/nsd
+        title: "A proof of concept support for IDELEG in the NSD authoritative name server software"
+        author:
+          -
+            name: Wouter Petri
+            ins: W. Petri
+    WPETRI:
+        target: https://nlnetlabs.nl/downloads/publications/extensible-delegations-in-authoritative-nameservers_2025-02-09.pdf
+        title: "Extensible delegations in authoritative nameservers"
+        author:
+          -
+            name: Wouter Petri
+            ins: W. Petri
+    IDELEG4LDNS:
+        target: https://github.com/NLnetLabs/ldns/tree/features/ideleg
+        title: "A proof of concept support for IDELEG in the ldns DNS library and tools"
+        author:
+          -
+            name: Willem Toorop
+            ins: W. Toorop
 
 --- abstract
 
@@ -112,7 +135,7 @@ The IDELEG RR type inherits its extensibility from the SVCB RR type, which is de
 
 ## *Note to the RFC Editor*: please remove this subsection before publication.
 
-The name IDELEG is chosen to avoid confusion with {{?I-D.draft-wesplaap-deleg}}.
+The name IDELEG is chosen to avoid confusion with {{?I-D.wesplaap-deleg}}.
 
 ## Outsourcing operation of the delegation {#outsourcing}
 
@@ -156,7 +179,7 @@ Implementation in the recursive may be less demanding with respect to (among oth
 
 {::boilerplate bcp14-tagged}
 
-This document follows terminology as defined in {{?RFC9499}}.
+This document follows terminology as defined in {{?BCP219}}.
 
 Throughout this document we will also use terminology with the meaning as defined below:
 
@@ -205,8 +228,9 @@ Note however that the target of a IDELEG RR in AliasMode is a SVCB RRset for the
 
 {{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
 Different from SVCB, mixed ServiceMode and AliasMode RRs are allowed in a IDELEG RRset.
-
-<!-- TODO: Describe how priorities work; First pick one AliasMode or all ServiceModeo RRs from within the IDELEG RRset; Then within resulting SVCB or IDELEG in ServiceMode RRset adhere to ServicePriority) -->
+When an mixed ServiceMode and AliasMode IDELEG RRset is encountered by a resolver, the resolver first picks one of the AliasMode RRs or all ServiceMode RRs, giving all ServiceMode RRs equal weight as each single AliasMode RR.
+When the result of that choice is an AliasMode RR, then that RR is followed and the resulting IDELEG RRset is reevaluated.
+When the result of that choice is all ServiceMode RRs, then within that set the resolver adheres to ServicePriority value.
 
 At the delegation point (for example `customer._deleg.example.`), the host names of the authoritative name servers for the subzone, are given in the TargetName RDATA field of IDELEG records in ServiceMode.
 Port Prefix Naming {{Section 3 of RFC9461}} is not used at the delegation point, but MUST be used when resolving the aliased to name servers with IDELEG RRs in AliasMode.
@@ -227,31 +251,31 @@ Note that if the delegation is outsourcing to a single operator represented in a
 
 ~~~~
 $ORIGIN example.
-@                  IN  SOA    ns zonemaster ...
-customer1._deleg   IN  IDELEG 1 ( ns.customer1
+@                 IN  SOA    ns zonemaster ...
+customer1._deleg  IN  IDELEG 1 ( ns.customer1
                                  ipv4hint=198.51.100.1,203.0.113.1
                                  ipv6hint=2001:db8:1::1,2001:db8:2::1
-                                )
+                               )
 ~~~
 {: #zone-within title="One name server within the subzone"}
 
 ### Two name servers within the subzone
 
     $ORIGIN example.
-    @                  IN  SOA    ns zonemaster ...
-    customer2._deleg   IN  IDELEG 1 ns1.customer2 ( ipv4hint=198.51.100.1
+    @                 IN  SOA    ns zonemaster ...
+    customer2._deleg  IN  IDELEG 1 ns1.customer2 ( ipv4hint=198.51.100.1
                                                    ipv6hint=2001:db8:1::1
-                                                  )
-                       IN  IDELEG 1 ns2.customer2 ( ipv4hint=203.0.113.1
+                                                 )
+                      IN  IDELEG 1 ns2.customer2 ( ipv4hint=203.0.113.1
                                                    ipv6hint=2001:db8:2::1
-                                                  )
+                                                 )
 {: #zones-within title="Two name servers within the subzone"}
 
 ### Outsourced to an operator
 
     $ORIGIN example.
-    @                  IN  SOA   ns zonemaster ...
-    customer3._deleg   IN  CNAME _dns.ns.operator1
+    @                 IN  SOA   ns zonemaster ...
+    customer3._deleg  IN  CNAME _dns.ns.operator1
 {: #outsourced-cname title="Outsourced with CNAME"}
 
 Instead of using CNAME, the outsourcing could also been accomplished with a IDELEG RRset with a single IDELEG RR in AliasMode.
@@ -260,26 +284,26 @@ It is RECOMMENDED to use a CNAME over a IDELEG RRset with a single IDELEG RR in 
 Note that a IDELEG RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target IDELEG RRset (or CNAME) which may have an `_dns` prefix.
 
     $ORIGIN example.
-    @                  IN  SOA    ns zonemaster ...
-    customer3._deleg   IN  IDELEG 0 ns.operator1
+    @                 IN  SOA    ns zonemaster ...
+    customer3._deleg  IN  IDELEG 0 ns.operator1
 {: #outsourced-svcb title="Outsourced with an AliasMode IDELEG RR"}
 
 The operator IDELEG RRset could for example be:
 
     $ORIGIN operator1.example.
-    @                  IN  SOA    ns zonemaster ...
-    _dns.ns            IN  IDELEG 1 ns ( alpn=h2,dot,h3,doq
+    @                 IN  SOA    ns zonemaster ...
+    _dns.ns           IN  IDELEG 1 ns ( alpn=h2,dot,h3,doq
                                         ipv4hint=192.0.2.1
                                         ipv6hint=2001:db8:3::1
                                         dohpath=/q{?dns}
-                                       )
-                       IN  IDELEG 2 ns ( ipv4hint=192.0.2.2
+                                      )
+                      IN  IDELEG 2 ns ( ipv4hint=192.0.2.2
                                         ipv6hint=2001:db8:3::2
-                                       )
-    ns                 IN  AAAA   2001:db8:3::1
-                       IN  AAAA   2001:db8:3::2
-                       IN  A      192.0.2.1
-                       IN  A      192.0.2.2
+                                      )
+    ns                IN  AAAA   2001:db8:3::1
+                      IN  AAAA   2001:db8:3::2
+                      IN  A      192.0.2.1
+                      IN  A      192.0.2.2
 {: #operator-zone title="Operator zone"}
 
 ### DNSSEC signed name servers within the subzone
@@ -415,13 +439,13 @@ The testing query can have three possible outcomes:
    A NOERROR response is returned with no RRs in the answer section.
 
    The existence of the `_deleg` name MUST be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
-   For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
+   For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
 
 3. The `_deleg` label does exist within the zone and contains data.
    A NOERROR response is returned with an A RRset in the answer section.
 
    The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.
-   For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in TODO.
+   For the period any RRset at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
 
 # Optimized implementation
 
@@ -460,7 +484,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ;; Query time: 0 msec
 ;; EDNS: version 0; flags: do ; udp: 1232
 ;; SERVER: 192.0.2.53
-;; WHEN: Mon Jul  1 20:36:25 2024
+;; WHEN: Mon Feb 24 20:36:25 2025
 ;; MSG SIZE  rcvd: 456
 ~~~
 {: #deleg-response title="An incremental deleg referral response"}
@@ -495,7 +519,7 @@ ns.customer6.example.   3600    IN      AAAA    2001:db8:6::1
 ;; Query time: 0 msec
 ;; EDNS: version 0; flags: do ; udp: 1232
 ;; SERVER: 192.0.2.53
-;; WHEN: Tue Jul  2 10:23:53 2024
+;; WHEN: Tue Feb 25 10:23:53 2025
 ;; MSG SIZE  rcvd: 744
 ~~~
 {: #no-incr-deleg-response title="Referral response without incremental deleg"}
@@ -531,7 +555,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ;; Query time: 0 msec
 ;; EDNS: version 0; flags: do ; udp: 1232
 ;; SERVER: 192.0.2.53
-;; WHEN: Tue Jul  2 10:55:07 2024
+;; WHEN: Tue Feb 25 10:55:07 2025
 ;; MSG SIZE  rcvd: 593
 ~~~
 {: #alias-response title="Aliasing referral response"}
@@ -581,13 +605,13 @@ For example, such a IDELEG RRset registered on the wildcard below the `_deleg` l
 
 ~~~
 $ORIGIN example.
-@                  IN  SOA   ns zonemaster ...
-*._deleg    86400  IN  IDELEG 0 .
-customer1._deleg   IN  IDELEG 1 ( ns.customer1
+@                 IN  SOA   ns zonemaster ...
+*._deleg   86400  IN  IDELEG 0 .
+customer1._deleg  IN  IDELEG 1 ( ns.customer1
                                  ipv4hint=198.51.100.1,203.0.113.1
                                  ipv6hint=2001:db8:1::1,2001:db8:2::1
                                )
-customer3._deleg   IN  CNAME _dns.ns.operator1
+customer3._deleg  IN  CNAME _dns.ns.operator1
 ~~~
 {: #wildcard-deleg title="Wildcard incremental deleg to control duration of detected support"}
 
@@ -698,34 +722,34 @@ This section will discuss how incremental deleg meets the requirements for a new
 
 Table {{xtraqueries}} provides an overview of when extra queries, in parallel to the legacy query, are sent.
 
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-|   | apex | support | `_deleg` |   | `<sub>._deleg.<apex> IDELEG` | `_deleg.<apex> A`       |
-|:-:|:----:|:-------:|:--------:|---|:---------------------------:|:-----------------------:|
-| 1 | Yes  | \*      | \*       |   |                             |                         |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-| 2 | No   | \*      | No       |   |                             |                         |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-| 3 | No   | Yes     | \*       |   |                             |                         |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-| 4 | No   | Unknown | Yes      |   | X                           |                         |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
-| 5 | No   | Unknown | Unknown  |   | X                           | only for unsigned zones |
-|---|------|---------|----------|---|-----------------------------|-------------------------|
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+|   | apex query | auth support | `_deleg` presence |   | `<sub>._deleg.<apex> IDELEG` | `_deleg.<apex> A`       |
+|:-:|:----------:|:------------:|:-----------------:|---|:----------------------------:|:-----------------------:|
+| 1 | Yes        | \*           | \*                |   |                              |                         |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+| 2 | No         | \*           | No                |   |                              |                         |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+| 3 | No         | Yes          | \*                |   |                              |                         |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+| 4 | No         | Unknown      | Yes               |   | X                            |                         |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
+| 5 | No         | Unknown      | Unknown           |   | X                            | only for unsigned zones |
+|---|------------|--------------|-------------------|---|------------------------------|-------------------------|
 {: #xtraqueries title="Additional queries in parallel to the legacy query"}
 
 The three headers on the left side of the table mean the following:
 
 {: vspace="0"}
-apex:
+apex query:
 : Whether the query is for the apex of the target zone.
   "Yes" means an apex query, "No" means a query below the apex which may be delegated
 
-support:
+auth support:
 : Whether or not the target authoritative server supports incremental deleg.
   "Yes" means it supports it and "Unknown" means support is not detected.
   "\*" means it does not matter
 
-`_deleg`:
+`_deleg` presence:
 : Whether or not the `_deleg` label is present in the target zone (and thus incremental delegations)
 
 On the right side of the table are the extra queries, to be sent in parallel with the legacy query.
@@ -738,34 +762,80 @@ If the target zone is unsigned, presence of the `_deleg` label needs to be teste
 
 ## Comparison with legacy delegations
 
+### The delegation point
+
+Legacy delegations are realized by an non-authoritative NS RRset at the name of the delegated zone, but in the delegating zone (the parent side of the zone cut).
+However, there is another NS RRset by the same name, but now authoritative, in the delegated zone (the child side of the zone cut).
+Some resolvers prefer to use the authoritative child side NS RRset (see {{Section 5.4.1 of !RFC2181}}) for contacting the authoritative name servers of the delegated zone, and will use it to reach the zone if they encounter the child side NS RRset authoritatively in responses.
+Some resolvers query explicitly for the authoritative child side NS RRset {{I-D.ietf-dnsop-ns-revalidation}}.
+However, these NS RRsets can differ in content leading to errors and inconsistencies (see {{Section 3 of I-D.ietf-dnsop-ns-revalidation}}).
+
+Incremental deleg eliminates these issues by placing the referral information, not at the name of the delegated zone, but authoritatively in the delegating zone.
+
+Having the referral information at an authoritative location brings clarity.
+There can be no misinterpretation about who is providing the referral (the delegating zone, or the delegated zone).
+In an future world where all delegations would be incremental delegations, all names will only be authoritative data, derivable from the name, for resolvers and other applications alike.
+
+### Legacy referrals
+
+Resolvers that support only legacy referrals will be on the internet for the foreseeable future, therefore a legacy referral MUST always be provided alongside the incremental referral.
+
+Legacy referrals can be deduced from the incremental delegation.
+An authoritative could (in some cases) synthesize the legacy referral from the incremental delegation, however this is not RECOMMENDED.
+It introduces an element of dynamism which is at the time of writing not part of authoritative name server behavior specification.
+Moreover, authoritative name servers could transfer the zone data to non incremental deleg supporting and aware name servers, which would not have this feature.
+We leave provisioning of legacy referrals from incremental delegations (for now) out of scope for this document.
+
+### Number of queries
+
+Legacy resolvers that do not do DNS Query Name Minimisation, will get a referral in a single query.
+The resolution process with incremental delegations must find the exact zone cut explicitly, comparable with DNS Query Name Minimisation.
+The query increase to find the zone cut (and referral) is comparable to that of a resolver performing DNS Query Name minimisation.
+
 ## Comparison with Name DNS Query Name Minimisation
 
-## Comparison with {{?I-D.dnsop-deleg}}
+There are no extra queries needed in most cases if the authoritative name server has incremental deleg support. The exception is when the parent zone is not signed and has no incremental deleg records.
+In that case, one extra query is needed when the parent zone is first contacted (and every TTL)
+
+## Comparison with {{?I-D.wesplaap-deleg}}
 
 {: cols="50%l 50%l"}
-|---------------------|-------------------|
-| \[I-D.dnsop-deleg\] | \[this document\] |
-|---------------------|-------------------|
-| Requires implementation in both authoritative name server as well as in the resolver | Only resolver implementation required. But optimized with updated authoritative software. |
-|-----------------------------------------|
+|-------------------------|-------------------|
+| \[?I-D.wesplaap-deleg\] | \[this document\] |
+|-------------------------|-------------------|
+| Requires implementation in both authoritative name server as well as in the resolver, DNSSEC signers and validators and all other DNS software | Only resolver implementation required. But optimized with updated authoritative software. |
+|-------------------------|-------------------|
+| DELEG resolvers need to contact DELEG authoritatives directly | IDELEG resolvers can query for the incremental delegation data, therefore direct contact with IDELEG supporting authoritatives is not necessary. All legacy infrastructure (including forwarders etc.) is supported. |
+|-------------------------|-------------------|
 | DNSKEY flag needed to signal IDELEG support with all authoritative name servers that serve the parent (delegating) domain. Special requirements for the child domain. | No DNSKEY flag needed. Separation of concerns. |
-|-----------------------------------------|
+|-------------------------|-------------------|
 | Authoritative name servers need to be updated all at once | Authoritative name servers may be updated gradually for optimization |
-|-----------------------------------------|
+|-------------------------|-------------------|
 | New semantics about what is authoritative (BOGUS with current DNSSEC validators) | Works with current DNS and DNSSEC semantics. Easier to implement. |
-|-----------------------------------------|
-| No extra queries | An extra query, in parallel to the legacy query, *per authoritative* server when incremental deleg support is not yet detected, and *per unsigned zone* to determine presence of the `_deleg` label |
-|---------------------|-------------------|
-{: title="Comparison of [I-D.dnsop-deleg] with [this document]"}
+|-------------------------|-------------------|
+| No extra queries | One extra query, in parallel to the legacy query, *per authoritative* server when incremental deleg support is not yet detected, and one extra query *per unsigned zone* to determine presence of the `_deleg` label |
+|-------------------------|-------------------|
+{: title="Comparison of [I-D.wesplaap-deleg] with [this document]"}
 
 # Implementation Status
 
 **Note to the RFC Editor**: please remove this entire section before publication.
 
-We are using Rtype 65280 for experiments.
+We are using RR type code 65280 for experiments.
 
-Jesse van Zutphen has built a proof of concept implementation supporting delegations as specified in this document for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam. {{JZUTPHEN}}
-The source code of his implementation is available on github {{DELEG4UNBOUND}}
+Jesse van Zutphen has built a proof of concept implementation supporting incremental delegations as specified in a previous version of this document {{?I-D.homburg-deleg-incremental-deleg-00}} for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam {{JZUTPHEN}}.
+Jesse's implementation has been adapted to query for the IDELEG RR types (with code point 65280).
+This version is available in the `ideleg` branch of the `NLnetLabs/unbound` github repository {{IDELEG4UNBOUND}}.
+Note that this implementation does not yet support {{behavior-with-auth-support (optimized behaviour)}}, and also does not yet follow AliasMode IDELEG RRs.
+
+The ldns DNS library and tools software has been extended with support for IDELEG, which is available in the `features/ideleg` branch of the `NLnetLabs/ldns` github repository {{IDELEG4LDNS}}.
+This includes support for IDELEG in the DNS lookup utility `drill`, as well as in the DNSSEC zone signer `ldns-signzone` and all other tools and examples included with the ldns software.
+
+Wouter Petri has built a proof of concept support for IDELEG in the NSD authoritative name server software as part of a research project for the Security and Network Engineering master program of the University of Amsterdam {{WPETRI}}.
+The source code of his implementation is available on github {{IDELEG4NSD}}.
+
+Wouter's implementation is serving the `ideleg.net.` domain, containing a variety of different incremental delegations, for evaluation purposes.
+We are planning to provide information about the deployment, including what software to evaluate these delegations, at [http://ideleg.net/](http://ideleg.net/), hopefully before the [IETF 122 in Bangkok](https://datatracker.ietf.org/meeting/122/proceedings).
 
 # Security Considerations
 
@@ -803,4 +873,4 @@ Per {{?RFC8552}}, IANA is requested to add the following entry to the DNS "Under
 The idea to utilize SVCB based RRs to signal capabilities was first proposed by Tim April in {{?I-D.tapril-ns2}}.
 
 The idea to utilize SVCB for extensible delegations (and also the idea described in this document) emerged from the DNS Hackathon at the IETF 118.
-The following participants contributed to this brainstorm session: Vandan Adhvaryu, Roy Arends, David Blacka, Manu Bretelle, Vladimír Čunát, Klaus Darilion, Peter van Dijk, Christian Elmerot, Bob Halley, Shumon Huque, Shane Kerr, David C Lawrence, Edward Lewis, George Michaelson, Erik Nygren, Libor Peltan, Ben Schwartz, Petr Špaček, Jan Včelák and Ralf Weber
+The following participants contributed to this brainstorm session: Vandan Adhvaryu, Roy Arends, David Blacka, Manu Bretelle, Vladimír Čunát, Klaus Darilion, Peter van Dijk, Christian Elmerot, Bob Halley, Philip Homburg, Shumon Huque, Shane Kerr, David C Lawrence, Edward Lewis, George Michaelson, Erik Nygren, Libor Peltan, Ben Schwartz, Petr Špaček, Jan Včelák and Ralf Weber
