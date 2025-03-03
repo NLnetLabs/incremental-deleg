@@ -744,9 +744,6 @@ Some resolvers query explicitly for the authoritative child side NS RRset {{I-D.
 However, these NS RRsets can differ in content leading to errors and inconsistencies (see {{Section 3 of I-D.ietf-dnsop-ns-revalidation}}).
 
 Incremental deleg eliminates these issues by placing the referral information, not at the name of the delegated zone, but authoritatively in the delegating zone.
-It is still possible to let the delegated zone be in charge of the information about which authoritative name servers and with capabilities serve the zone, but this is now explicit.
-Registrants can choose if they want to control their authoritative information, or outsource it to an operator.
-Incremental deleg brings more commonality in resolver behavior, because of the explicitly registered registrants intentions.
 
 Having the referral information at an authoritative location brings clarity.
 There can be no misinterpretation about who is providing the referral (the delegating zone, or the delegated zone).
