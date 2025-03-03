@@ -594,7 +594,7 @@ With DNSSEC signed zones, support is apparent with all referral responses.
 With unsigned zones, support is apparent only from referral responses for which an incremental delegation exists, unless the zone has the Resource Record `*._deleg IN IDELEG 0 .` provisioned (see {{extra-optimized (Extra optimized implementation)}}).
 
 If the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC signed zone is being served, then all referrals SHOULD contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
-If a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).
+If a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver MAY register that authoritative server does not support incremental deleg and MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).
 
 # Extra optimized implementation {#extra-optimized}
 
