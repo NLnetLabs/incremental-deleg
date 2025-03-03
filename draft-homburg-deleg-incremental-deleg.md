@@ -670,7 +670,12 @@ The source code of his implementation is available on github {{DELEG4UNBOUND}}
 
 # Security Considerations
 
-TODO Security
+Incremental deleg moves the location of  referral information to a unique  location that currently exists. However, as this is a new approach, thought must be given to usage.   There must be some checks to ensure that the registering a _deleg subdomain happens at the time the domain is provisioned. The same care needs to be addressed when a domain is deprovisioned that the _deleg is removed.  This is similar to what happens to NS A records deployed in parent zones to act as Glue.
+
+While the recommendation is to deploy DNSSEC with incremental deleg, it is not mandatory.  However, using incremental deleg with unsigned zones can create possibilities of domain hijackings. This could  be hard to detect when not speaking directly to the authoritative name server.
+
+There are bound to be other considerations.
+
 
 # IANA Considerations
 
