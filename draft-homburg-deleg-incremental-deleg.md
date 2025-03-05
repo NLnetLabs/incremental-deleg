@@ -315,7 +315,8 @@ $ORIGIN
                   IN  DNSKEY 257 3 15 ...
                   IN  RRSIG  DNSKEY ...
                   IN  NS     ns.example.
-                  IN  NSEC   customer5._deleg SOA RRSIG NSEC DNSKEY
+                  IN  RRSIG  NS ...
+                  IN  NSEC   customer5._deleg NS SOA RRSIG NSEC DNSKEY
                   IN  RRSIG  NSEC ...
 
 customer5._deleg  IN  IDELEG 1 ns.customer5 alpn=h2,h3 (
@@ -413,7 +414,7 @@ The eventual incremental deleg query response, after following all redirections 
    The response to the new incremental deleg query MUST be processed as described above, as if it was the initial incremental deleg query.
 
    If the legacy query was sent minimised and needs a followup query, then parallel to that followup query a new incremental deleg query will be sent, adding a single label to the previous incremental deleg query name.
-   For example if the triggering query is `www.university.ac.example.` and the target zone is `example.` and the minimised legacy query name is `ac.example.` (which also resulted in a NOERROR no answer response), then the incremental deleg query to be sent along in parallel with the followup legacy query will become `university.ac.example.`
+   For example if the triggering query is `www.university.ac.example.` and the target zone is `example.` and the minimised legacy query name is `ac.example.` (which also resulted in a NOERROR no answer response), then the incremental deleg query to be sent along in parallel with the followup legacy query will become `university.ac._deleg.example.`
    Processing of the responses of those two new queries will be done as described above.
 
 ## `_deleg` label presence {#presence}
@@ -715,7 +716,7 @@ This section will discuss how incremental deleg meets the requirements for a new
 
 + S7. DELEG should be able to convey a security model for delegations stronger than currently exists with DNSSEC.
 
-  Increment delegations are protected by DNSSEC, unlike
+  Incremental delegations are protected by DNSSEC, unlike
   NS records at the parent zone.
 
 # Comparison with other delegation mechanisms
@@ -781,7 +782,7 @@ In an future world where all delegations would be incremental delegations, all n
 Resolvers that support only legacy referrals will be on the internet for the foreseeable future, therefore a legacy referral MUST always be provided alongside the incremental referral.
 
 Legacy referrals can be deduced from the incremental delegation.
-An authoritative could (in some cases) synthesize the legacy referral from the incremental delegation, however this is not RECOMMENDED.
+An authoritative could (in some cases) synthesize the legacy referral from the incremental delegation, however this is NOT RECOMMENDED.
 It introduces an element of dynamism which is at the time of writing not part of authoritative name server behavior specification.
 Moreover, authoritative name servers could transfer the zone data to non incremental deleg supporting and aware name servers, which would not have this feature.
 We leave provisioning of legacy referrals from incremental delegations (for now) out of scope for this document.
