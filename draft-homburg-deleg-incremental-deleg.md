@@ -141,10 +141,10 @@ The name IDELEG is chosen to avoid confusion with {{?I-D.wesplaap-deleg}}.
 
 Delegation information is stored at an authoritative location in the zone with this mechanism.
 Legacy methods to redirect this information to another location, possible under the control of another operator, such as (CNAME {{Section 3.6.2 of RFC1034}}) and DNAME {{!RFC6672}} remain functional.
-One could even outsource all delegation operational practice to another party with an DNAME on the `_deleg` label on the apex of the delegating zone.
+One could even outsource all delegation operational practice to another party with a DNAME record on the `_deleg` label on the apex of the delegating zone.
 
-Additional to the legacy methods, a delegation may be outsourced to a third parties by having RRs in AliasMode.
-Unlike SVCB, IDELEG allows for more than a single IDELEG RR in AliasMode in a IDELEG RRset, enabling outsourcing a delegation to multiple different operators.
+Additional to the legacy methods, a delegation may be outsourced to a set of third parties by having RRs in AliasMode.
+Unlike SVCB, IDELEG allows for more than a single IDELEG RR in AliasMode in an IDELEG RRset, enabling outsourcing a delegation to multiple different operators.
 
 ## DNSSEC protection of the delegation {#dnssec-protection}
 
@@ -153,15 +153,15 @@ An adversary that is able to spoof a referral response, can alter this informati
 The adversary can then perceive all queries for the redirected zone (Privacy concern) and alter all unsigned parts of responses (such as further referrals, which is a Security concern).
 
 DNSSEC protection of delegation information prevents that, and is the only countermeasure that also works against on-path attackers.
-At the time of writing, the only way to DNSSEC validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations {{?I-D.ietf-dnsop-ns-revalidation}}, which is done after the fact and has other security concerns ({{Section 7 of ?I-D.ietf-dnsop-ns-revalidation}}).
+At the time of writing, the only way to DNSSEC-validate and verify delegations at all levels in the DNS hierarchy is to revalidate delegations {{?I-D.ietf-dnsop-ns-revalidation}}, which is done after the fact and has other security concerns ({{Section 7 of ?I-D.ietf-dnsop-ns-revalidation}}).
 
 Direct delegation information (provided by IDELEG RRs in ServiceMode) includes the hostnames of the authoritative name servers for the delegation as well as IP addresses for those hostnames.
-Since the information is stored authoritatively in the delegating zone, it will be DNSSEC signed if the zone is signed.
-When the delegation is outsourced, then it's protected when the zones providing the aliasing resource records *and* the zones serving the targets of the aliases are all DNSSEC signed.
+Since the information is stored authoritatively in the delegating zone, it will be DNSSEC-signed if the zone is signed.
+When the delegation is outsourced, then it's protected when the zones providing the aliasing resource records *and* the zones serving the targets of the aliases are all DNSSEC-signed.
 
 ## Maximize ease of deployment {#deployability}
 
-Delegation information is stored authoritatively within the delegation zone.
+Delegation information is stored authoritatively within the delegating zone.
 No semantic changes as to what zones are authoritative for what data are needed.
 As a consequence, existing DNS software, such as authoritative name servers and DNSSEC signing software, can remain unmodified.
 Unmodified authoritative name server software will serve the delegation information when queried for.
@@ -224,20 +224,20 @@ The protocol-specific mapping specification for iterative resolutions are the sa
 
 {{Section 2.4.2 of !RFC9460}} states that SVCB RRsets SHOULD only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers SHOULD pick one at random.
 Different from SVCB ({{Section 2.4.2 of RFC9460}}), IDELEG allows for multiple AliasMode RRs to be present in a single IDELEG RRset.
-Note however that the target of a IDELEG RR in AliasMode is a SVCB RRset for the "dns" service type adhering fully to the Service Binding Mapping for DNS Servers as specified in {{!RFC9461}}.
+Note however that the target of an IDELEG RR in AliasMode is an SVCB RRset for the "dns" service type adhering fully to the Service Binding Mapping for DNS Servers as specified in {{!RFC9461}}.
 
 {{Section 2.4.1 of !RFC9460}} states that within an SVCB RRset, all RRs SHOULD have the same mode, and that if an RRset contains a record in AliasMode, the recipient MUST ignore any ServiceMode records in the set.
-Different from SVCB, mixed ServiceMode and AliasMode RRs are allowed in a IDELEG RRset.
-When an mixed ServiceMode and AliasMode IDELEG RRset is encountered by a resolver, the resolver first picks one of the AliasMode RRs or all ServiceMode RRs, giving all ServiceMode RRs equal weight as each single AliasMode RR.
+Different from SVCB, mixed ServiceMode and AliasMode RRs are allowed in an IDELEG RRset.
+When a mixed ServiceMode and AliasMode IDELEG RRset is encountered by a resolver, the resolver first picks one of the AliasMode RRs or all ServiceMode RRs, giving all ServiceMode RRs equal weight as each single AliasMode RR.
 When the result of that choice is an AliasMode RR, then that RR is followed and the resulting IDELEG RRset is reevaluated.
-When the result of that choice is all ServiceMode RRs, then within that set the resolver adheres to ServicePriority value.
+When the result of that choice is all ServiceMode RRs, then within that set the resolver adheres to the ServicePriority value.
 
 At the delegation point (for example `customer._deleg.example.`), the host names of the authoritative name servers for the subzone, are given in the TargetName RDATA field of IDELEG records in ServiceMode.
-Port Prefix Naming {{Section 3 of RFC9461}} is not used at the delegation point, but MUST be used when resolving the aliased to name servers with IDELEG RRs in AliasMode.
+Port Prefix Naming {{Section 3 of RFC9461}} is not used at the delegation point, but MUST be used when resolving the aliased-to name servers with IDELEG RRs in AliasMode.
 
 # Delegation administration
 
-An extensible delegation is realized with a IDELEG Resource Record set (RRset) {{!RFC9460}} below a specially for the purpose reserved label with the name `_deleg` at the apex of the delegating zone.
+An extensible delegation is realized with an IDELEG Resource Record set (RRset) {{!RFC9460}} below a specially for the purpose reserved label with the name `_deleg` at the apex of the delegating zone.
 The `_deleg` label scopes the interpretation of the IDELEG records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see {{node-name (\_deleg Node Name)}}).
 The full scoping of delegations includes the labels that are **below** the `_deleg` label and those, together with the name of the delegating domain, make up the name of the subzone to which the delegation refers.
 For example, if the delegating zone is `example.`, then a delegation to subzone `customer.example.` is realized by a IDELEG RRset at the name `customer._deleg.example.` in the parent zone.
@@ -278,10 +278,10 @@ customer1._deleg  IN  IDELEG 1 ( ns.customer1
     customer3._deleg  IN  CNAME _dns.ns.operator1
 {: #outsourced-cname title="Outsourced with CNAME"}
 
-Instead of using CNAME, the outsourcing could also been accomplished with a IDELEG RRset with a single IDELEG RR in AliasMode.
+Instead of using CNAME, the outsourcing could also have been accomplished with an IDELEG RRset with a single IDELEG RR in AliasMode.
 The configuration below is operationally equivalent to the CNAME configuration above.
-It is RECOMMENDED to use a CNAME over a IDELEG RRset with a single IDELEG RR in AliasMode ({{Section 10.2 of !RFC9460}}).
-Note that a IDELEG RRset refers with TargetName to an DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target IDELEG RRset (or CNAME) which may have an `_dns` prefix.
+It is RECOMMENDED to use a CNAME over an IDELEG RRset with a single IDELEG RR in AliasMode ({{Section 10.2 of !RFC9460}}).
+Note that an IDELEG RRset refers with TargetName to a DNS service, which will be looked up using Port Prefix Naming {{Section 3 of RFC9461}}, but that CNAME refers to the domain name of the target IDELEG RRset (or CNAME) which may have a `_dns` prefix.
 
     $ORIGIN example.
     @                 IN  SOA    ns zonemaster ...
@@ -306,7 +306,7 @@ The operator IDELEG RRset could for example be:
                       IN  A      192.0.2.2
 {: #operator-zone title="Operator zone"}
 
-### DNSSEC signed name servers within the subzone
+### DNSSEC-signed name servers within the subzone
 
 ~~~
 $ORIGIN
@@ -355,13 +355,13 @@ customer7         IN  NS     ns.customer5
                   IN  NSEC   example. NS DS RRSIG NSEC
                   IN  RRSIG  NSEC ...
 ~~~
-{: #dnssec-zone title="DNSSEC signed incremental deleg zone"}
+{: #dnssec-zone title="DNSSEC-signed incremental deleg zone"}
 
 `customer5.example.` is delegated to in an extensible way and `customer6.example.` is delegated only in a legacy way.
 `customer7.example.`'s delegation is outsourced to customer5's delegation.
 
 The delegation signals that the authoritative name server supports DoH.
-`customer5.example.`, `customer6.example.` and `example.` are all DNSSEC signed.
+`customer5.example.`, `customer6.example.` and `example.` are all DNSSEC-signed.
 The DNSSEC authentication chain links from `example.` to `customer5.example.` in the for DNSSEC conventional way with the signed `customer5.example. DS` RRset in the `example.` zone.
 Also, `customer6.example.` is linked to from `example.` with the signed `customer6.example. DS` RRset in the `example.` zone.
 
@@ -389,10 +389,10 @@ The incremental deleg query name is constructed by concatenating the first label
 For example if the triggering query is `www.customer.example.` and the target zone `example.`, then the incremental deleg query name is `customer._deleg.example.`
 For another example, if the triggering query is `www.faculty.university.example.` and the target zone `example.` then the incremental deleg name is `university._deleg.example.`
 
-Normal DNAME, CNAME and IDELEG in AliasMode processing should happen as before, though note that when following a IDELEG RR in AliasMode the target RR type is SVCB (see {{the-deleg-resource-record-type}}).
+Normal DNAME, CNAME and IDELEG in AliasMode processing should happen as before, though note that when following an IDELEG RR in AliasMode the target RR type is SVCB (see {{the-deleg-resource-record-type}}).
 The eventual incremental deleg query response, after following all redirections caused by DNAME, CNAME and AliasMode IDELEG RRs, has three possible outcomes:
 
-1. A IDELEG RRset in ServiceMode is returned in the response's answer section containing the delegation for the subzone.
+1. An IDELEG RRset in ServiceMode is returned in the response's answer section containing the delegation for the subzone.
 
    The IDELEG RRs in the RRset MUST be used to follow the referral.
    The TargetName data field in the IDELEG RRs in the RRset MUST be used as the names for the name servers to contact for the subzone, and the ipv4hint and ipv6hint parameters MUST be used as the IP addresses for the TargetName in the same IDELEG RR.
@@ -442,7 +442,7 @@ The testing query can have three possible outcomes:
    The existence of the `_deleg` name MUST be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
    For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional incremental deleg queries as described in {{recursive-resolver-behavior}}.
 
-3. The `_deleg` label does exist within the zone, but is an delegation.
+3. The `_deleg` label does exist within the zone, but is a delegation.
    A NOERROR legacy referral response is returned with an NS RRset in the authority section.
 
    The resolver MUST record that the zone does not have valid incremental delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries.
@@ -563,10 +563,10 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 
 The incremental delegation of `customer7.example.` is aliased to the one that is also used by `customer5.example.`
 Since both delegations are in the same zone, the authoritative name server for `example.` returns both the CNAME realising the alias, as well as the IDELEG RRset which is the target of the alias in {{alias-response}}.
-In other cases an returned CNAME or IDELEG RR in AliasMode may need further chasing by the resolver.
+In other cases a returned CNAME or IDELEG RR in AliasMode may need further chasing by the resolver.
 <!-- TODO: Add an AliasMode referral without expansion within the zone -->
 
-With unsigned zones, only if an incremental deleg delegation exists, the IDELEG RRset (or CNAME) will be present in the authority section of referral responses.
+With unsigned zones, only if an incremental delegation exists, the IDELEG RRset (or CNAME) will be present in the authority section of referral responses.
 <!-- TODO: Add a referral response for an unsigned zone -->
 If the incremental deleg does not exist, then it is simply absent from the authority section and the referral response is indistinguishable from an non supportive authoritative.
 <!-- TODO: Add a non incremental deleg referral response for an unsigned zone -->
@@ -579,7 +579,7 @@ For an unsigned zone, an incremental deleg supporting authoritative cannot retur
 If it is known that an authoritative name server supports incremental deleg, then no direct queries for the incremental delegation need to be sent in parallel to the legacy delegation query.
 A resolver SHOULD register that an authoritative name server supports incremental deleg when the authority section, of the returned referral responses from that authoritative name server, contains incremental delegation information.
 
-When the authority section of a referral response contains a IDELEG RRset or a CNAME on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such IDELEG or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that IDELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+When the authority section of a referral response contains an IDELEG RRset or a CNAME record on the incremental delegation name, or valid NSEC(3) RRs showing the non-existence of such an IDELEG or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports incremental deleg for the duration indicated by the TTL for that IDELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Subsequent queries SHOULD NOT include incremental deleg queries, as described in {{recursive-resolver-behavior}}, to be send in parallel for the duration support for incremental deleg is registered for the authoritative name server.
 
 For example, in {{deleg-response}}, the IDELEG RRset at the incremental delegation point has TTL 3600.
@@ -588,21 +588,21 @@ All subsequent queries to that authoritative name server SHOULD NOT include incr
 
 If the authority section contains more than one RRset making up the incremental delegation, then the RRset with the longest TTL MUST be taken to determine the duration for which incremental deleg support is registered.
 
-For example, in {{alias-response}}, both a CNAME and a IDELEG RRset for the incremental delegation are included in the authority section.
+For example, in {{alias-response}}, both a CNAME and an IDELEG RRset for the incremental delegation are included in the authority section.
 The longest TTL must be taken for incremental support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.
 
-With DNSSEC signed zones, support is apparent with all referral responses.
+With DNSSEC-signed zones, support is apparent with all referral responses.
 With unsigned zones, support is apparent only from referral responses for which an incremental delegation exists, unless the zone has the Resource Record `*._deleg IN IDELEG 0 .` provisioned (see {{extra-optimized (Extra optimized implementation)}}).
 
-If the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC signed zone is being served, then all referrals SHOULD contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
+If the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC-signed zone is being served, then all referrals SHOULD contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.
 If a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver MAY register that authoritative server does not support incremental deleg and MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).
 
 # Extra optimized implementation {#extra-optimized}
 
-A IDELEG RRset on an incremental delegation point, with a IDELEG RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
+An IDELEG RRset on an incremental delegation point, with an IDELEG RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
 All service parameters for such AliasMode (aliasing to the root) IDELEG RRs on the incremental delegation point, MUST be ignored.
 
-For example, such a IDELEG RRset registered on the wildcard below the `_deleg` label on the apex of a zone, can signal that legacy DNS referrals MUST be used for both signed and *unsigned* zones:
+For example, such an IDELEG RRset registered on the wildcard below the `_deleg` label on the apex of a zone, can signal that legacy DNS referrals MUST be used for both signed and *unsigned* zones:
 
 ~~~
 $ORIGIN example.
@@ -616,18 +616,18 @@ customer3._deleg  IN  CNAME _dns.ns.operator1
 ~~~
 {: #wildcard-deleg title="Wildcard incremental deleg to control duration of detected support"}
 
-Resolvers SHOULD register that an authoritative name server supports incremental deleg, if such a IDELEG RRset is returned in the authority section of referral responses, for the duration of the TTL if the IDELEG RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+Resolvers SHOULD register that an authoritative name server supports incremental deleg, if such an IDELEG RRset is returned in the authority section of referral responses, for the duration of the TTL if the IDELEG RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Note that this will also be included in referral responses for unsigned zones, which would otherwise not have signalling of incremental deleg support by the authoritative name server.
 Also, signed zones need fewer RRs to indicate that no incremental delegation exists.
-The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`), so only one additional NSEC(3) is needed to show non-existence of the queried for name below the closest encloser.
+The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`), so only one additional NSEC(3) is needed to show non-existence of the queried-for name below the closest encloser.
 
 This method of signalling that the legacy delegation MUST be used, is RECOMMENDED.
 
 # Priming queries {#priming-queries}
 
 Some zones, such as the root zone, are targeted directly from hints files.
-Information about which authoritative name servers and with capabilities, MAY be provided in a IDELEG RRset directly at the `_deleg` label under the apex of the zone.
-Priming queries from a incremental deleg supporting resolver, MUST send an `_deleg.<apex> IDELEG` query in parallel to the legacy `<apex> NS` query and process the content as if it was found through an incremental referral response.
+Information about which authoritative name servers and with capabilities, MAY be provided in an IDELEG RRset directly at the `_deleg` label under the apex of the zone.
+Priming queries from an incremental deleg supporting resolver, MUST send an `_deleg.<apex> IDELEG` query in parallel to the legacy `<apex> NS` query and process the content as if it was found through an incremental referral response.
 
 # How does incremental deleg meet the requirements
 
@@ -754,7 +754,7 @@ auth support:
 : Whether or not the `_deleg` label is present in the target zone (and thus incremental delegations)
 
 On the right side of the table are the extra queries, to be sent in parallel with the legacy query.
-The `_deleg` presence test query (most right column) only needs to be sent to unsigned target zones, because its non-existence will be show in the NSEC(3) records showing the non-existence of the incremental delegation (second from right column).
+The `_deleg` presence test query (most right column) only needs to be sent to unsigned target zones, because its non-existence will be shown in the NSEC(3) records showing the non-existence of the incremental delegation (second from right column).
 
 If the query name is the same as the apex of the target zone, no extra queries need to be sent (Row 1).
 If the `_deleg` label is known not to exist in the target zone (Row 2) or if the target name server is known to support incremental deleg (Row 3), no extra queries need to be sent.
@@ -765,7 +765,7 @@ If the target zone is unsigned, presence of the `_deleg` label needs to be teste
 
 ### The delegation point
 
-Legacy delegations are realized by an non-authoritative NS RRset at the name of the delegated zone, but in the delegating zone (the parent side of the zone cut).
+Legacy delegations are realized by a non-authoritative NS RRset at the name of the delegated zone, but in the delegating zone (the parent side of the zone cut).
 However, there is another NS RRset by the same name, but now authoritative, in the delegated zone (the child side of the zone cut).
 Some resolvers prefer to use the authoritative child side NS RRset (see {{Section 5.4.1 of !RFC2181}}) for contacting the authoritative name servers of the delegated zone, and will use it to reach the zone if they encounter the child side NS RRset authoritatively in responses.
 Some resolvers query explicitly for the authoritative child side NS RRset {{I-D.ietf-dnsop-ns-revalidation}}.
@@ -775,14 +775,14 @@ Incremental deleg eliminates these issues by placing the referral information, n
 
 Having the referral information at an authoritative location brings clarity.
 There can be no misinterpretation about who is providing the referral (the delegating zone, or the delegated zone).
-In an future world where all delegations would be incremental delegations, all names will only be authoritative data, derivable from the name, for resolvers and other applications alike.
+In a future world where all delegations would be incremental delegations, all names will only be authoritative data, derivable from the name, for resolvers and other applications alike.
 
 ### Legacy referrals
 
 Resolvers that support only legacy referrals will be on the internet for the foreseeable future, therefore a legacy referral MUST always be provided alongside the incremental referral.
 
 Legacy referrals can be deduced from the incremental delegation.
-An authoritative could (in some cases) synthesize the legacy referral from the incremental delegation, however this is NOT RECOMMENDED.
+An authoritative name server could (in some cases) synthesize the legacy referral from the incremental delegation, however this is NOT RECOMMENDED.
 It introduces an element of dynamism which is at the time of writing not part of authoritative name server behavior specification.
 Moreover, authoritative name servers could transfer the zone data to non incremental deleg supporting and aware name servers, which would not have this feature.
 We leave provisioning of legacy referrals from incremental delegations (for now) out of scope for this document.
@@ -840,7 +840,7 @@ We are planning to provide information about the deployment, including what soft
 
 # Security Considerations
 
-Incremental deleg moves the location of  referral information to a unique  location that currently exists. However, as this is a new approach, thought must be given to usage.   There must be some checks to ensure that the registering a _deleg subdomain happens at the time the domain is provisioned. The same care needs to be addressed when a domain is deprovisioned that the _deleg is removed.  This is similar to what happens to NS A records deployed in parent zones to act as Glue.
+Incremental deleg moves the location of  referral information to a unique  location that currently exists. However, as this is a new approach, thought must be given to usage.   There must be some checks to ensure that the registering a _deleg subdomain happens at the time the domain is provisioned. The same care needs to be addressed when a domain is de-provisioned that the _deleg is removed.  This is similar to what happens to A/AAAA glue records for NS records deployed in parent zones.
 
 While the recommendation is to deploy DNSSEC with incremental deleg, it is not mandatory.  However, using incremental deleg with unsigned zones can create possibilities of domain hijackings. This could  be hard to detect when not speaking directly to the authoritative name server.
 This risk of domain hijacking is not expected to increase significantly compared to the situation without incremental deleg.
