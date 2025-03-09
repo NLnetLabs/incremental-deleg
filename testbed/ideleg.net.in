@@ -1,0 +1,51 @@
+$ORIGIN ideleg.net.
+$TTL 3600
+@                SOA @ wouter.petri.os3.nl. (
+                                 2025030601 ; serial
+                                 1800       ; refresh
+                                 900        ; retry
+                                 604800     ; expire
+                                 3600       ; minimum
+                                 )
+
+                 NS     @
+                 NS     ideleg.nlnetlabs.nl.
+                 A      {% ideleg.ipv4 %}
+                 AAAA   {% ideleg.ipv6 %}
+
+_deleg           IDELEG 1 @ ipv4hint={% ideleg.ipv4 %} ipv6hint={% ideleg.ipv6 %}
+_deleg           IDELEG 2 ideleg.nlnetlabs.nl. ipv4hint={% nlnetlabs.ipv4 %} ipv6hint={% nlnetlabs.ipv6 %}
+*._deleg         IDELEG 0 .
+
+supporting       A      {% supporting.ipv4 %}
+                 AAAA   {% supporting.ipv6 %}
+legacy           A      {% legacy.ipv4 %}
+                 AAAA   {% legacy.ipv6 %}
+resolver         A      {% resolver.ipv4 %}
+                 AAAA   {% resolver.ipv6 %}
+
+;; IDELEG delegations
+customer1._deleg IDELEG 10 supporting   ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+customer2._deleg IDELEG 10 ns.customer2 ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+customer3._deleg IDELEG 10 supporting   ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+                 IDELEG 20 legacy  ipv4hint={% legacy.ipv4 %}  ipv6hint={% legacy.ipv6 %}
+customer4._deleg IDELEG 0 ideleg.customer2
+nsec3            IDELEG 10 supporting   ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+
+;; Legacy delegations
+customer1        NS     supporting
+                 DS     27601 13 2 460999b41cfc231791b07ddb783e1c518fae9263ffa45beb9654aa238b019aba
+customer2        NS     ns.customer2
+                 DS     22597 13 2 599803e763644df9b2af3dc5052761061cc6c997af27c5e3ec80589b0511eb2f
+ns.customer2     A      {% supporting.ipv4 %}
+                 AAAA   {% supporting.ipv6 %}
+customer3        NS     supporting
+                 NS     legacy
+		 DS     62671 13 2 836c38badf9480442bb490e3a6c5a2e58c856047e7515dc83a4fe94412789a57
+; Assuming ideleg.customer2.ideleg.net. IDELEG 10 ns.customer2.ideleg.net. ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+customer4        NS     ns.customer2
+                 DS     64041 13 2 981aeeb8af09aafe018286bb30606a1c27ce5cab4883f2540863c2a25d05e504
+;customer5        NS     legacy
+nsec3            NS     supporting
+nsec3            DS     52286 13 2 2f9e78cb6df581a4f2272e817175038dbdca081513f4824c1588f01f694c912c
+

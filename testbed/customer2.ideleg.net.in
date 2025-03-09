@@ -1,0 +1,21 @@
+$ORIGIN customer2.ideleg.net.
+$TTL 3600
+@                SOA supporting.ideleg.net. wouter.petri.os3.nl. (
+                                 2025030900 ; serial
+                                 1800       ; refresh
+                                 900        ; retry
+                                 604800     ; expire
+                                 3600       ; minimum
+                                 )
+
+                 NS     ns
+                 A      {% ideleg.ipv4 %}
+                 AAAA   {% ideleg.ipv6 %}
+		 TXT    "This is customer2.ideleg.net."
+ns               A      {% supporting.ipv4 %}
+                 AAAA   {% supporting.ipv6 %}
+
+ideleg           IDELEG 10 ns ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+;                 SVCB   10 ns ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+_dns.ideleg      IDELEG 10 ns ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+;                 SVCB   10 ns ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}

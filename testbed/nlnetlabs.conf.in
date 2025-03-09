@@ -1,0 +1,32 @@
+server:
+	server-count: 2
+	username: nsd
+	answer-cookie: yes
+	ip-address: 0.0.0.0
+	ip-address: 0.0.0.0@853
+	ip-address: ::0
+	ip-address: ::0@853
+
+	tls-port: 853
+	tls-service-key: /etc/letsencrypt/live/ideleg.nlnetlabs.nl/privkey.pem
+	tls-service-pem: /etc/letsencrypt/live/ideleg.nlnetlabs.nl/fullchain.pem
+
+remote-control:
+	control-enable: yes
+
+zone:
+	name: "ideleg.net"
+	zonefile: "%s.signed"
+	allow-notify: {% ideleg.ipv4 %} NOKEY
+	allow-notify: {% ideleg.ipv6 %} NOKEY
+	request-xfr: {% ideleg.ipv4 %} NOKEY
+	request-xfr: {% ideleg.ipv6 %} NOKEY
+
+zone:
+	name: "customer3.nsec3.ideleg.net"
+	zonefile: "%s.signed"
+	provide-xfr: 0.0.0.0/0 NOKEY
+	provide-xfr: ::0/0 NOKEY
+	notify: {% legacy.ipv4 %} NOKEY
+	notify: {% legacy.ipv6 %} NOKEY
+

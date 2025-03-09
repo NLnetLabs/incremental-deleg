@@ -1,0 +1,34 @@
+$ORIGIN nsec3.ideleg.net.
+$TTL 3600
+@                SOA   supporting.ideleg.net. wouter.petri.os3.nl. (
+                                 2025030707 ; serial
+                                 1800       ; refresh
+                                 900        ; retry
+                                 604800     ; expire
+                                 3600       ; minimum
+                                 )
+                 NS     @
+
+_deleg           IDELEG 1 supporting.ideleg.net. ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+*._deleg         IDELEG 0 .
+
+;; IDELEG delegations
+customer1._deleg IDELEG 10 legacy.ideleg.net. ipv4hint={% legacy.ipv4 %} ipv6hint={% legacy.ipv6 %}
+customer2._deleg IDELEG 10 ns.customer2 
+customer3._deleg IDELEG 10 ideleg.nlnetlabs.nl. ipv4hint={% nlnetlabs.ipv4 %} ipv6hint={% nlnetlabs.ipv6 %}
+                 IDELEG 20 legacy.ideleg.net. ipv4hint={% legacy.ipv4 %} ipv6hint={% legacy.ipv6 %}
+customer4._deleg IDELEG 0 ideleg.customer2
+
+;; Legacy delegations
+customer1        NS     legacy.ideleg.net.
+                 DS     6616 13 2 de044b0fc7001d393446f7fee4cc79dcc3ceb1bccef2095148a4c70f5b23a869
+customer2        NS     ns.customer2
+                 DS     39656 13 2 ccfa2e32d6323fa141d18eab5390978558fc828f5cf40c6ee16e3bc4802a32f3
+ns.customer2     A      {% legacy.ipv4 %}
+                 AAAA   {% legacy.ipv6 %}
+customer3        NS     ideleg.nlnetlabs.nl.
+                 NS     legacy.ideleg.net.
+                 DS     11090 13 2 a8c48a81504db0e781dc682b399949b10f7248d587deaa8df4faed2c9ec54927
+; Assuming ideleg.customer2.nsec3.ideleg.net. IDELEG 10 ns.customer2.ideleg.net. ipv4hint={% ideleg.ipv4 %} ipv6hint={% ideleg.ipv6 %}
+customer4        NS     ns.customer2
+                 DS     24809 13 2 49996ff66c0e2e456880ca7f1a95c0a5174db0be5082bc8abbd62cc437ac68df

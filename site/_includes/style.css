@@ -1,0 +1,80 @@
+
+@media screen  {
+  body {
+    max-width: 1000px;
+  }
+}
+
+
+a[href].current {
+	color: red;
+	font-weight: bold;
+}
+/* The sidebar menu */
+.sidenav {
+  /* height: 100%; Full-height: remove this if you want "auto" height */
+  width: 160px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 20px; /* Stay at the top */
+  left: 10px;
+  background-color: #eee; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.sidenav li {
+  /* padding: 6px 8px 6px 16px; */
+  font-family: "Lato", sans-serif;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: normal;
+  padding: 4px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+   color: #2196F3;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #064579;
+  text-decoration: underline;
+}
+.sidenav a.current:hover {
+  color: #660000;
+}
+
+/* Style page content */
+.main {
+  margin-left: 180px; /* Same as the width of the sidebar */
+  padding: 0px 10px;
+}
+
+.main table {
+	border-collapse: collapse;
+}
+.main td {
+	padding: 5pt;
+}
+.main th {
+	border-bottom: 1px solid black;
+}
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+/*
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+*/
+
+.sidenav ul {
+	padding-left: 20px;
+	margin: 0;
+}
+.sidenav ul li {
+	margin: 0;
+}
+

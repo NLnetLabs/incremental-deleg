@@ -1,0 +1,19 @@
+- title: IDELEG testbed
+  url: /
+- title: Software support
+  subnav:
+    - title: ldns
+      url: /ldns.html
+    - title: NSD
+      url: /nsd.html
+    - title: Unbound
+      url: /unbound.html
+- title: Internet draft
+  subnav:
+    - title: Latest
+      url: /draft-homburg-deleg-incremental-deleg-latest.html
+    - title: Editors copy
+      url: /draft-homburg-deleg-incremental-deleg.html
+    - title: Incr. DNSSEC
+      url: /draft-homburg-deleg-incremental-dnssec-latest.html
+

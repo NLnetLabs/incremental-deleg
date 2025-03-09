@@ -1,0 +1,17 @@
+$ORIGIN customer4.nsec3.ideleg.net.
+$TTL 3600
+@                SOA supporting.ideleg.net. wouter.petri.os3.nl. (
+                                 2025030900 ; serial
+                                 1800       ; refresh
+                                 900        ; retry
+                                 604800     ; expire
+                                 3600       ; minimum
+                                 )
+
+                 NS     ns.customer2.nsec3.ideleg.net.
+                 A      {% ideleg.ipv4 %}
+                 AAAA   {% ideleg.ipv6 %}
+		 TXT    "This is customer4.nsec3.ideleg.net."
+_deleg           IDELEG 0 ideleg.customer2.nsec3.ideleg.net.
+*._deleg         IDELEG 0 .
+
