@@ -377,16 +377,16 @@ In {{presence}}, an optimization is presented that will reduce the number of (pa
 
 ## Recursive Resolver behavior {#recursive-resolver-behavior}
 
-If the triggering query name is the same as the name of the target zone apex, then no further delegation will occur, and resolution will complete.
-No special behavior or processing is needed.
+As part of the processing a recursive resolver does, it learns where the zone boundaries are in the DNS name tree.
+If the triggering query name is already known to be the apex of a zone, then no further delegation point probing will need to be done for this name (subject to the TTL of this information).
 
-Otherwise, the triggering query is below the target zone apex and a delegation may exist in the target zone.
+Otherwise, the triggering query is below the target zone apex and it is unknown whether the triggering query name itself is the name of a delegation or zone.
 In this case two parallel queries MUST be sent.
 One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query {{!RFC9156}}), and one *incremental deleg query* with query type IDELEG.
 
 The incremental deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a `_deleg` label and the name of the target zone.
 For example if the triggering query is `www.customer.example.` and the target zone `example.`, then the incremental deleg query name is `customer._deleg.example.`
-For another example, if the triggering query is `www.faculty.university.example.` and the target zone `example.` then the incremental deleg name is `university._deleg.example.`
+For another example, if the triggering query is `www.faculty.university.example.` and the target zone `faculty.university.example.` then the incremental deleg name is `www._deleg.faculty.university.example.`
 
 Normal DNAME, CNAME and IDELEG in AliasMode processing should happen as before, though note that when following an IDELEG RR in AliasMode the target RR type is SVCB (see {{the-deleg-resource-record-type}}).
 The eventual incremental deleg query response, after following all redirections caused by DNAME, CNAME and AliasMode IDELEG RRs, has three possible outcomes:
