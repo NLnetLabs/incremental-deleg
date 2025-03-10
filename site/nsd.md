@@ -86,7 +86,7 @@ if test -n "/var/run"; then ./install-sh -c -d /var/run; fi
 ```
 
 This version of NSD will include the IDELEG delegation in the referral responses.
-For an IDELEG supporting NSD is running on the name servers serving the ideleg.net zone.
+An IDELEG supporting NSD is running on the name servers serving the ideleg.net zone.
 For example:
 
 ```
