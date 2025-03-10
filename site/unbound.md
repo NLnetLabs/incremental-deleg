@@ -16,7 +16,7 @@ Below is shown how to install those prerequisites on an Ubuntu Linux machine:
 ~$ sudo apt install git build-essential autoconf make libevent-dev libssl-dev libexpat1-dev flex bison
 ```
 
-Then, clone and initialize the repository, do:
+Then, to clone and initialize the repository, do:
 
 ```
 ~$ git clone https://github.com/NLnetLabs/unbound.git

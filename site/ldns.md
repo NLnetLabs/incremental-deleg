@@ -13,7 +13,7 @@ Below is shown how to install those prerequisites on an Ubuntu Linux machine:
 ~$ sudo apt install git build-essential libtool autoconf make libssl-dev
 ```
 
-Then, clone the repository, checkout the `features/ideleg` branch and initialize the repository:
+Then, to clone the repository, checkout the `features/ideleg` branch and initialize the repository:
 
 ```
 ~$ git clone https://github.com/NLnetLabs/ldns

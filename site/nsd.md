@@ -4,7 +4,7 @@ layout: default
 permalink: /nsd.html
 ---
 
-The [NSD authoritative name server](https://nlnetlabs.nl/projects/nsd/about/) software has been extended with support for IDELEG, by Wouter Petri as part of research project for the Security and Network Engineering master program of the University of Amsterdam.
+The [NSD authoritative name server](https://nlnetlabs.nl/projects/nsd/about/) software has been extended with support for IDELEG, by Wouter Petri as part of a research project for the Security and Network Engineering master program of the University of Amsterdam.
 For the full report, see: [Extensible delegations in authoritative nameservers](https://nlnetlabs.nl/downloads/publications/extensible-delegations-in-authoritative-nameservers_2025-02-09.pdf), Wouter Petri, University of Amsterdam, February 2025.
 
 The source code for Wouter's version of NSD is available in the [`master`](https://github.com/WP-Official/nsd/tree/master) branch of the `WP-Official/nsd` github repository.
@@ -16,7 +16,7 @@ Below is shown how to install those prerequisites on an Ubuntu Linux machine:
 ~$ sudo apt install git build-essential autoconf make cmake libevent-dev libssl-dev flex bison
 ```
 
-Then, clone and initialize the repository, do:
+Then, to clone and initialize the repository, do:
 
 ```
 ~$ git clone https://github.com/WP-Official/nsd.git
