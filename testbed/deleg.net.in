@@ -1,0 +1,44 @@
+$ORIGIN deleg.net.
+$TTL 3600
+@                SOA @ willem.nlnetlabs.nl. (
+                                 2025030601 ; serial
+                                 1800       ; refresh
+                                 900        ; retry
+                                 604800     ; expire
+                                 3600       ; minimum
+                                 )
+
+                 NS     @
+                 NS     deleg.nlnetlabs.nl.
+                 A      {% deleg.ipv4 %}
+                 AAAA   {% deleg.ipv6 %}
+
+legacy           A      {% legacy.ipv4 %}
+                 AAAA   {% legacy.ipv6 %}
+supporting       A      {% dsupporting.ipv4 %}
+                 AAAA   {% dsupporting.ipv6 %}
+
+;; Legacy delegations
+customer1        NS     legacy
+                 DS     27601 13 2 460999b41cfc231791b07ddb783e1c518fae9263ffa45beb9654aa238b019aba
+		 DELEG  10 legacy Glue4={% legacy.ipv4 %} Glue6={% legacy.ipv6 %}
+customer2        NS     ns.customer2
+                 DS     22597 13 2 599803e763644df9b2af3dc5052761061cc6c997af27c5e3ec80589b0511eb2f
+                 DELEG  10 ns.customer2 Glue4={% legacy.ipv4 %} Glue6={% legacy.ipv6 %}
+ns.customer2     A      {% legacy.ipv4 %}
+                 AAAA   {% legacy.ipv6 %}
+;customer3        NS     legacy
+;                 NS     legacy
+;		 DS     62671 13 2 836c38badf9480442bb490e3a6c5a2e58c856047e7515dc83a4fe94412789a57
+;                 DELEG  10 legacy  Glue4={% legacy.ipv4 %} Glue6={% legacy.ipv6 %}
+;                 DELEG  20 legacy  Glue4={% legacy.ipv4 %}  Glue6={% legacy.ipv6 %}
+
+; Assuming deleg.customer2.deleg.net. IDELEG 10 ns.customer2.deleg.net. Glue4={% supporting.ipv4 %} Glue6={% supporting.ipv6 %}
+customer4        NS     ns.customer2
+                 DS     64041 13 2 981aeeb8af09aafe018286bb30606a1c27ce5cab4883f2540863c2a25d05e504
+                 DELEG  0 deleg.customer2
+;customer5        NS     legacy
+nsec3            NS     supporting
+nsec3            DS     13372 13 2 6aea4548fb455f48cdf322af3cfffb308aa93fc619aff04d48d2ba39b790d84d
+nsec3            DELEG  10 dsupporting   Glue4={% dsupporting.ipv4 %} Glue6={% dsupporting.ipv6 %}
+

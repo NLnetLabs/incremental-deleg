@@ -1,4 +1,4 @@
-ZONES = ideleg.net nsec3.ideleg.net customer1.ideleg.net customer1.nsec3.ideleg.net customer2.ideleg.net customer2.nsec3.ideleg.net customer3.ideleg.net customer3.nsec3.ideleg.net customer4.ideleg.net customer4.nsec3.ideleg.net
+ZONES = ideleg.net nsec3.ideleg.net customer1.ideleg.net customer1.nsec3.ideleg.net customer2.ideleg.net customer2.nsec3.ideleg.net customer3.ideleg.net customer3.nsec3.ideleg.net customer4.ideleg.net customer4.nsec3.ideleg.net deleg.net nsec3.deleg.net
 
 
 all: $(ZONES:=.signed)
@@ -58,6 +58,19 @@ customer4.nsec3.ideleg.net.signed: customer4.nsec3.ideleg.net
 	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+24809\
 	| ldns-read-zone -u IDELEG > $@.new \
 	&& mv $@.new $@
+
+deleg.net.signed: deleg.net
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+54409 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+nsec3.deleg.net.signed: nsec3.deleg.net
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+13372 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
 
 sign:
 	touch $(ZONES)
