@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-30T00:26:50.291886+00:00",
+  "timestamp": "2025-03-11T00:29:12.503128+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -55,15 +55,15 @@
       "id": "I_kwDOMN-KqM6b4tJm",
       "title": "\"Incremental deleg\" vs \"Incremental delegation\"",
       "url": "https://github.com/NLnetLabs/incremental-deleg/issues/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "moonshiner",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "I've been reading through the document more carefully and I do like this. \r\nBut I keep bumping against how similar these terms are.  have you considered calling the former \"ideleg\" ? \r\n\r\nalso \"Delegation\" - does the 9499 definition not as good as the one in STD13 for Legacy Delegations?\r\n\r\nI have some minor edits i will send along, but I also have some other thoughts - like moving the motivation (1.2->1.4) out of the intro into its own section\r\n\r\nmore as I do some experiments\r\n\r\n",
       "createdAt": "2024-10-25T23:13:11Z",
-      "updatedAt": "2025-01-17T07:53:49Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-03T07:44:02Z",
+      "closedAt": "2025-03-03T07:44:01Z",
       "comments": [
         {
           "author": "moonshiner",
@@ -78,8 +78,107 @@
           "body": "For legacy delegations, the 9499 definition does not make it clear that we only refer to STD13. The 9499 is wide enough that it may include deleg.\n\nThe naming is very annoying. And referring to the other proposal as the DELEG type proposal also doesn't work anymore. Is there confusion between 'Incremental deleg' and 'Incremental delegation'? Usually it is quite clear from the context was is meant.",
           "createdAt": "2025-01-17T07:53:48Z",
           "updatedAt": "2025-01-17T07:53:48Z"
+        },
+        {
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "the more I thought about this the more I was wrong.  ",
+          "createdAt": "2025-03-03T07:44:01Z",
+          "updatedAt": "2025-03-03T07:44:01Z"
         }
       ]
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOMN-KqM6sE0Uj",
+      "title": "Positive response to _deleg probing query",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/issues/5",
+      "state": "CLOSED",
+      "author": "Philip-NLnetLabs",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "The current text is:\n3. The `_deleg` label does exist within the zone and contains data. \n   A NOERROR response is returned with an A RRset in the answer section.\n\n   The resolver MUST record that the `_deleg` label is known to be present for a duration indicated by A RRset's TTL value, adjusted to the resolver's TTL boundaries, for example by caching the RRset.\n   For the period any RRset at the `_deleg` label is cached, the label is \"known to be present\" and the resolver MUST send additional incremental deleg queries as described in TODO.\n\nThis ia bit weird. It introduces a signalling mechanism based on A records. It is not clear why the A record would be there. I think we can either delete this and always use the SOA minimum or use an IDELEG record.",
+      "createdAt": "2025-02-28T11:47:25Z",
+      "updatedAt": "2025-03-03T14:42:22Z",
+      "closedAt": "2025-03-03T14:42:22Z",
+      "comments": [
+        {
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I read that as referencing the statement about this:\n\n\"The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type A.\"\n\nPerhaps it should be expanded to reference the TTL of the RRset which is returned from the upstream query?  or something about the \"minimum\" of the target zone?",
+          "createdAt": "2025-02-28T12:43:01Z",
+          "updatedAt": "2025-02-28T12:43:01Z"
+        },
+        {
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "body": "My reasoning is that the probe should be able to use almost any type. 'A' would be fine as an example. But if we later use the TTL of any response then the A query could result in zones containing dummy A records just to send a TTL, which is not ideal.\n\nThe easiest way out seems to be to use the SOA minimum even if a positive answer arrives.",
+          "createdAt": "2025-02-28T12:48:28Z",
+          "updatedAt": "2025-02-28T12:48:28Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "body": "> I think we can either delete this and always use the SOA minimum or use an IDELEG record.\n\nThe disadvantage of getting the TTL from a NODATA response is that the the zone-owner cannot tune how long to cache presence of _deleg at resolvers (at least not independent  from how long NXDOMAIN and NODATA are cached)\n\nThe IDELEG at the _deleg label was reserved for priming queries I believe...",
+          "createdAt": "2025-03-02T16:01:19Z",
+          "updatedAt": "2025-03-02T16:01:19Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "body": "Resolved with the merge of PR #12 ",
+          "createdAt": "2025-03-03T14:42:22Z",
+          "updatedAt": "2025-03-03T14:42:22Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOMN-KqM6sE-6W",
+      "title": "5.2.  Resolver behavior with authoritative name server support",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/issues/6",
+      "state": "CLOSED",
+      "author": "Philip-NLnetLabs",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "I see two issues here:\n1) for an unsigned zone, a deleg supporting authoritative cannot return that an incremental delegation is absent. The section needs additional text for that.\n\n2) A logical authoritative server can be a mix of server with and without support for incremental deleg. So the text\n   If the resolver knows that the authoritative name server supports\n   incremental deleg, _and_ a DNSSEC signed zone is being served, then\n   all referrals MUST contain either an incremental delegation, or\n   NSEC(3) records showing that the delegation does not exist. \n\nis overly restrictive.",
+      "createdAt": "2025-02-28T12:07:46Z",
+      "updatedAt": "2025-03-03T14:41:59Z",
+      "closedAt": "2025-03-03T14:41:58Z",
+      "comments": [
+        {
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "\n1.  stop the first sentence after \"all referral responses\".  For unsigned zones, it sounds similar to the case of Wildcard incremental deleg in the subsection below.\n\n2. A logical authoritative server can be a mix of server with and without support for incremental deleg AND be a mix of serving signed zones and unsigned zones. From reading the wildcard and alias mode sections, they appear to return the DELEG RRSET of the authoritative?",
+          "createdAt": "2025-02-28T13:04:58Z",
+          "updatedAt": "2025-02-28T13:04:58Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "body": "Resolved with the merge of PR #9 ",
+          "createdAt": "2025-03-03T14:41:58Z",
+          "updatedAt": "2025-03-03T14:41:58Z"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOMN-KqM6tJ8xA",
+      "title": "Havard Eidnes comments",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/issues/17",
+      "state": "CLOSED",
+      "author": "moonshiner",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\nIn section 4.1 it is written:\n\n   If the triggering query name is the same as the name of the\n   target zone apex, then no further delegation will occur, and\n   resolution will complete. No special behavior or processing is\n   needed.\n\nI don't quite understand.  Why would whether the query is for a zone\napex or not make any difference in recursive resolver behaviour?\nShould not the recursive resolver in both cases get hold of the\npublishing name servers for the zone, and get an answer to the\ntriggering query from one of them?  In both cases, the queried-for\ninformation is authoritative in the delegated zone.\n\nIf I'm right, this could be a potential for simplification, by\ngetting rid of the distinction of whether a query is for a zone apex\nor not.\n\nBesides, how can a newly started recursive resolver ahead of time\nknow the zone structure of the name tree?  In short: it can't.\n\nSection 4.1 also contains:\n\n   The incremental deleg query name is constructed by concatenating\n   the first label below the part that the triggering query name has\n   in common with the target zone, a _deleg label and the name of\n   the target zone. For example if the triggering query is\n   www.customer.example. and the target zone example., then the\n   incremental deleg query name is customer._deleg.example. For\n   another example, if the triggering query is\n   www.faculty.university.example. and the target zone example. then\n   the incremental deleg name is university._deleg.example.\n\nI find this section also to be difficult to grasp.  How can a\nrecursive resolver know where to place the _deleg label, to query\nfor the delegation point(s)?  Does it already need to know the zone\nstructure (which it really can't \"ahead of time\" -- it can only\nlearn that by probing for it).\n",
+      "createdAt": "2025-03-08T23:16:16Z",
+      "updatedAt": "2025-03-09T12:02:25Z",
+      "closedAt": "2025-03-09T12:02:25Z",
+      "comments": []
     }
   ],
   "pulls": [
@@ -834,6 +933,1216 @@
         "oid": "1b6aaa344d12d2484b229513bf8820af80054d58"
       },
       "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOMN-KqM6M7tiZ",
+      "title": "Renamed DELEG to IDELEG.",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/7",
+      "state": "MERGED",
+      "author": "Philip-NLnetLabs",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-28T12:31:21Z",
+      "updatedAt": "2025-02-28T12:51:20Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "1b6aaa344d12d2484b229513bf8820af80054d58",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "ideleg",
+      "headRefOid": "00d08cbf9d27c57f55a3b164282a84e2470d7f9c",
+      "closedAt": "2025-02-28T12:51:14Z",
+      "mergedAt": "2025-02-28T12:51:14Z",
+      "mergedBy": "Philip-NLnetLabs",
+      "mergeCommit": {
+        "oid": "bbb7e85ba2a2a1547d400c46fea5ed5cc65df1ea"
+      },
+      "comments": [
+        {
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Straightforward as we discussed.  OK ",
+          "createdAt": "2025-02-28T12:46:29Z",
+          "updatedAt": "2025-02-28T12:46:29Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6d_fqX",
+          "commit": {
+            "abbreviatedOid": "00d08cb"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-28T12:50:55Z",
+          "updatedAt": "2025-02-28T12:50:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOMN-KqM6M8fLo",
+      "title": "Add requirements section.",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/8",
+      "state": "MERGED",
+      "author": "Philip-NLnetLabs",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-28T14:12:41Z",
+      "updatedAt": "2025-02-28T16:22:54Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "bbb7e85ba2a2a1547d400c46fea5ed5cc65df1ea",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "requirements",
+      "headRefOid": "bef394bd7d1d9ee7c0fea92f7383931c6b5efd9e",
+      "closedAt": "2025-02-28T16:22:46Z",
+      "mergedAt": "2025-02-28T16:22:46Z",
+      "mergedBy": "Philip-NLnetLabs",
+      "mergeCommit": {
+        "oid": "600d8cf03f5a1988d2479f38d72ae82da33d2eb4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6eBUbZ",
+          "commit": {
+            "abbreviatedOid": "b6c826d"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Looks good. Some spelling fixes and some suggestions.",
+          "createdAt": "2025-02-28T15:51:47Z",
+          "updatedAt": "2025-02-28T16:03:20Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\nThis section will discuss how incremental deleg meets the requirements for a new delegation mechanism as described in {{?I-D.ietf-deleg-requirements-02}}\r\n```",
+              "createdAt": "2025-02-28T15:51:47Z",
+              "updatedAt": "2025-02-28T16:03:20Z"
+            },
+            {
+              "originalPosition": 31,
+              "body": "```suggestion\r\n  Incremental deleg introduces a new RR type.\r\n```",
+              "createdAt": "2025-02-28T15:53:05Z",
+              "updatedAt": "2025-02-28T16:03:20Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "```suggestion\r\n  Though unknown type notation {{!RFC3597}} can be used in some cases if no support for the new RR type is present.\r\n```\r\nThe renderer already adds square brackets",
+              "createdAt": "2025-02-28T15:54:16Z",
+              "updatedAt": "2025-02-28T16:03:20Z"
+            },
+            {
+              "originalPosition": 35,
+              "body": "```suggestion\r\n  Existing authoritatives can serve incremental deleg zones (though less efficiently), existing signers can sign incremental deleg zones, existing diagnostic tools can query incremental deleg zones.\r\n```\r\nRemove the \"-aware\" because it may make one feel that there is some \"awareness\" needed in the implementation.",
+              "createdAt": "2025-02-28T15:57:12Z",
+              "updatedAt": "2025-02-28T16:03:20Z"
+            },
+            {
+              "originalPosition": 51,
+              "body": "```suggestion\r\n  Incremental deleg zones can be added without upgrading authoritatives.\r\n  Incremental deleg zones still work with old resolvers and validators.\r\n```",
+              "createdAt": "2025-02-28T15:59:16Z",
+              "updatedAt": "2025-02-28T16:03:20Z"
+            },
+            {
+              "originalPosition": 68,
+              "body": "```suggestion\r\n  The exception is a replacement for the DS records, which is described in {{?I-D.homburg-deleg-incremental-dnssec}}.\r\n```",
+              "createdAt": "2025-02-28T16:00:18Z",
+              "updatedAt": "2025-02-28T16:03:20Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOMN-KqM6NEsay",
+      "title": "absent incremental delegation in unsigned zones with auth support, and ...",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/9",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "... an auth SHOULD send incremental delegation (or absence) in the authority section (instead of MUST), because there may be auths with support and auths without support behind a load-balancer for example.\r\n\r\nThis addresses issue #6",
+      "createdAt": "2025-03-02T19:48:59Z",
+      "updatedAt": "2025-03-03T14:28:07Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "cd9e922968cb50d322745b74162442257c2bcb93",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "behavior-with-auth-support",
+      "headRefOid": "cb06998b5785dd2533294eaa0978f527c4e87bc3",
+      "closedAt": "2025-03-03T14:28:07Z",
+      "mergedAt": "2025-03-03T14:28:07Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "7ab6a96ae3eeddc2000688e2b03ff52a352cb7c3"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6eHo7u",
+          "commit": {
+            "abbreviatedOid": "71ad6f3"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-02T19:51:37Z",
+          "updatedAt": "2025-03-02T19:51:38Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\nFor an unsigned zone, an incremental deleg supporting authoritative cannot return that an incremental delegation is absent (because of lack of an authenticated denial of existence), however with support from the served zone (the zone has an `*._deleg IN IDELEG 0 .` RR provisioned), the authoritative name server can signal support also for unsigned zones (see {{extra-optimized (Extra optimized implementation)}}).\r\n```",
+              "createdAt": "2025-03-02T19:51:37Z",
+              "updatedAt": "2025-03-02T19:51:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eHpEo",
+          "commit": {
+            "abbreviatedOid": "f105662"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "These look good - this may read better but  it's not a big deal\r\n\r\n(the zone has the Resource Record provisioned `*._deleg IN IDELEG 0 .`)",
+          "createdAt": "2025-03-02T19:54:48Z",
+          "updatedAt": "2025-03-02T19:54:48Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eHq9B",
+          "commit": {
+            "abbreviatedOid": "f105662"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "The suggestion from Tim",
+          "createdAt": "2025-03-02T20:36:58Z",
+          "updatedAt": "2025-03-02T20:38:08Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\nFor an unsigned zone, an incremental deleg supporting authoritative cannot return that an incremental delegation is absent (because of lack of an authenticated denial of existence), however with support from the served zone (the zone has the Resource Record provisioned `*._deleg IN IDELEG 0 .`), the authoritative name server can signal support also for unsigned zones (see {{extra-optimized (Extra optimized implementation)}}).\r\n```",
+              "createdAt": "2025-03-02T20:36:58Z",
+              "updatedAt": "2025-03-02T20:38:08Z"
+            },
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\nWith unsigned zones, support is apparent only from referral responses for which an incremental delegation exists, unless the zone has the Resource Record `*._deleg IN IDELEG 0 .` provisioned (see {{extra-optimized (Extra optimized implementation)}}).\r\n```",
+              "createdAt": "2025-03-02T20:37:38Z",
+              "updatedAt": "2025-03-02T20:38:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMTIX",
+          "commit": {
+            "abbreviatedOid": "6c5f1b8"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T12:40:19Z",
+          "updatedAt": "2025-03-03T12:40:19Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Maybe we should add:\r\n\r\nIf a resolver has registered that an authoritative name server supports incremental deleg and resolver receives a delegation without (denial of) an incremental delegation then resolver MUST issue a separate incremental deleg query and MAY register that authoritative server does not support incremental deleg.",
+              "createdAt": "2025-03-03T12:40:19Z",
+              "updatedAt": "2025-03-03T12:40:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMsRm",
+          "commit": {
+            "abbreviatedOid": "6c5f1b8"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T13:26:42Z",
+          "updatedAt": "2025-03-03T13:26:42Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Agree, I'll add it",
+              "createdAt": "2025-03-03T13:26:42Z",
+              "updatedAt": "2025-03-03T13:26:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMvf1",
+          "commit": {
+            "abbreviatedOid": "6c5f1b8"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T13:32:27Z",
+          "updatedAt": "2025-03-03T13:32:27Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Wait a minute. It already says this in the last two paragraphs of this subsection. Quoting:\r\n> If the resolver knows that the authoritative name server supports incremental deleg, *and* a DNSSEC signed zone is being served, then all referrals SHOULD contain either an incremental delegation, or NSEC(3) records showing that the delegation does not exist.\r\n> If a referral is returned that does not contain an incremental delegation nor an indication that it does not exist, then the resolver MUST send an additional incremental deleg query to find the incremental delegation (or denial of its existence).",
+              "createdAt": "2025-03-03T13:32:27Z",
+              "updatedAt": "2025-03-03T13:33:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMx6p",
+          "commit": {
+            "abbreviatedOid": "6c5f1b8"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T13:36:40Z",
+          "updatedAt": "2025-03-03T13:36:40Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "@Philip-NLnetLabs can you confirm your suggestion was already in the text?",
+              "createdAt": "2025-03-03T13:36:40Z",
+              "updatedAt": "2025-03-03T13:36:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eM9M2",
+          "commit": {
+            "abbreviatedOid": "6c5f1b8"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T13:55:32Z",
+          "updatedAt": "2025-03-03T13:55:32Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "The part that I wanted to add was 'and MAY register that authoritative server does not support incremental deleg.' I assumed, but did not verify that the other part about sending a separate query was already there. But felt that a bit of redundancy would be warranted in this case.",
+              "createdAt": "2025-03-03T13:55:32Z",
+              "updatedAt": "2025-03-03T13:55:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNGMK",
+          "commit": {
+            "abbreviatedOid": "6c5f1b8"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:09:00Z",
+          "updatedAt": "2025-03-03T14:09:00Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Well the redundancy is very close to each other. I'll see if I can extend already existing paragraph with 'and MAY register that authoritative server does not support incremental deleg.'",
+              "createdAt": "2025-03-03T14:09:00Z",
+              "updatedAt": "2025-03-03T14:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNG8B",
+          "commit": {
+            "abbreviatedOid": "6c5f1b8"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:10:09Z",
+          "updatedAt": "2025-03-03T14:10:09Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "That is fine with me",
+              "createdAt": "2025-03-03T14:10:09Z",
+              "updatedAt": "2025-03-03T14:10:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNQ0i",
+          "commit": {
+            "abbreviatedOid": "cb06998"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:24:04Z",
+          "updatedAt": "2025-03-03T14:24:04Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I have added this text to mention deregistration of auth support by the resolver. Can you re-review @Philip-NLnetLabs and approve if you do approve?",
+              "createdAt": "2025-03-03T14:24:04Z",
+              "updatedAt": "2025-03-03T14:24:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNR7H",
+          "commit": {
+            "abbreviatedOid": "cb06998"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:25:38Z",
+          "updatedAt": "2025-03-03T14:25:38Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Yes, that looks good.",
+              "createdAt": "2025-03-03T14:25:38Z",
+              "updatedAt": "2025-03-03T14:25:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNSdI",
+          "commit": {
+            "abbreviatedOid": "cb06998"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-03T14:26:25Z",
+          "updatedAt": "2025-03-03T14:26:25Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOMN-KqM6NEwhh",
+      "title": "Extend the implementation section with current status",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/10",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-02T20:33:34Z",
+      "updatedAt": "2025-03-03T13:19:59Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "600d8cf03f5a1988d2479f38d72ae82da33d2eb4",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "implementations",
+      "headRefOid": "95535d4f811b098b2bc277de568c614ba5ee68db",
+      "closedAt": "2025-03-03T13:19:59Z",
+      "mergedAt": "2025-03-03T13:19:59Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "163a0448785046aa57a898b584ef223fcc8a0b40"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6eHzI1",
+          "commit": {
+            "abbreviatedOid": "95535d4"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Good",
+          "createdAt": "2025-03-02T22:58:24Z",
+          "updatedAt": "2025-03-02T22:58:24Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMZRb",
+          "commit": {
+            "abbreviatedOid": "95535d4"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-03T12:51:26Z",
+          "updatedAt": "2025-03-03T12:51:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOMN-KqM6NE6cR",
+      "title": "Explain how mixed ServiceMode and AliasMode IDELEG RRsets work",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/11",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-02T22:17:44Z",
+      "updatedAt": "2025-03-03T13:20:22Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "5c7a11123369695cc5487d6fe11c271b53162027",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "mixed-service-and-aliase-mode",
+      "headRefOid": "e302c9b613e65e8df40217c36ff2a7936a8f80b4",
+      "closedAt": "2025-03-03T13:20:21Z",
+      "mergedAt": "2025-03-03T13:20:21Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "cd9e922968cb50d322745b74162442257c2bcb93"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6eH0AX",
+          "commit": {
+            "abbreviatedOid": "e302c9b"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Yes",
+          "createdAt": "2025-03-02T23:12:17Z",
+          "updatedAt": "2025-03-02T23:12:17Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMZ2j",
+          "commit": {
+            "abbreviatedOid": "e302c9b"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-03T12:52:31Z",
+          "updatedAt": "2025-03-03T12:52:31Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOMN-KqM6NE73e",
+      "title": "IDELEG as qtype for _deleg.<apex> presence query",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/12",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes issue #5 ",
+      "createdAt": "2025-03-02T22:33:46Z",
+      "updatedAt": "2025-03-03T14:26:09Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "cd9e922968cb50d322745b74162442257c2bcb93",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "_deleg-qtype",
+      "headRefOid": "97d93cf973b32c282e9858b67eb433a11dec7dc2",
+      "closedAt": "2025-03-03T14:26:08Z",
+      "mergedAt": "2025-03-03T14:26:08Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "5c0ac8a7e4959b102cb51895c64cd47676b8b097"
+      },
+      "comments": [
+        {
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "body": "In the light of the security section, what if we probe with an NS qtype? That should detect any accidental delegations. But might be considered a hack. Is the risk of somebody registering _deleg a serious risk? There is also ACME with dns01 verification.",
+          "createdAt": "2025-03-03T10:14:46Z",
+          "updatedAt": "2025-03-03T10:14:46Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "body": "> In the light of the security section, what if we probe with an NS qtype? That should detect any accidental delegations. But might be considered a hack.\r\n\r\nI like the idea, but then the TTL to cache \"known to exist\" is again the same as those of NODATA and NXDOMAINs and cannot be controlled separately by the zone owner.\r\n\r\n>  Is the risk of somebody registering _deleg a serious risk? There is also ACME with dns01 verification.\r\n\r\nCurrently there is nothing in the Security Section about bad actors trying to register _deleg, so I propose to leave it like that.\r\n\r\nThe impact with _acme-challenge is substantially lower, because _acme-challenge is the left-most label. So you always hijack only a single name instead of all delegations.",
+          "createdAt": "2025-03-03T12:24:55Z",
+          "updatedAt": "2025-03-03T12:38:00Z"
+        },
+        {
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "body": "What is the downside of the SOA minimum? Is your worry that it might be too low or too high?",
+          "createdAt": "2025-03-03T12:34:09Z",
+          "updatedAt": "2025-03-03T12:34:09Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "body": "> What is the downside of the SOA minimum? Is your worry that it might be too low or too high?\r\n\r\nToo low yes. If you do incremental deleg and are not planning to remove it in the future, then you want resolvers to have this cached as long as possible, right?",
+          "createdAt": "2025-03-03T12:37:29Z",
+          "updatedAt": "2025-03-03T12:37:29Z"
+        },
+        {
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "body": "If you have _deleg and the authoritative does not support incremental deleg then you already get a separate incremental deleg query for each name lookup. I don't see how an extra _deleg at the rate of the SOA minimum would make a big difference.",
+          "createdAt": "2025-03-03T12:45:32Z",
+          "updatedAt": "2025-03-03T12:45:32Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "body": "> If you have _deleg and the authoritative does not support incremental deleg then you already get a separate incremental deleg query for each name lookup. I don't see how an extra _deleg at the rate of the SOA minimum would make a big difference.\r\n\r\nOkay, I agree. It is quite a bit of text to rewrite, but I'll give it a go",
+          "createdAt": "2025-03-03T13:39:00Z",
+          "updatedAt": "2025-03-03T13:39:00Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "body": "> If you have _deleg and the authoritative does not support incremental deleg then you already get a separate incremental deleg query for each name lookup. I don't see how an extra _deleg at the rate of the SOA minimum would make a big difference.\r\n\r\nI have rewritten it to use qtype NS. Can you review @Philip-NLnetLabs ",
+          "createdAt": "2025-03-03T14:06:40Z",
+          "updatedAt": "2025-03-03T14:06:40Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6eH0LO",
+          "commit": {
+            "abbreviatedOid": "a6c2d00"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "OK",
+          "createdAt": "2025-03-02T23:15:13Z",
+          "updatedAt": "2025-03-02T23:15:13Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNDg6",
+          "commit": {
+            "abbreviatedOid": "3e89ad8"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:04:43Z",
+          "updatedAt": "2025-03-03T14:04:44Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\r\n   The resolver MUST record that the zone does not have valid incremental delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries.\r\n```",
+              "createdAt": "2025-03-03T14:04:43Z",
+              "updatedAt": "2025-03-03T14:04:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNDxH",
+          "commit": {
+            "abbreviatedOid": "3e89ad8"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-03T14:05:08Z",
+          "updatedAt": "2025-03-03T14:05:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOMN-KqM6NFGp8",
+      "title": "Comparison with legacy delegations",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/13",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-03T00:22:52Z",
+      "updatedAt": "2025-03-03T12:22:54Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "c7e42f64d219b2d38c3b71a3c3300f35853a8f47",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "comparisons",
+      "headRefOid": "49f32e75e8529165d07965fb8b3665858f621163",
+      "closedAt": "2025-03-03T12:22:54Z",
+      "mergedAt": "2025-03-03T12:22:54Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "e2cedb835dd6065d1255fb5cda488a52f19c664c"
+      },
+      "comments": [
+        {
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "body": "Looks good to me.",
+          "createdAt": "2025-03-03T12:20:22Z",
+          "updatedAt": "2025-03-03T12:20:22Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6eJceL",
+          "commit": {
+            "abbreviatedOid": "6ff2bdc"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "I have some suggested edits but feel it is better to approve and then suggest\r\n\r\nLike 760:\r\ns/An authoritative could/An authoritative name server could/ ",
+          "createdAt": "2025-03-03T07:35:46Z",
+          "updatedAt": "2025-03-03T07:35:46Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eK9jW",
+          "commit": {
+            "abbreviatedOid": "6ff2bdc"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T10:16:45Z",
+          "updatedAt": "2025-03-03T10:16:46Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "I'm a bit confused by this. How is the delegated zone 'in charge' (I assume in the sense of client-side NS records) of IDELEG records?",
+              "createdAt": "2025-03-03T10:16:45Z",
+              "updatedAt": "2025-03-03T10:16:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eLpkF",
+          "commit": {
+            "abbreviatedOid": "6ff2bdc"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T11:30:15Z",
+          "updatedAt": "2025-03-03T11:30:16Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Sorry I was thinking about usage of IDELEG which we haven't discussed yet, namely, have an AliasMode IDELEL in the parent with as target name a name below the delegated zone, and then ipv4hints and ipv6hints as glue.\r\nBut I agree this is introducing all kinds of confusion, so perhaps leave that out for now and bring it up and create text for it later (if anyone wants it in the first place) .",
+              "createdAt": "2025-03-03T11:30:16Z",
+              "updatedAt": "2025-03-03T11:30:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eLqxK",
+          "commit": {
+            "abbreviatedOid": "6ff2bdc"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T11:32:41Z",
+          "updatedAt": "2025-03-03T11:32:41Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2025-03-03T11:32:41Z",
+              "updatedAt": "2025-03-03T11:32:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eLtK4",
+          "commit": {
+            "abbreviatedOid": "6ff2bdc"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T11:37:26Z",
+          "updatedAt": "2025-03-03T11:37:27Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "```suggestion\r\nIt introduces an element of dynamism which is at the time of writing not part of authoritative name server behavior specification.\r\n```",
+              "createdAt": "2025-03-03T11:37:26Z",
+              "updatedAt": "2025-03-03T11:37:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMHTf",
+          "commit": {
+            "abbreviatedOid": "4647e10"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-03T12:21:20Z",
+          "updatedAt": "2025-03-03T12:21:20Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOMN-KqM6NG4We",
+      "title": "first pass on security considerations",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/14",
+      "state": "MERGED",
+      "author": "moonshiner",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-03T07:33:06Z",
+      "updatedAt": "2025-03-03T15:12:02Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "c7e42f64d219b2d38c3b71a3c3300f35853a8f47",
+      "headRepository": "moonshiner/incremental-deleg",
+      "headRefName": "main",
+      "headRefOid": "a412ca42f3770b3dce64297bf315438be8f282ca",
+      "closedAt": "2025-03-03T15:12:02Z",
+      "mergedAt": "2025-03-03T15:12:01Z",
+      "mergedBy": "moonshiner",
+      "mergeCommit": {
+        "oid": "28ff94a2f6df6fb520286a77a2ce933248c760c9"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6eMP1x",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Looks good to me!",
+          "createdAt": "2025-03-03T12:36:00Z",
+          "updatedAt": "2025-03-03T12:36:00Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMa_z",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T12:54:41Z",
+          "updatedAt": "2025-03-03T12:54:42Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Maybe we should add: \r\n\r\nthis risk of domain hijacking is not expected to increase significantly compared to the situation without incremental deleg.",
+              "createdAt": "2025-03-03T12:54:41Z",
+              "updatedAt": "2025-03-03T12:54:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMdB2",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T12:58:32Z",
+          "updatedAt": "2025-03-03T12:58:32Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nIncremental deleg moves the location of  referral information to a unique  location that currently exists. However, as this is a new approach, thought must be given to usage.   In domains that are open to registration by third parties, care must be taken to ensure that the _deleg subdomain is reserved at the time the domain is provisioned. The same care needs to be addressed when a domain is deprovisioned that the _deleg reservation is removed.  This is similar to what happens to NS A records deployed in parent zones to act as Glue.\r\n```",
+              "createdAt": "2025-03-03T12:58:32Z",
+              "updatedAt": "2025-03-03T12:58:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eMxII",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T13:35:14Z",
+          "updatedAt": "2025-03-03T13:35:15Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\nWhile the recommendation is to deploy DNSSEC with incremental deleg, it is not mandatory.  However, using incremental deleg with unsigned zones can create possibilities of domain hijackings. This could  be hard to detect when not speaking directly to the authoritative name server.\r\nThis risk of domain hijacking is not expected to increase significantly compared to the situation without incremental deleg.\r\n```",
+              "createdAt": "2025-03-03T13:35:15Z",
+              "updatedAt": "2025-03-03T13:35:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNTE_",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:27:22Z",
+          "updatedAt": "2025-03-03T14:27:23Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Added in commit a412ca4 ",
+              "createdAt": "2025-03-03T14:27:23Z",
+              "updatedAt": "2025-03-03T14:27:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNVOo",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:30:08Z",
+          "updatedAt": "2025-03-03T14:30:09Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I like this suggestion. Should we wait for @moonshiner to commit it?",
+              "createdAt": "2025-03-03T14:30:08Z",
+              "updatedAt": "2025-03-03T14:30:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNXu4",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:33:34Z",
+          "updatedAt": "2025-03-03T14:33:34Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Yes (unless we get too close to midnight)",
+              "createdAt": "2025-03-03T14:33:34Z",
+              "updatedAt": "2025-03-03T14:33:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNlG0",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:50:58Z",
+          "updatedAt": "2025-03-03T14:50:58Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "yes. ",
+              "createdAt": "2025-03-03T14:50:58Z",
+              "updatedAt": "2025-03-03T14:50:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNliL",
+          "commit": {
+            "abbreviatedOid": "cba1432"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-03T14:51:24Z",
+          "updatedAt": "2025-03-03T14:51:24Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "COMMIT NOW",
+              "createdAt": "2025-03-03T14:51:24Z",
+              "updatedAt": "2025-03-03T14:51:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6eNpCh",
+          "commit": {
+            "abbreviatedOid": "a412ca4"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-03T14:55:49Z",
+          "updatedAt": "2025-03-03T14:55:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOMN-KqM6Ndm80",
+      "title": "Fixes for typos and example records",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/15",
+      "state": "MERGED",
+      "author": "gthess",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Since I went through the document I may as well create a PR.",
+      "createdAt": "2025-03-05T11:46:11Z",
+      "updatedAt": "2025-03-10T09:03:22Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "7efb89d96dd271d0292aafd9640bb516afc364cf",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "yorgos-typos-03",
+      "headRefOid": "57b59733e36b19c33f88276ec920b9b18d387696",
+      "closedAt": "2025-03-09T11:09:32Z",
+      "mergedAt": "2025-03-09T11:09:32Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "4532660f6cde4d0dae905246c4f4d6505f74bc80"
+      },
+      "comments": [
+        {
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I believe I merged Havard's PR before this one so there is a conflict.  \r\nCould y'all tweak your PR slightly?  Also I can",
+          "createdAt": "2025-03-08T23:19:16Z",
+          "updatedAt": "2025-03-08T23:19:16Z"
+        },
+        {
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "body": "> I believe I merged Havard's PR before this one so there is a conflict.\r\n> Could y'all tweak your PR slightly? Also I can\r\n\r\nDone!\r\n\r\nI'll just merge, because all suggestions were good.",
+          "createdAt": "2025-03-09T11:09:28Z",
+          "updatedAt": "2025-03-09T11:09:28Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6fG8DE",
+          "commit": {
+            "abbreviatedOid": "debe889"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Thanks! These all look like good changes! Especially good you found the missing RRSIG for the authoritative NS RRset!",
+          "createdAt": "2025-03-09T11:07:00Z",
+          "updatedAt": "2025-03-09T11:07:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOMN-KqM6N396i",
+      "title": "Grammar and wording nit",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/16",
+      "state": "MERGED",
+      "author": "he32",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": " * Correction of a/an usage\r\n * Addition of some hyphens to clarify meaning\r\n * Some other minor wording change suggestions",
+      "createdAt": "2025-03-08T15:56:06Z",
+      "updatedAt": "2025-03-08T19:17:23Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "f1ae9e260439bba888f5fb8dde82210026475406",
+      "headRepository": "he32/incremental-deleg",
+      "headRefName": "spell-and-grammar",
+      "headRefOid": "d3cc5cbbcd26b7b70bb95c489a9d2b0135f426f1",
+      "closedAt": "2025-03-08T19:17:23Z",
+      "mergedAt": "2025-03-08T19:17:23Z",
+      "mergedBy": "moonshiner",
+      "mergeCommit": {
+        "oid": "7efb89d96dd271d0292aafd9640bb516afc364cf"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOMN-KqM6N-nd3",
+      "title": "Suggestions from H\u00e5vard Eidnes",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/18",
+      "state": "OPEN",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "I like all these suggestions. @moonshiner and @Philip-NLnetLabs, please approve if you like them too.",
+      "createdAt": "2025-03-10T11:32:02Z",
+      "updatedAt": "2025-03-10T12:36:21Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "8515030361227919d13d1c96d157aac3edbf659e",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "suggestions-from-h\u00e5vard",
+      "headRefOid": "9aac6a778ccd03817a83ece0fea6a7f04139a7d0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOMN-KqM6N-thD",
+      "title": "Suggestions from Stephane Bortzmeyer",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/19",
+      "state": "OPEN",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "@moonshiner and @Philip-NLnetLabs , please approve if you approve, or comment or make suggestions otherwise.",
+      "createdAt": "2025-03-10T11:43:16Z",
+      "updatedAt": "2025-03-10T20:13:45Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "8515030361227919d13d1c96d157aac3edbf659e",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "suggestions-from-stephane",
+      "headRefOid": "2632df0cb04f60fa05f1d8d5419a635afb03489d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6fMt6j",
+          "commit": {
+            "abbreviatedOid": "f2395f2"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-10T13:13:02Z",
+          "updatedAt": "2025-03-10T13:13:02Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6fRN8f",
+          "commit": {
+            "abbreviatedOid": "f2395f2"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-10T20:13:16Z",
+          "updatedAt": "2025-03-10T20:13:16Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n| Requires implementation in both authoritative name server as well as in the resolver, DNSSEC signers and validators and all other DNS software | Only implementation required for functionalities following the delegations (like in resolvers). No support from the authoritative name server, DNSSEC signers or validators are needed. But optimized with updated authoritative software. |\r\n```",
+              "createdAt": "2025-03-10T20:13:16Z",
+              "updatedAt": "2025-03-10T20:13:16Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOMN-KqM6N_Lxy",
+      "title": "Try to fix github actions, by updating the i-d-template",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/20",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-10T12:34:16Z",
+      "updatedAt": "2025-03-10T12:36:06Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "558b861caf222b2fc0c82a6e2c83bc6fdd53a469",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "fix-github-actions",
+      "headRefOid": "fff35765918b941d184aa90cc6526022eee7af58",
+      "closedAt": "2025-03-10T12:35:39Z",
+      "mergedAt": "2025-03-10T12:35:39Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "8515030361227919d13d1c96d157aac3edbf659e"
+      },
+      "comments": [
+        {
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "YES",
+          "createdAt": "2025-03-10T12:36:04Z",
+          "updatedAt": "2025-03-10T12:36:04Z"
+        }
+      ],
       "reviews": []
     }
   ]
