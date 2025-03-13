@@ -803,7 +803,7 @@ In that case, one extra query is needed when the parent zone is first contacted 
 |-------------------------|-------------------|
 | \[?I-D.wesplaap-deleg\] | \[this document\] |
 |-------------------------|-------------------|
-| Requires implementation in both authoritative name server as well as in the resolver, DNSSEC signers and validators and all other DNS software | Only resolver implementation required. But optimized with updated authoritative software. |
+| Requires implementation in both authoritative name server as well as in the resolver, DNSSEC signers and validators and all other DNS software | Only implementation required for functionalities following the delegations (like in resolvers). No support from the authoritative name server, DNSSEC signers or validators are needed. But optimized with updated authoritative software. |
 |-------------------------|-------------------|
 | DELEG resolvers need to contact DELEG authoritatives directly | IDELEG resolvers can query for the incremental delegation data, therefore direct contact with IDELEG supporting authoritatives is not necessary. All legacy infrastructure (including forwarders etc.) is supported. |
 |-------------------------|-------------------|
