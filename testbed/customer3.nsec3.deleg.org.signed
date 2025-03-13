@@ -1,0 +1,16 @@
+customer3.nsec3.deleg.org.	3600	IN	SOA	legacy.ideleg.net. willem.nlnetlabs.nl. 2025031300 1800 900 604800 3600
+customer3.nsec3.deleg.org.	3600	IN	RRSIG	SOA 13 4 3600 20250410093829 20250313093829 46550 customer3.nsec3.deleg.org. OCkSc0Ecfo74K5o6AZ6vGVr0+v6zwYzLwPSK64okMSly7UJ3/dZeTQ9NkRcdzKgo2gUIaAewI1MZOZ1fEOS8RA==
+customer3.nsec3.deleg.org.	3600	IN	A	146.190.95.45
+customer3.nsec3.deleg.org.	3600	IN	RRSIG	A 13 4 3600 20250410093829 20250313093829 46550 customer3.nsec3.deleg.org. UzBfmDKNjHM3svC3gxLSnMxbordZlE7Fg26T/OzY9Xp5Vv+1ui+KEtAJqSHe5FA7r20AIfl+8smjfODLsc0weQ==
+customer3.nsec3.deleg.org.	3600	IN	NS	legacy.ideleg.net.
+customer3.nsec3.deleg.org.	3600	IN	RRSIG	NS 13 4 3600 20250410093829 20250313093829 46550 customer3.nsec3.deleg.org. Kb8YhtUEZyjZfZmt3Yx2witmFv4OJHK7FxnNp16Ok0fmvdnOfuLDMpZt8Om0SeUK36GZWsLMgkeUqCBpNcjGzw==
+customer3.nsec3.deleg.org.	3600	IN	TXT	"This is customer3.nsec3.deleg.org."
+customer3.nsec3.deleg.org.	3600	IN	RRSIG	TXT 13 4 3600 20250410093829 20250313093829 46550 customer3.nsec3.deleg.org. l1PdMH6WuGDAGrDf8CoezMQam/LrFPUBKOatxJlxxMipISgnRG+qMdqxogWqaTYanabDZxq+LMTQj7LZgh2RcA==
+customer3.nsec3.deleg.org.	3600	IN	AAAA	2400:6180:0:d2:0:1:ac7b:8000
+customer3.nsec3.deleg.org.	3600	IN	RRSIG	AAAA 13 4 3600 20250410093829 20250313093829 46550 customer3.nsec3.deleg.org. Ow6nOagYmdY5OXRGtu725xLu/3wLcUywO4uu/lq3Y+dKx54v/GQej4yeUMggp0yjVGq4cZ82UN6Tcg/Qt9Vd8w==
+customer3.nsec3.deleg.org.	3600	IN	DNSKEY	257 3 13 BiMiHvt5osCQGewjDi3OOXhetdbcVxEXzI1SRt9BJnwZ6FN/9xsjrrYg/qy9SlW1C8O1IjehXH5uxpE/bDRBMw== ;{id = 46550 (ksk), size = 256b}
+customer3.nsec3.deleg.org.	3600	IN	RRSIG	DNSKEY 13 4 3600 20250410093829 20250313093829 46550 customer3.nsec3.deleg.org. 0jaltKozkJwbR2yZPsAMCATY4cLEvWmTlyyz6m9kS7/EwzsvWQHINABHvXZfsq2zZhrGb6abJcM3231l3deWVw==
+customer3.nsec3.deleg.org.	3600	IN	ZONEMD	2025031300 1 1 258d3d10a795d8cac5dd451c678ef842472e2d4c818452be35345c1a2bfdfcfca03a670f2557b45f913c6356952862aa
+customer3.nsec3.deleg.org.	3600	IN	RRSIG	ZONEMD 13 4 3600 20250410093829 20250313093829 46550 customer3.nsec3.deleg.org. e3PeTW5pfSvW1L1OvYUFsI7Kz1h+T7XpQNSlmEWdhozxP8Xmyypi/kSsu8ilI6wqdPEz+ErHu5qw0zvnbIy4Dg==
+customer3.nsec3.deleg.org.	3600	IN	NSEC	customer3.nsec3.deleg.org. A NS SOA TXT AAAA RRSIG NSEC DNSKEY ZONEMD 
+customer3.nsec3.deleg.org.	3600	IN	RRSIG	NSEC 13 4 3600 20250410093829 20250313093829 46550 customer3.nsec3.deleg.org. Nf2z5uQAdLkQH5Yc8Ng+ROeFTTzcTJGvLHw7CpbdgyD/egSDySCSrNn2FvpDwPI6zjv8kIJ8yJWGBj53j2SO4Q==

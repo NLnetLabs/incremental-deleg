@@ -3,7 +3,7 @@ title: Incrementally Deployable Extensible Delegation testbed
 layout: default
 permalink: /
 ---
-This website hosts information on the domains we have deployed for evaluating and testing the [`draft-homburg-deleg-incremental-deleg`](/draft-homburg-deleg-incremental-deleg-latest.html) protocol proposal.
+This website hosts information on the domains we have deployed for evaluating and testing the [`draft-homburg-deleg-incremental-deleg`](/draft-homburg-deleg-incremental-deleg-latest.html) protocol proposal, as well as [`draft-wesplaap-deleg`](https://datatracker.ietf.org/doc/draft-wesplaap-deleg/).
 
 ## Zones and name servers
 
@@ -14,6 +14,14 @@ The `{{ tb.zone }}` zone has been provisioned with several incremental delegatio
 |---------------------|-------------------|-------------------|----------------------|
 | `{{ tb.ideleg.name }}` | <a href="" onclick="navigator.clipboard.writeText('{{ tb.ideleg.ipv4}}')" title="copy '{{ tb.ideleg.ipv4}}' to clipboard">{{ tb.ideleg.ipv4}}</a> | <a href="" onclick="navigator.clipboard.writeText('{{ tb.ideleg.ipv6}}')" title="copy '{{ tb.ideleg.ipv6}}' to clipboard">{{ tb.ideleg.ipv6}}</a> | {{ tb.ideleg.location}} |
 | `{{ tb.nlnetlabs.name }}` | <a href="" onclick="navigator.clipboard.writeText('{{ tb.nlnetlabs.ipv4}}')" title="copy '{{ tb.nlnetlabs.ipv4}}' to clipboard">{{ tb.nlnetlabs.ipv4}}</a> | <a href="" onclick="navigator.clipboard.writeText('{{ tb.nlnetlabs.ipv6}}')" title="copy '{{ tb.nlnetlabs.ipv6}}' to clipboard">{{ tb.nlnetlabs.ipv6}}</a> | {{ tb.nlnetlabs.location}} |
+| `{{ tb.legacy.name }}` | <a href="" onclick="navigator.clipboard.writeText('{{ tb.legacy.ipv4}}')" title="copy '{{ tb.legacy.ipv4}}' to clipboard">{{ tb.legacy.ipv4}}</a> | <a href="" onclick="navigator.clipboard.writeText('{{ tb.legacy.ipv6}}')" title="copy '{{ tb.legacy.ipv6}}' to clipboard">{{ tb.legacy.ipv6}}</a> | {{ tb.legacy.location}} |
+
+The `{{ tb.deleg.name }}` zone has been provisioned with several wesplaap-deleg delegations (using 65432 as the value for the `DELEG` RR type), and is served by two wesplaap-deleg supporting authoritative name servers (`{{ tb.deleg.name }}` and `{{ tb.dnlnetlabs.name }}`) and one legacy, non incremental deleg supporting, authoritative name server (`{{ tb.legacy.name }}`) as hidden secondary:
+
+|        name         |       IPv4        |       IPv6        |       location       |
+|---------------------|-------------------|-------------------|----------------------|
+| `{{ tb.deleg.name }}` | <a href="" onclick="navigator.clipboard.writeText('{{ tb.deleg.ipv4}}')" title="copy '{{ tb.deleg.ipv4}}' to clipboard">{{ tb.deleg.ipv4}}</a> | <a href="" onclick="navigator.clipboard.writeText('{{ tb.deleg.ipv6}}')" title="copy '{{ tb.deleg.ipv6}}' to clipboard">{{ tb.deleg.ipv6}}</a> | {{ tb.deleg.location}} |
+| `{{ tb.dnlnetlabs.name }}` | <a href="" onclick="navigator.clipboard.writeText('{{ tb.dnlnetlabs.ipv4}}')" title="copy '{{ tb.dnlnetlabs.ipv4}}' to clipboard">{{ tb.dnlnetlabs.ipv4}}</a> | <a href="" onclick="navigator.clipboard.writeText('{{ tb.dnlnetlabs.ipv6}}')" title="copy '{{ tb.dnlnetlabs.ipv6}}' to clipboard">{{ tb.dnlnetlabs.ipv6}}</a> | {{ tb.dnlnetlabs.location}} |
 | `{{ tb.legacy.name }}` | <a href="" onclick="navigator.clipboard.writeText('{{ tb.legacy.ipv4}}')" title="copy '{{ tb.legacy.ipv4}}' to clipboard">{{ tb.legacy.ipv4}}</a> | <a href="" onclick="navigator.clipboard.writeText('{{ tb.legacy.ipv6}}')" title="copy '{{ tb.legacy.ipv6}}' to clipboard">{{ tb.legacy.ipv6}}</a> | {{ tb.legacy.location}} |
 
 ## Querying the zones
@@ -95,18 +103,33 @@ It does not anticipate [optimized](/draft-homburg-deleg-incremental-deleg-latest
 
 ## Zones at name servers table
 
-| zone                       | ideleg.net | nlnetlabs[^1] | supporting[^2] | legacy[^3]       |
-|----------------------------|:----------:|:-------------:|:--------------:|:----------------:|
-| ideleg.net                 | &#x2714;   | &#x2713;      |                | hidden           |
-| customer1.ideleg.net       |            |               | &#x2714;       |                  |
-| customer2.ideleg.net       |            |               | &#x2714;[^4]   |                  |
-| customer3.ideleg.net       |            |               | &#x2714;       | &#x2713;         |
-| customer4.ideleg.net       |            |               | &#x2714;[^5]   |                  |
-| nsec3.ideleg.net           |            |               | &#x2714;       | hidden           |
-| customer1.nsec3.ideleg.net |            |               |                | &#x2714;         |
-| customer2.nsec3.ideleg.net |            |               |                | &#x2714;[^6]     |
-| customer3.nsec3.ideleg.net |            | &#x2714;      |                | &#x2713;         |
-| customer4.nsec3.ideleg.net |            |               |                | &#x2714;[^7]     |
+| zone                       | ideleg.net | nlnetlabs[^1] | supporting[^2] | legacy[^3]       |  signed  |
+|----------------------------|:----------:|:-------------:|:--------------:|:----------------:|:--------:|
+| ideleg.net                 | &#x2714;   | &#x2713;      |                | hidden           | &#x2714; |
+| customer1.ideleg.net       |            |               | &#x2714;       |                  | &#x2714; |
+| customer2.ideleg.net       |            |               | &#x2714;[^4]   |                  | &#x2714; |
+| customer3.ideleg.net       |            |               | &#x2714;       | &#x2713;         | &#x2714; |
+| customer4.ideleg.net       |            |               | &#x2714;[^5]   |                  | &#x2714; |
+| nsec3.ideleg.net           |            |               | &#x2714;       | hidden           | &#x2714; |
+| customer1.nsec3.ideleg.net |            |               |                | &#x2714;         | &#x2714; |
+| customer2.nsec3.ideleg.net |            |               |                | &#x2714;[^6]     | &#x2714; |
+| customer3.nsec3.ideleg.net |            | &#x2714;      |                | &#x2713;         | &#x2714; |
+| customer4.nsec3.ideleg.net |            |               |                | &#x2714;[^7]     | &#x2714; |
+
+| zone                       | deleg.org  | nlnetlabs[^8] | supporting[^9] | legacy[^3]       |  signed  |
+|----------------------------|:----------:|:-------------:|:--------------:|:----------------:|:--------:|
+| deleg.org                  | &#x2714;   | &#x2713;      |                | hidden           | &#x2714; |
+| customer1.deleg.org        |            |               |                | &#x2714;         | &#x2714; |
+| customer2.deleg.org        |            |               |                | &#x2714;         | &#x2714; |
+| customer3.deleg.org        |            |               |                | &#x2714;         | &#x2714; |
+| customer4.deleg.org        |            |               |                | &#x2714;         |          |
+| customer5.deleg.org        |            |               |                | &#x2714;         |          |
+| nsec3.deleg.org            |            |               | &#x2714;       | hidden           | &#x2714; |
+| customer1.nsec3.deleg.org  |            |               |                | &#x2714;         | &#x2714; |
+| customer2.nsec3.deleg.org  |            |               |                | &#x2714;         | &#x2714; |
+| customer3.nsec3.deleg.org  |            |               |                | &#x2714;         | &#x2714; |
+| customer4.nsec3.deleg.org  |            |               |                | &#x2714;         |          |
+| customer5.nsec3.deleg.org  |            |               |                | &#x2714;         |          |
 
 ### footnotes
 [^1]: ideleg.nlnetlabs.nl
@@ -116,5 +139,7 @@ It does not anticipate [optimized](/draft-homburg-deleg-incremental-deleg-latest
 [^5]: customer4.ideleg.net has outsourced operations to ideleg.customer2.ideleg.net
 [^6]: customer2.nsec3.ideleg.net has the authoritative NS RRset in the customer2.nsec3.ideleg.net zone
 [^7]: customer4.nsec3.ideleg.net has outsourced operations to ideleg.nsec3.customer2.ideleg.net
+[^8]: deleg.nlnetlabs.nl
+[^9]: supporting.deleg.org
 
 

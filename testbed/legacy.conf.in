@@ -46,21 +46,55 @@ zone:
 	request-xfr: {% nlnetlabs.ipv4 %} NOKEY
 	request-xfr: {% nlnetlabs.ipv6 %} NOKEY
 
+pattern:
+	name: "single-primary-signed"
+	zonefile: "%s.signed"
+	provide-xfr: 0.0.0.0/0 NOKEY
+	provide-xfr: ::0/0 NOKEY
+
+pattern:
+	name: "single-primary-unsigned"
+	zonefile: "%s"
+	provide-xfr: 0.0.0.0/0 NOKEY
+	provide-xfr: ::0/0 NOKEY
+
 zone:
 	name: "customer1.nsec3.ideleg.net"
-	zonefile: "%s.signed"
-	provide-xfr: 0.0.0.0/0 NOKEY
-	provide-xfr: ::0/0 NOKEY
-
+	include-pattern: "single-primary-signed"
 zone:
 	name: "customer2.nsec3.ideleg.net"
-	zonefile: "%s.signed"
-	provide-xfr: 0.0.0.0/0 NOKEY
-	provide-xfr: ::0/0 NOKEY
-
+	include-pattern: "single-primary-signed"
 zone:
 	name: "customer4.nsec3.ideleg.net"
-	zonefile: "%s.signed"
-	provide-xfr: 0.0.0.0/0 NOKEY
-	provide-xfr: ::0/0 NOKEY
+	include-pattern: "single-primary-signed"
+zone:
+	name: "customer1.ideleg.org"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "customer2.ideleg.org"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "customer3.ideleg.org"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "customer3.nsec3.ideleg.org"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "customer2.nsec3.ideleg.org"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "customer1.nsec3.ideleg.org"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "customer4.nsec3.ideleg.org"
+	include-pattern: "single-primary-unsigned"
+zone:
+	name: "customer5.nsec3.ideleg.org"
+	include-pattern: "single-primary-unsigned"
+zone:
+	name: "customer5.ideleg.org"
+	include-pattern: "single-primary-unsigned"
+zone:
+	name: "customer4.ideleg.org"
+	include-pattern: "single-primary-unsigned"
 

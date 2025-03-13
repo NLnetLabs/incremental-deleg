@@ -1,0 +1,28 @@
+$ORIGIN nsec3.deleg.org.
+$TTL 3600
+@                SOA {% dsupporting.name %}. willem.nlnetlabs.nl. (
+                                 2025030601 ; serial
+                                 1800       ; refresh
+                                 900        ; retry
+                                 604800     ; expire
+                                 3600       ; minimum
+                                 )
+
+                 NS     {% dsupporting.name %}.
+                 A      {% deleg.ipv4 %}
+                 AAAA   {% deleg.ipv6 %}
+
+;; Legacy delegations
+customer1        NS     legacy.deleg.org.
+                 DS     34489 13 2 dbecb6dd288c720b3026b07f4e04e886994a80fdd484da7b5c3c73dba0eb812b
+		 DELEG  10 legacy.deleg.org. Glue4={% legacy.ipv4 %} Glue6={% legacy.ipv6 %}
+customer2        NS     ns.customer2
+                 DS     2762 13 2 b40bb5adf0d01cd46f35e8f8ae8f456481b9dee812516a67d422ec068b416789
+                 DELEG  10 ns.customer2 Glue4={% legacy.ipv4 %} Glue6={% legacy.ipv6 %}
+ns.customer2     A      {% legacy.ipv4 %}
+                 AAAA   {% legacy.ipv6 %}
+; Assuming deleg.customer2.nsec3.deleg.org. IDELEG 10 ns.customer2.nsec3.deleg.org. Glue4={% legacy.ipv4 %} Glue6={% legacy.ipv6 %}
+customer3        NS     ns.customer2
+                 DS     46550 13 2 6def8173b7150e09816d2cb94ac19f1a85ecdfdabd6c585a33a7eb36aa8a0aff
+                 DELEG  0 deleg.customer2
+

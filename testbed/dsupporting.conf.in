@@ -1,0 +1,24 @@
+server:
+	server-count: 2
+	username: nsd
+	answer-cookie: yes
+	ip-address: 0.0.0.0
+	ip-address: 0.0.0.0@853
+	ip-address: ::0
+	ip-address: ::0@853
+
+	tls-port: 853
+	tls-service-key: /etc/letsencrypt/live/supporting.deleg.org/privkey.pem
+	tls-service-pem: /etc/letsencrypt/live/supporting.deleg.org/fullchain.pem
+
+remote-control:
+	control-enable: yes
+
+zone:
+	name: "nsec3.deleg.org"
+	zonefile: "%s.signed"
+	provide-xfr: 0.0.0.0/0 NOKEY
+	provide-xfr: ::0/0 NOKEY
+	notify: {% legacy.ipv4 %} NOKEY
+	notify: {% legacy.ipv6 %} NOKEY
+

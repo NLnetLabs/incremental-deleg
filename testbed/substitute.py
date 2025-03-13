@@ -11,6 +11,7 @@ with open('../site/_data/testbed.yml') as stream:
 	data = yaml.safe_load(stream)
 
 for fn in sys.argv[1:]:
+	data['target'] = fn[:-3]
 	content = open(fn).read()
 	m = re.search('{%.*?%}', content)
 	while m:

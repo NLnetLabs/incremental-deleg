@@ -1,0 +1,24 @@
+server:
+	server-count: 2
+	username: nsd
+	answer-cookie: yes
+	ip-address: 0.0.0.0
+	ip-address: 0.0.0.0@853
+	ip-address: ::0
+	ip-address: ::0@853
+
+	tls-port: 853
+	tls-service-key: /etc/letsencrypt/live/deleg.nlnetlabs.nl/privkey.pem
+	tls-service-pem: /etc/letsencrypt/live/deleg.nlnetlabs.nl/fullchain.pem
+
+remote-control:
+	control-enable: yes
+
+zone:
+	name: "deleg.org"
+	zonefile: "%s.signed"
+	allow-notify: {% deleg.ipv4 %} NOKEY
+	allow-notify: {% deleg.ipv6 %} NOKEY
+	request-xfr: {% deleg.ipv4 %} NOKEY
+	request-xfr: {% deleg.ipv6 %} NOKEY
+

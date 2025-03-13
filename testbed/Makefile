@@ -1,7 +1,7 @@
-ZONES = ideleg.net nsec3.ideleg.net customer1.ideleg.net customer1.nsec3.ideleg.net customer2.ideleg.net customer2.nsec3.ideleg.net customer3.ideleg.net customer3.nsec3.ideleg.net customer4.ideleg.net customer4.nsec3.ideleg.net deleg.net nsec3.deleg.net
+TOSIGN = ideleg.net nsec3.ideleg.net customer1.ideleg.net customer1.nsec3.ideleg.net customer2.ideleg.net customer2.nsec3.ideleg.net customer3.ideleg.net customer3.nsec3.ideleg.net customer4.ideleg.net deleg.org nsec3.deleg.org customer1.deleg.org customer2.deleg.org customer3.deleg.org customer1.nsec3.deleg.org customer2.nsec3.deleg.org customer3.nsec3.deleg.org
+UNSIGNED = customer4.deleg.org customer5.deleg.org customer4.nsec3.deleg.org customer5.nsec3.deleg.org
 
-
-all: $(ZONES:=.signed)
+all: $(TOSIGN:=.signed) $(UNSIGNED)
 
 %: %.in
 	./substitute.py $<
@@ -59,18 +59,53 @@ customer4.nsec3.ideleg.net.signed: customer4.nsec3.ideleg.net
 	| ldns-read-zone -u IDELEG > $@.new \
 	&& mv $@.new $@
 
-deleg.net.signed: deleg.net
+deleg.org.signed: deleg.org
 	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
-	| ldns-signzone -z 1 -f - -o $< - K$<.+013+54409 \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+47825 \
 	| ldns-read-zone -u DELEG > $@.new \
 	&& mv $@.new $@
 
-nsec3.deleg.net.signed: nsec3.deleg.net
+nsec3.deleg.org.signed: nsec3.deleg.org
 	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
-	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+13372 \
+	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+26656 \
 	| ldns-read-zone -u DELEG > $@.new \
 	&& mv $@.new $@
 
+customer1.deleg.org.signed: customer1.deleg.org
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+44593 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+customer2.deleg.org.signed: customer2.deleg.org
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+10829 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+customer3.deleg.org.signed: customer3.deleg.org
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+31173 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+customer3.nsec3.deleg.org.signed: customer3.nsec3.deleg.org
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+46550 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+customer2.nsec3.deleg.org.signed: customer2.nsec3.deleg.org
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+02762 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+customer1.nsec3.deleg.org.signed: customer1.nsec3.deleg.org
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+34489 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
 
 sign:
 	touch $(ZONES)
@@ -106,9 +141,37 @@ deploy-legacy: legacy.conf customer1.nsec3.ideleg.net.signed customer2.nsec3.ide
 	scp customer1.nsec3.ideleg.net.signed root@legacy.ideleg.net:/etc/nsd
 	scp customer2.nsec3.ideleg.net.signed root@legacy.ideleg.net:/etc/nsd
 	scp customer4.nsec3.ideleg.net.signed root@legacy.ideleg.net:/etc/nsd
+	scp customer1.deleg.org.signed root@legacy.ideleg.net:/etc/nsd
+	scp customer2.deleg.org.signed root@legacy.ideleg.net:/etc/nsd
+	scp customer3.deleg.org.signed root@legacy.ideleg.net:/etc/nsd
+	scp customer3.nsec3.deleg.org.signed root@legacy.ideleg.net:/etc/nsd
+	scp customer2.nsec3.deleg.org.signed root@legacy.ideleg.net:/etc/nsd
+	scp customer1.nsec3.deleg.org.signed root@legacy.ideleg.net:/etc/nsd
+	scp customer4.nsec3.deleg.org root@legacy.ideleg.net:/etc/nsd
+	scp customer5.nsec3.deleg.org root@legacy.ideleg.net:/etc/nsd
+	scp customer5.deleg.org root@legacy.ideleg.net:/etc/nsd
+	scp customer4.deleg.org root@legacy.ideleg.net:/etc/nsd
 	scp legacy.conf root@legacy.ideleg.net:/etc/nsd/nsd.conf
 	ssh root@legacy.ideleg.net nsd-control reconfig
 	ssh root@legacy.ideleg.net nsd-control reload
 
-deploy: deploy-ideleg deploy-supporting deploy-nlnetlabs deploy-legacy
+deploy-deleg: deleg.org.conf deleg.org.signed
+	scp deleg.org.conf root@deleg.org:/etc/nsd/nsd.conf
+	scp deleg.org.signed root@deleg.org:/etc/nsd
+	ssh root@deleg.org nsd-control reconfig
+	ssh root@deleg.org nsd-control reload
+
+deploy-dsupporting: dsupporting.conf nsec3.deleg.org.signed
+	scp dsupporting.conf root@supporting.deleg.org:/etc/nsd/nsd.conf
+	scp nsec3.deleg.org.signed root@supporting.deleg.org:/etc/nsd
+	ssh root@supporting.deleg.org nsd-control reconfig
+	ssh root@supporting.deleg.org nsd-control reload
+
+deploy-dnlnetlabs: dnlnetlabs.conf
+	scp dnlnetlabs.conf root@deleg.nlnetlabs.nl:/etc/nsd/nsd.conf
+	ssh root@deleg.nlnetlabs.nl nsd-control reconfig
+	ssh root@deleg.nlnetlabs.nl nsd-control reload
+
+deploy: deploy-ideleg deploy-supporting deploy-nlnetlabs deploy-legacy \
+		deploy-deleg deploy-dsupporting deploy-dnlnetlabs
 
