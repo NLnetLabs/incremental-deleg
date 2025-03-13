@@ -18,6 +18,10 @@ legacy           A      {% legacy.ipv4 %}
 supporting       A      {% dsupporting.ipv4 %}
                  AAAA   {% dsupporting.ipv6 %}
 
+*                TXT    "deleg.org"
+                 A      {% deleg.ipv4 %}
+                 AAAA   {% deleg.ipv6 %}
+
 ;; Legacy delegations
 customer1        NS     legacy
                  DS     44593 13 2 0dc65baa4600f6ef2266d849ffbbae96c56250e240f8d8b571f113ab94d65009

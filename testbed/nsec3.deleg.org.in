@@ -12,6 +12,10 @@ $TTL 3600
                  A      {% deleg.ipv4 %}
                  AAAA   {% deleg.ipv6 %}
 
+*                TXT    "nsec3.deleg.org"
+                 A      {% deleg.ipv4 %}
+                 AAAA   {% deleg.ipv6 %}
+
 ;; Legacy delegations
 customer1        NS     legacy.deleg.org.
                  DS     34489 13 2 dbecb6dd288c720b3026b07f4e04e886994a80fdd484da7b5c3c73dba0eb812b

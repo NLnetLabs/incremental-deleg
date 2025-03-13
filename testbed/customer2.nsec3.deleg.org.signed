@@ -1,16 +1,16 @@
-customer2.nsec3.deleg.org.	3600	IN	SOA	legacy.ideleg.net. willem.nlnetlabs.nl. 2025031300 1800 900 604800 3600
-customer2.nsec3.deleg.org.	3600	IN	RRSIG	SOA 13 4 3600 20250410093829 20250313093829 2762 customer2.nsec3.deleg.org. vUB4+7RHq5hOhSz3Fk/yIXhp9VfjV+3QdTxvXsnG+ay0Qp4m+PrcyXexYYwFa1M0FGrxQ2adkFdisFa5lfXvMQ==
+customer2.nsec3.deleg.org.	3600	IN	SOA	legacy.ideleg.net. willem.nlnetlabs.nl. 2025031302 1800 900 604800 3600
+customer2.nsec3.deleg.org.	3600	IN	RRSIG	SOA 13 4 3600 20250410172036 20250313172036 2762 customer2.nsec3.deleg.org. wW35/slpcgC6plnUnBDQ7pz66TFcQ+I3dAGwmyk2d25XVrq0iAcA87womddbGJvuyHcbYYM5m0xJ0dOV012m/g==
 customer2.nsec3.deleg.org.	3600	IN	A	146.190.95.45
-customer2.nsec3.deleg.org.	3600	IN	RRSIG	A 13 4 3600 20250410093829 20250313093829 2762 customer2.nsec3.deleg.org. pADFcie2rCVnOXAeusK3plBzFACY3YQojrRw8pdHY0uvv0qUZLAZygdXDuYO93Zbx82cG0Wj3rDWVOJaLXXr4g==
+customer2.nsec3.deleg.org.	3600	IN	RRSIG	A 13 4 3600 20250410172036 20250313172036 2762 customer2.nsec3.deleg.org. XTnwy23BQ8oHKhkpan3pxUE/7kuTJTtZd15d/QjKg7BO2XPn5Biom2rBh/6MFN5Gn/+zA/evYefoj1dnkGgptg==
 customer2.nsec3.deleg.org.	3600	IN	NS	legacy.ideleg.net.
-customer2.nsec3.deleg.org.	3600	IN	RRSIG	NS 13 4 3600 20250410093829 20250313093829 2762 customer2.nsec3.deleg.org. abm39HGixtueBJ3+7uFV2isZN+qKJvnITnj3SBUBadVgla+qI6o+Zou+vXl+5OFRSlwpXMRPv3VTgm0iHRUNnQ==
+customer2.nsec3.deleg.org.	3600	IN	RRSIG	NS 13 4 3600 20250410172036 20250313172036 2762 customer2.nsec3.deleg.org. v2JOQBWPI9mMCE4qN4AOFZVpdpgSRueJ6F1P/X/6I/EKQ9JmOciTGD6YaOboGQ+W9O2AS2wdcuXrr6ibxRkCqQ==
 customer2.nsec3.deleg.org.	3600	IN	TXT	"This is customer2.nsec3.deleg.org."
-customer2.nsec3.deleg.org.	3600	IN	RRSIG	TXT 13 4 3600 20250410093829 20250313093829 2762 customer2.nsec3.deleg.org. CJRYmyTpEfUdflHM5UGqhTzmRzPIauf3axPVfUArY96cWaZzLDSJTtL8+2UoeAEE/MA5BhdloKQiqKtWmlslvQ==
+customer2.nsec3.deleg.org.	3600	IN	RRSIG	TXT 13 4 3600 20250410172036 20250313172036 2762 customer2.nsec3.deleg.org. pPaJS+3lx2Iku1N6GOwVyfo8t9qcfLiDfvN7epIM0KHgZHI8Qvz9VjuvpvuAxxYQSv96UNtyFSZbAK+PCXtmzw==
 customer2.nsec3.deleg.org.	3600	IN	AAAA	2400:6180:0:d2:0:1:ac7b:8000
-customer2.nsec3.deleg.org.	3600	IN	RRSIG	AAAA 13 4 3600 20250410093829 20250313093829 2762 customer2.nsec3.deleg.org. pnyWrgEI2M0zy16taCVTJsZaQqOKkghLPcddYJ2jTeuqkBz2+MAnyo4KpdGQZr+hq4GrilXaqXXutXh3rk0z8Q==
+customer2.nsec3.deleg.org.	3600	IN	RRSIG	AAAA 13 4 3600 20250410172036 20250313172036 2762 customer2.nsec3.deleg.org. cap+z1aUgoWHz+cJRg0LG5UYmIJU7TddRXLmySGs16tSmYnDwe+XMcNJN7pw9+cTlm/HXk92FdfjWt8iAM2Tuw==
 customer2.nsec3.deleg.org.	3600	IN	DNSKEY	257 3 13 /wU1XYHjPU59KQvKClGoVvuzjVsz/xFlQC8C07c7ZC3lAaWeGOiQWlhv11Syu34h+3e+Re9W/6dM3bjjOGgvQg== ;{id = 2762 (ksk), size = 256b}
-customer2.nsec3.deleg.org.	3600	IN	RRSIG	DNSKEY 13 4 3600 20250410093829 20250313093829 2762 customer2.nsec3.deleg.org. pag7LpWqQIKooXWL2GrTpu17Dz5SWnG19A+4OQ4UnDFJhIUIvEsgfyF/wg7KUXmE4R1IpD3ihW5k4Ze/rgSZQw==
-customer2.nsec3.deleg.org.	3600	IN	ZONEMD	2025031300 1 1 e13475fd108cb465c4e07c482cd7bf6299e3a639b802534d374434b1240bdcb1ef564a9bdc264ce5b26dbe312d91d993
-customer2.nsec3.deleg.org.	3600	IN	RRSIG	ZONEMD 13 4 3600 20250410093829 20250313093829 2762 customer2.nsec3.deleg.org. OrLHz46BOJ/zEzMMxIKudYXdO6I2e3HQbR5xRhjkxLBjSMII8HnMycEU0ajpECCGi8DtaXEgL8XyooPoV5U0wg==
+customer2.nsec3.deleg.org.	3600	IN	RRSIG	DNSKEY 13 4 3600 20250410172036 20250313172036 2762 customer2.nsec3.deleg.org. 3ms0K2b709mtYuY7qUIHgWDcah9uQ1cFQ4aCsg2EiTZdakTlRZfLyYnYetjJrVfX9Ah3VXBGOIDJFVdjDKRbKg==
+customer2.nsec3.deleg.org.	3600	IN	ZONEMD	2025031302 1 1 35ae8a739c7ca25af4622b5d960b6ef98a4bcc22e082532444c8a16b0197edb100b25283478ea15e46e55582ee8e16fa
+customer2.nsec3.deleg.org.	3600	IN	RRSIG	ZONEMD 13 4 3600 20250410172036 20250313172036 2762 customer2.nsec3.deleg.org. TEgyEy4GuqNQ/EsLw6rS97fKPteYFjlsxMN+Q9taXwoqZScZCpHe0Y36fRBU0kwJvVxubKrocv0jU4N3qc6XEg==
 customer2.nsec3.deleg.org.	3600	IN	NSEC	customer2.nsec3.deleg.org. A NS SOA TXT AAAA RRSIG NSEC DNSKEY ZONEMD 
-customer2.nsec3.deleg.org.	3600	IN	RRSIG	NSEC 13 4 3600 20250410093829 20250313093829 2762 customer2.nsec3.deleg.org. GSICnnBxVkPXXphUUvnDQJ3NcV72CniuxHD3GpRkKk3AX5CAfCHHcD2UwkSCrpZ9sUF1W+qUNRZ/dPL0k6c+fg==
+customer2.nsec3.deleg.org.	3600	IN	RRSIG	NSEC 13 4 3600 20250410172036 20250313172036 2762 customer2.nsec3.deleg.org. QeQNmNdtGmrWJ1tLdahD/6aVMe/OC+J1ceLj/WzQ7mzuJuz73Fx7Dir+Vt6IB3T7IAipiUMlGFBElrdRd3eAgQ==

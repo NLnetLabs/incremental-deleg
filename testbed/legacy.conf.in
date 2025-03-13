@@ -46,6 +46,22 @@ zone:
 	request-xfr: {% nlnetlabs.ipv4 %} NOKEY
 	request-xfr: {% nlnetlabs.ipv6 %} NOKEY
 
+zone:
+	name: "deleg.org"
+	zonefile: "%s.signed"
+	allow-notify: {% deleg.ipv4 %} NOKEY
+	allow-notify: {% deleg.ipv6 %} NOKEY
+	request-xfr: {% deleg.ipv4 %} NOKEY
+	request-xfr: {% deleg.ipv6 %} NOKEY
+
+zone:
+	name: "nsec3.deleg.org"
+	zonefile: "%s.signed"
+	allow-notify: {% dsupporting.ipv4 %} NOKEY
+	allow-notify: {% dsupporting.ipv6 %} NOKEY
+	request-xfr: {% dsupporting.ipv4 %} NOKEY
+	request-xfr: {% dsupporting.ipv6 %} NOKEY
+
 pattern:
 	name: "single-primary-signed"
 	zonefile: "%s.signed"

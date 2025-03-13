@@ -9,6 +9,9 @@ $TTL 3600
                                  )
                  NS     @
 
+*                TXT    "nsec3.ideleg.net"
+                 A      {% ideleg.ipv4 %}
+                 AAAA   {% ideleg.ipv6 %}
 _deleg           IDELEG 1 supporting.ideleg.net. ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
 *._deleg         IDELEG 0 .
 

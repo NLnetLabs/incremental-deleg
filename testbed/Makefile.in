@@ -116,26 +116,26 @@ resign:
 	$(MAKE) sign
 
 deploy-ideleg: ideleg.net.signed ideleg.net.conf
-	scp ideleg.net.signed root@128.199.252.158:/etc/nsd
-	scp ideleg.net.conf root@128.199.252.158:/etc/nsd/nsd.conf
-	ssh root@128.199.252.158 "nsd-control reconfig || nsd-control start"
-	ssh root@128.199.252.158 "nsd-control reload || true"
+	scp ideleg.net.signed root@{% ideleg.ipv4 %}:/etc/nsd
+	scp ideleg.net.conf root@{% ideleg.ipv4 %}:/etc/nsd/nsd.conf
+	ssh root@{% ideleg.ipv4 %} "nsd-control reconfig || nsd-control start"
+	ssh root@{% ideleg.ipv4 %} "nsd-control reload || true"
 
 deploy-supporting: customer1.ideleg.net.signed customer2.ideleg.net.signed customer3.ideleg.net.signed customer4.ideleg.net.signed nsec3.ideleg.net.signed supporting.conf
-	scp customer1.ideleg.net.signed root@159.223.42.75:/etc/nsd
-	scp customer2.ideleg.net.signed root@159.223.42.75:/etc/nsd
-	scp customer3.ideleg.net.signed root@159.223.42.75:/etc/nsd
-	scp customer4.ideleg.net.signed root@159.223.42.75:/etc/nsd
-	scp nsec3.ideleg.net.signed root@159.223.42.75:/etc/nsd
-	scp supporting.conf root@159.223.42.75:/etc/nsd/nsd.conf
-	ssh root@159.223.42.75 "nsd-control reconfig || nsd-control start"
-	ssh root@159.223.42.75 "nsd-control reload || true"
+	scp customer1.ideleg.net.signed root@{% supporting.ipv4 %}:/etc/nsd
+	scp customer2.ideleg.net.signed root@{% supporting.ipv4 %}:/etc/nsd
+	scp customer3.ideleg.net.signed root@{% supporting.ipv4 %}:/etc/nsd
+	scp customer4.ideleg.net.signed root@{% supporting.ipv4 %}:/etc/nsd
+	scp nsec3.ideleg.net.signed root@{% supporting.ipv4 %}:/etc/nsd
+	scp supporting.conf root@{% supporting.ipv4 %}:/etc/nsd/nsd.conf
+	ssh root@{% supporting.ipv4 %} "nsd-control reconfig || nsd-control start"
+	ssh root@{% supporting.ipv4 %} "nsd-control reload || true"
 
 deploy-nlnetlabs: nlnetlabs.conf customer3.nsec3.ideleg.net.signed
-	scp customer3.nsec3.ideleg.net.signed root@152.42.143.10:/etc/nsd
-	scp nlnetlabs.conf root@152.42.143.10:/etc/nsd/nsd.conf
-	ssh root@152.42.143.10 "nsd-control reconfig || nsd-control start"
-	ssh root@152.42.143.10 "nsd-control reload || true"
+	scp customer3.nsec3.ideleg.net.signed root@{% nlnetlabs.ipv4 %}:/etc/nsd
+	scp nlnetlabs.conf root@{% nlnetlabs.ipv4 %}:/etc/nsd/nsd.conf
+	ssh root@{% nlnetlabs.ipv4 %} "nsd-control reconfig || nsd-control start"
+	ssh root@{% nlnetlabs.ipv4 %} "nsd-control reload || true"
 
 deploy-legacy: legacy.conf customer1.nsec3.ideleg.net.signed \
 		customer2.nsec3.ideleg.net.signed customer4.nsec3.ideleg.net.signed \
@@ -144,39 +144,39 @@ deploy-legacy: legacy.conf customer1.nsec3.ideleg.net.signed \
 		customer2.nsec3.deleg.org.signed customer1.nsec3.deleg.org.signed \
 		customer4.nsec3.deleg.org customer5.nsec3.deleg.org \
 		customer5.deleg.org customer4.deleg.org
-	scp customer1.nsec3.ideleg.net.signed root@134.122.39.99:/etc/nsd
-	scp customer2.nsec3.ideleg.net.signed root@134.122.39.99:/etc/nsd
-	scp customer4.nsec3.ideleg.net.signed root@134.122.39.99:/etc/nsd
-	scp customer1.deleg.org.signed root@134.122.39.99:/etc/nsd
-	scp customer2.deleg.org.signed root@134.122.39.99:/etc/nsd
-	scp customer3.deleg.org.signed root@134.122.39.99:/etc/nsd
-	scp customer3.nsec3.deleg.org.signed root@134.122.39.99:/etc/nsd
-	scp customer2.nsec3.deleg.org.signed root@134.122.39.99:/etc/nsd
-	scp customer1.nsec3.deleg.org.signed root@134.122.39.99:/etc/nsd
-	scp customer4.nsec3.deleg.org root@134.122.39.99:/etc/nsd
-	scp customer5.nsec3.deleg.org root@134.122.39.99:/etc/nsd
-	scp customer5.deleg.org root@134.122.39.99:/etc/nsd
-	scp customer4.deleg.org root@134.122.39.99:/etc/nsd
-	scp legacy.conf root@134.122.39.99:/etc/nsd/nsd.conf
-	ssh root@134.122.39.99 "nsd-control reconfig || nsd-control start"
-	ssh root@134.122.39.99 "nsd-control reload || true"
+	scp customer1.nsec3.ideleg.net.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer2.nsec3.ideleg.net.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer4.nsec3.ideleg.net.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer1.deleg.org.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer2.deleg.org.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer3.deleg.org.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer3.nsec3.deleg.org.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer2.nsec3.deleg.org.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer1.nsec3.deleg.org.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer4.nsec3.deleg.org root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer5.nsec3.deleg.org root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer5.deleg.org root@{% legacy.ipv4 %}:/etc/nsd
+	scp customer4.deleg.org root@{% legacy.ipv4 %}:/etc/nsd
+	scp legacy.conf root@{% legacy.ipv4 %}:/etc/nsd/nsd.conf
+	ssh root@{% legacy.ipv4 %} "nsd-control reconfig || nsd-control start"
+	ssh root@{% legacy.ipv4 %} "nsd-control reload || true"
 
 deploy-deleg: deleg.org.conf deleg.org.signed
-	scp deleg.org.conf root@146.190.95.45:/etc/nsd/nsd.conf
-	scp deleg.org.signed root@146.190.95.45:/etc/nsd
-	ssh root@146.190.95.45 "nsd-control reconfig || nsd-control start"
-	ssh root@146.190.95.45 "nsd-control reload || true"
+	scp deleg.org.conf root@{% deleg.ipv4 %}:/etc/nsd/nsd.conf
+	scp deleg.org.signed root@{% deleg.ipv4 %}:/etc/nsd
+	ssh root@{% deleg.ipv4 %} "nsd-control reconfig || nsd-control start"
+	ssh root@{% deleg.ipv4 %} "nsd-control reload || true"
 
 deploy-dsupporting: dsupporting.conf nsec3.deleg.org.signed
-	scp dsupporting.conf root@178.128.234.33:/etc/nsd/nsd.conf
-	scp nsec3.deleg.org.signed root@178.128.234.33:/etc/nsd
-	ssh root@178.128.234.33 "nsd-control reconfig || nsd-control start"
-	ssh root@178.128.234.33 "nsd-control reload || true"
+	scp dsupporting.conf root@{% dsupporting.ipv4 %}:/etc/nsd/nsd.conf
+	scp nsec3.deleg.org.signed root@{% dsupporting.ipv4 %}:/etc/nsd
+	ssh root@{% dsupporting.ipv4 %} "nsd-control reconfig || nsd-control start"
+	ssh root@{% dsupporting.ipv4 %} "nsd-control reload || true"
 
 deploy-dnlnetlabs: dnlnetlabs.conf
-	scp dnlnetlabs.conf root@146.190.31.218:/etc/nsd/nsd.conf
-	ssh root@146.190.31.218 "nsd-control reconfig || nsd-control start"
-	ssh root@146.190.31.218 "nsd-control reload || true"
+	scp dnlnetlabs.conf root@{% dnlnetlabs.ipv4%}:/etc/nsd/nsd.conf
+	ssh root@{% dnlnetlabs.ipv4%} "nsd-control reconfig || nsd-control start"
+	ssh root@{% dnlnetlabs.ipv4%} "nsd-control reload || true"
 
 deploy: deploy-ideleg deploy-supporting deploy-nlnetlabs deploy-legacy \
 		deploy-deleg deploy-dsupporting deploy-dnlnetlabs

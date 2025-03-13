@@ -1,18 +1,18 @@
-customer1.nsec3.ideleg.net.	3600	IN	SOA	supporting.ideleg.net. wouter.petri.os3.nl. 2025030901 1800 900 604800 3600
-customer1.nsec3.ideleg.net.	3600	IN	RRSIG	SOA 13 4 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. US44fiVMP3mcIhhL8Pfaq3IgVVcrwuacKsoAfiQB5PK18JrvUxJyhAPMRDSvIqVugpQuB25yopz4fO+l1dkRMA==
-customer1.nsec3.ideleg.net.	3600	IN	A	78.47.51.169
-customer1.nsec3.ideleg.net.	3600	IN	RRSIG	A 13 4 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. mno16IRbzFr23DxvHlYPiSZMNi4QMQKDavw2ool5HzSwSVLb6fl3YppyQ6nyf0qG+eDdM19fwWl5vPU6YtGzuQ==
+customer1.nsec3.ideleg.net.	3600	IN	SOA	supporting.ideleg.net. wouter.petri.os3.nl. 2025031302 1800 900 604800 3600
+customer1.nsec3.ideleg.net.	3600	IN	RRSIG	SOA 13 4 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. JaDHAqO86QAnfcy7mm4nn6X6GaO8er7xkIPaN6R6IoYBvqzs1peRtNwA8FSGfQ4h1tNoXsYFeLoZlC1bu7gpuw==
+customer1.nsec3.ideleg.net.	3600	IN	A	128.199.252.158
+customer1.nsec3.ideleg.net.	3600	IN	RRSIG	A 13 4 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. 72kWgAHuCIjNw9tz8iKJdRiXUnKFxidqB9RvZTIBODjh3k6asv7vftPbfDJn5HN8hTog8G/imX7w8mrhIN/q7Q==
 customer1.nsec3.ideleg.net.	3600	IN	NS	legacy.ideleg.net.
-customer1.nsec3.ideleg.net.	3600	IN	RRSIG	NS 13 4 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. kiQbSRhK3QU7IxJ82sLTDXByEBpWWvp6GRHojuMxaU4PRizPESduv20fBXyv6n4hrpqNi/rm3KFUNhypT41T6A==
+customer1.nsec3.ideleg.net.	3600	IN	RRSIG	NS 13 4 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. qtfH1nNgzguhkOzAO1oQs7u+rPyWsTMmjtgnqadNAagGdUgjUZewvc+sIGtI+vQ6a1j5E74ASOEjxAs/tAcJCg==
 customer1.nsec3.ideleg.net.	3600	IN	TXT	"This is customer1.nsec3.ideleg.net."
-customer1.nsec3.ideleg.net.	3600	IN	RRSIG	TXT 13 4 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. eM6SZdkZMcY5OJZzVjYnPsLsCQxmAWBIrMN6UjoENECi+84sbKQW3X1+fCRso7vVqThMXMCqNNiHaSHu3q6GeQ==
-customer1.nsec3.ideleg.net.	3600	IN	AAAA	2a01:4f8:c0c:92cd::1
-customer1.nsec3.ideleg.net.	3600	IN	RRSIG	AAAA 13 4 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. GUIpxWeNzItLf7IFnlGcvjuE4DmmTXeGitVAnh//t4jrkRd9niLd1BBDWfP4O/Iamnbyo0N8H4a9WssiWsKsbg==
+customer1.nsec3.ideleg.net.	3600	IN	RRSIG	TXT 13 4 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. S/n0T/kFcAf5AfO339RvBmASjdEzcleogQni58Yrhr4QeB4EK40E+NBOKOkRAOhq0lzpcvOJAJ7NauO+4Z17gQ==
+customer1.nsec3.ideleg.net.	3600	IN	AAAA	2400:6180:0:d2:0:1:ac7b:9000
+customer1.nsec3.ideleg.net.	3600	IN	RRSIG	AAAA 13 4 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. Ii/T715qvdSJiJgH6wIf51EeYJ6XbS+v3F0HRkjivCv3EDyGrq7gUvyF3w0FQTMOdVsuCPm9txnnQfrVVbilcw==
 customer1.nsec3.ideleg.net.	3600	IN	DNSKEY	257 3 13 d97Rkr90Fvj3bpkBX5aOaTPCbqP/sm4FZaFFrpU4PaDhZWT4maZSAmqxxdYdjIChi0hy/4LisQfB7aqtU3n2MA== ;{id = 6616 (ksk), size = 256b}
-customer1.nsec3.ideleg.net.	3600	IN	RRSIG	DNSKEY 13 4 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. OSRoIfDsf2mlYpOLkzRyTFDcLX5CD/D9a5MtnxiOGCRlaAicrW5gCjeHvm93l2qsGgQss9+qHDpCveGqMjJY9A==
+customer1.nsec3.ideleg.net.	3600	IN	RRSIG	DNSKEY 13 4 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. 2gKmYvt9rs16YRtdAwwcBBXFQKUXRoALxeCeorlbAH/cNAIfpG1ikaEMxjgwNodqhBhP+FmjArZ+sFcoGexCzA==
 customer1.nsec3.ideleg.net.	3600	IN	NSEC3PARAM	1 0 0 - 
-customer1.nsec3.ideleg.net.	3600	IN	RRSIG	NSEC3PARAM 13 4 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. FimmDxIRHKsR8vriRp284Y5qe+l56TYo/XbZC3FepQyQXNF5C6cCwzAENUaEaxYRINigDo4OIKGC9biVHVXj2w==
-customer1.nsec3.ideleg.net.	3600	IN	ZONEMD	2025030901 1 1 2fe73e9e71ceac0f9cd949f41c5a031c6185f63698571aedc6a43dcfdc9e1f03386b09a051af9150f81ebef46936954e
-customer1.nsec3.ideleg.net.	3600	IN	RRSIG	ZONEMD 13 4 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. TbTCpg7xcJAmGNfqV2dIFppKe5HqlFQghX1VXxH9EKY3tpSVx+jdsFRlykLJZk238wXmigfm90/zpI0PHCsjmw==
+customer1.nsec3.ideleg.net.	3600	IN	RRSIG	NSEC3PARAM 13 4 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. 3d2kbAYisO2P0mub7M+qrWB6sDFqk07Q3+ehB8WG6ifdZI4B/FdpP9CEhfMJaiyblFQ0EOOCn7wv6w5CGLZTFA==
+customer1.nsec3.ideleg.net.	3600	IN	ZONEMD	2025031302 1 1 88637632c185dc7f32a3f3ae985a6f279d7cd871bb820ba756187a2dfe8a839c24bd6b831f8b986ea30c2e212d6c255b
+customer1.nsec3.ideleg.net.	3600	IN	RRSIG	ZONEMD 13 4 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. GuAMXHOGDNAGDlU3yWx/r8JWru6fQrSzdbh6z/b3kBidZfLH/qdxRvoTIfPZ84vaqUEUJpmMTkF8Ziopl54UKw==
 2h4vos1fat03vi1sledk8nr093ddief2.customer1.nsec3.ideleg.net.	3600	IN	NSEC3	1 1 0 -  2h4vos1fat03vi1sledk8nr093ddief2 A NS SOA TXT AAAA RRSIG DNSKEY NSEC3PARAM ZONEMD 
-2h4vos1fat03vi1sledk8nr093ddief2.customer1.nsec3.ideleg.net.	3600	IN	RRSIG	NSEC3 13 5 3600 20250406145607 20250309145607 6616 customer1.nsec3.ideleg.net. UHg2FPI/GOtn3lVrNFBUGe/1zABp/cmAQX7BPlzTQY7Ht5iEVgCv7dreIWvrsLcj9I0EY5ciXx7GqaL3Q7cwqQ==
+2h4vos1fat03vi1sledk8nr093ddief2.customer1.nsec3.ideleg.net.	3600	IN	RRSIG	NSEC3 13 5 3600 20250410172036 20250313172036 6616 customer1.nsec3.ideleg.net. WzVyFG/VT+h4rdX+watd7yIt667zypIy7ct0ATXEs7wcHnJP11aWKjj9Kaw2n17XMHzSL8ZJ8q461ZpmdtzRfQ==
