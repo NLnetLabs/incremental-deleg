@@ -61,13 +61,13 @@ customer4.nsec3.ideleg.net.signed: customer4.nsec3.ideleg.net
 
 deleg.org.signed: deleg.org
 	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
-	| ldns-signzone -z 1 -f - -o $< - K$<.+013+47825 \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+15059 \
 	| ldns-read-zone -u DELEG > $@.new \
 	&& mv $@.new $@
 
 nsec3.deleg.org.signed: nsec3.deleg.org
 	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
-	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+26656 \
+	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+59425 \
 	| ldns-read-zone -u DELEG > $@.new \
 	&& mv $@.new $@
 
