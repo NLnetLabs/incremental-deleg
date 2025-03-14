@@ -1,24 +1,24 @@
-customer4.ideleg.net.	3600	IN	SOA	supporting.ideleg.net. wouter.petri.os3.nl. 2025031302 1800 900 604800 3600
-customer4.ideleg.net.	3600	IN	RRSIG	SOA 13 3 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. m2JUUn+shiRF95OwF3esuNk3f5mxciBA1POl7NolzRui3M984wXHhViPTSCpSPUeq2arcOJsKIz1nHBqT1cxlg==
+customer4.ideleg.net.	3600	IN	SOA	supporting.ideleg.net. wouter.petri.os3.nl. 2025031402 1800 900 604800 3600
+customer4.ideleg.net.	3600	IN	RRSIG	SOA 13 3 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. HXDdWhhOZmMNlMQfsS3MLKUQn1Ce0+l/J1Wri6Ev/ZPY1X40FUWz+u+V2/uJZSwNFyXsTQEgsK8feC8SY8NtTQ==
 customer4.ideleg.net.	3600	IN	A	128.199.252.158
-customer4.ideleg.net.	3600	IN	RRSIG	A 13 3 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. rH5FuSxmaV18dBYNwXEIaSFcu1y2kAsa0WQBplPj+G5gHzWcK8KT+3rYN2SmySxVA2SA2AkxuqHYth/alyfdow==
+customer4.ideleg.net.	3600	IN	RRSIG	A 13 3 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. UpA7ec7l0dIo8ZgI9WaEA3lGumNmOtF5wMnShdGC4wM1FjM9Qaeqsryo5JxUpNh/O3ew0Gw3oLRahCu14lkn9A==
 customer4.ideleg.net.	3600	IN	NS	ns.customer2.ideleg.net.
-customer4.ideleg.net.	3600	IN	RRSIG	NS 13 3 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. NKg3BYXBBhOdF/di5ephPsq5jtuC2PW3Szba5qCWbhp3Sv35+yi6N/+qYnV76Jexq0O4jjTF7f3KJvPaOshABw==
+customer4.ideleg.net.	3600	IN	RRSIG	NS 13 3 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. w4Chktifx2pCzaCOqlaMyQdt1eBzYZZgdAV//vP0BgQezdF22aeiy2NL2I4D/b+nreAaTINpRFob5bs3XXf+vQ==
 customer4.ideleg.net.	3600	IN	TXT	"This is customer4.ideleg.net."
-customer4.ideleg.net.	3600	IN	RRSIG	TXT 13 3 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. XAlU2UacNSeaejnUKFbYu+HEmK09epIjXq54enl2DRBSpFNB3Z+nziEgenRyUo9hFbhYbQIs83p9rAooC/CDKA==
+customer4.ideleg.net.	3600	IN	RRSIG	TXT 13 3 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. D3Xa7duteNNvHlNy0Xj3F+qGsPiwYvI7TFkgwEcQrCAPZaiFAcTRMgr21tAZTOT1GVDVDRD6Ba7trDy29BuBpg==
 customer4.ideleg.net.	3600	IN	AAAA	2400:6180:0:d2:0:1:ac7b:9000
-customer4.ideleg.net.	3600	IN	RRSIG	AAAA 13 3 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. 3KpXUVjEok6wUPOJKVqvKT39RgRDUyNh7lfm7kMc/d2U3J7vMnQ7oSXo1gQN+DiHrsJh6TvtXSJA5iqG9pdWbA==
+customer4.ideleg.net.	3600	IN	RRSIG	AAAA 13 3 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. kIqo/9L4Bie6VX/JXhlLJaFXLfEfLwr/XTNNm56zjsGV5S6Vbd1ycyAPMY7pNHwrHs8THc4R/fapvaH0IpKwPQ==
 customer4.ideleg.net.	3600	IN	DNSKEY	257 3 13 127AmMTgf0cs4lr5hZxLNMT+lAgsnXc8/NYC5AEjLTqorn38Zc89/UNZwm8rAlb7LwdKWqB55Dt4qNAldTuH5w== ;{id = 64041 (ksk), size = 256b}
-customer4.ideleg.net.	3600	IN	RRSIG	DNSKEY 13 3 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. xDZ7wP5Aa+Lsy/1LFlnMkxP7X9K+bSIhFbxeKswUnwpJ+dp11gPv4RCCnHbAjzRR0pPxN5+jtfShYEKZOOqGTA==
-customer4.ideleg.net.	3600	IN	ZONEMD	2025031302 1 1 2cf474fb82313777bd4b4708ae35f53f11016b5126b6c5684197fdb249412c6f6b18c42418d10b4167136bab4b057306
-customer4.ideleg.net.	3600	IN	RRSIG	ZONEMD 13 3 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. Zt5WShdZOCO5xJOyGJoXE+uxFTPleJjuZI8Jvb+rHC3kvbxuxCClsFwpSnR7luen9b12Fl0bEzaYJIQAxVVSvw==
+customer4.ideleg.net.	3600	IN	RRSIG	DNSKEY 13 3 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. uCs8sriXu5U5QCSBPeXkOJMxRPElKRE99Reh9Gz0m0cHvvdh4kOe7vP5+SMgCvX8nEpOzDrbgoChqDbQ0fhRdA==
+customer4.ideleg.net.	3600	IN	ZONEMD	2025031402 1 1 0aa86ae554fa550874f67c1d746b92d6b2a7da631435989d110c44c688dd4575c832f729e7c40012a902024c0f98304c
+customer4.ideleg.net.	3600	IN	RRSIG	ZONEMD 13 3 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. KKZDY8LwK8U2Gq697jas2T+nS1fZnIcv59FJI+X5j4hC/U1m7EiQBHFSMzr2I2eX8EdFmMHKJTn3Qnf09vRtmw==
 customer4.ideleg.net.	3600	IN	NSEC	_deleg.customer4.ideleg.net. A NS SOA TXT AAAA RRSIG NSEC DNSKEY ZONEMD 
-customer4.ideleg.net.	3600	IN	RRSIG	NSEC 13 3 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. 5HeYy3t6D6x/puDu9Gxo7JZ+3GN5fPahjg2qyXBmQIe9oKeGGJNeIe5LlGa2p1dNU/c8wx0fuNXHH4aCtqqcRw==
+customer4.ideleg.net.	3600	IN	RRSIG	NSEC 13 3 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. 3xPiNGR9EmQmeSfsi5HwPuZcsSVUagIzTLKU52K186iOapx4o08O6i9yntr21GaMYVxVpq/Fj6N3C+Oy8lldCw==
 _deleg.customer4.ideleg.net.	3600	IN	IDELEG	0 ideleg.customer2.ideleg.net.
-_deleg.customer4.ideleg.net.	3600	IN	RRSIG	IDELEG 13 4 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. peMBoeyf2a30SoEWMNCorqrIFySngub4rncWoyPO9nk8AYS70HkMxg1ww5LgGtqCSRT0x/sT4jp1OiJhucEDeg==
+_deleg.customer4.ideleg.net.	3600	IN	RRSIG	IDELEG 13 4 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. kkOzSmdxRsGotC4wNWZkzhnL5Fa6+iHOPdP57QJ9UOoPOzxtH/NCcqY1ubErdKeWZ5Sv6Ocxxs6A7OqJXRaqlg==
 _deleg.customer4.ideleg.net.	3600	IN	NSEC	*._deleg.customer4.ideleg.net. RRSIG NSEC IDELEG 
-_deleg.customer4.ideleg.net.	3600	IN	RRSIG	NSEC 13 4 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. 470x9Pp0Hlt9zI0Taqch7AqCDp+pqHWmxgun5XGQrc583YElFc+03D/XEAQd/ksboYx+m+KoB+deBDOPbLeIZw==
+_deleg.customer4.ideleg.net.	3600	IN	RRSIG	NSEC 13 4 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. xtE6XsaimlC9oBr90EpVjaHQGIFIvpGCxbUdfiH/pa9y5r2furi4ID6VsnCXbv5D31q8PSPbY2QHRcIZQehr1Q==
 *._deleg.customer4.ideleg.net.	3600	IN	IDELEG	0 .
-*._deleg.customer4.ideleg.net.	3600	IN	RRSIG	IDELEG 13 4 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. sFc1VuHjZFlJWw7snNKj67kyd0g4NwsfKPnpY+AHxM51ZksgtHUpcAzXy9nMVRcHIN7cM1JxUcij69lm2o/y9g==
+*._deleg.customer4.ideleg.net.	3600	IN	RRSIG	IDELEG 13 4 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. OVDOJG07zMGDYd8pUkPUR0SIGUjZaFvAYfFl0bMWi4AMXsuRaX9Fh/MJJCxpQ9oslS/MX6uMp58lJ9JUWcfn3A==
 *._deleg.customer4.ideleg.net.	3600	IN	NSEC	customer4.ideleg.net. RRSIG NSEC IDELEG 
-*._deleg.customer4.ideleg.net.	3600	IN	RRSIG	NSEC 13 4 3600 20250410172036 20250313172036 64041 customer4.ideleg.net. 5zIDJAXcM9ujK8D06uFHyvne3GKWz3rWsOr5HcFdQejqq91uic4egpMMENTZqA/kqIHx45u//MGs1U7vjdBFzw==
+*._deleg.customer4.ideleg.net.	3600	IN	RRSIG	NSEC 13 4 3600 20250411102536 20250314102536 64041 customer4.ideleg.net. U+C8zwUmlKE3aXhX+9PqsG9GcSEmav28joiYGnzHRl+N23+FUrRu4Vxclr5KtLCc0LS8fenRfRv4TKxaP5C5xQ==

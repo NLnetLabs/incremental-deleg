@@ -35,6 +35,7 @@ customer3._deleg IDELEG 10 supporting   ipv4hint={% supporting.ipv4 %} ipv6hint=
                  IDELEG 20 legacy  ipv4hint={% legacy.ipv4 %}  ipv6hint={% legacy.ipv6 %}
 customer4._deleg IDELEG 0 ideleg.customer2
 nsec3            IDELEG 10 supporting   ipv4hint={% supporting.ipv4 %} ipv6hint={% supporting.ipv6 %}
+flag0            IDELEG 10 legacy ipv4hint={% legacy.ipv4 %} ipv6hint={% legacy.ipv6 %}
 
 ;; Legacy delegations
 customer1        NS     supporting
@@ -52,4 +53,6 @@ customer4        NS     ns.customer2
 ;customer5        NS     legacy
 nsec3            NS     supporting
 nsec3            DS     52286 13 2 2f9e78cb6df581a4f2272e817175038dbdca081513f4824c1588f01f694c912c
+flag0            NS     legacy
+flag0            DS     26224 13 2 3b40a0b072297512dc77e99e265643e9251e147dc3754ee770b3812aa4540044
 

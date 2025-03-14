@@ -84,33 +84,45 @@ zone:
 	name: "customer4.nsec3.ideleg.net"
 	include-pattern: "single-primary-signed"
 zone:
-	name: "customer1.ideleg.org"
+	name: "customer1.deleg.org"
 	include-pattern: "single-primary-signed"
 zone:
-	name: "customer2.ideleg.org"
+	name: "customer2.deleg.org"
 	include-pattern: "single-primary-signed"
 zone:
-	name: "customer3.ideleg.org"
+	name: "customer3.deleg.org"
 	include-pattern: "single-primary-signed"
 zone:
-	name: "customer3.nsec3.ideleg.org"
+	name: "customer3.nsec3.deleg.org"
 	include-pattern: "single-primary-signed"
 zone:
-	name: "customer2.nsec3.ideleg.org"
+	name: "customer2.nsec3.deleg.org"
 	include-pattern: "single-primary-signed"
 zone:
-	name: "customer1.nsec3.ideleg.org"
+	name: "customer1.nsec3.deleg.org"
 	include-pattern: "single-primary-signed"
 zone:
-	name: "customer4.nsec3.ideleg.org"
+	name: "customer4.nsec3.deleg.org"
 	include-pattern: "single-primary-unsigned"
 zone:
-	name: "customer5.nsec3.ideleg.org"
+	name: "customer5.nsec3.deleg.org"
 	include-pattern: "single-primary-unsigned"
 zone:
-	name: "customer5.ideleg.org"
+	name: "customer5.deleg.org"
 	include-pattern: "single-primary-unsigned"
 zone:
-	name: "customer4.ideleg.org"
+	name: "customer4.deleg.org"
 	include-pattern: "single-primary-unsigned"
+zone:
+	name: "flag0.deleg.org"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "flag0.nsec3.deleg.org"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "flag0.nsec3.ideleg.net"
+	include-pattern: "single-primary-signed"
+zone:
+	name: "flag0.ideleg.net"
+	include-pattern: "single-primary-signed"
 

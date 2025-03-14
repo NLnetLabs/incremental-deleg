@@ -52,4 +52,8 @@ report.xml
 /testbed/dsupporting.conf
 /testbed/kresd-resolution-failure.log
 /testbed/nsec3.deleg.org
+/testbed/flag0.deleg.org
+/testbed/flag0.ideleg.net
+/testbed/flag0.nsec3.deleg.org
+/testbed/flag0.nsec3.ideleg.net
 

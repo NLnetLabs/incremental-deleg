@@ -1,4 +1,4 @@
-TOSIGN = ideleg.net nsec3.ideleg.net customer1.ideleg.net customer1.nsec3.ideleg.net customer2.ideleg.net customer2.nsec3.ideleg.net customer3.ideleg.net customer3.nsec3.ideleg.net customer4.ideleg.net deleg.org nsec3.deleg.org customer1.deleg.org customer2.deleg.org customer3.deleg.org customer1.nsec3.deleg.org customer2.nsec3.deleg.org customer3.nsec3.deleg.org
+TOSIGN = ideleg.net nsec3.ideleg.net customer1.ideleg.net customer1.nsec3.ideleg.net customer2.ideleg.net customer2.nsec3.ideleg.net customer3.ideleg.net customer3.nsec3.ideleg.net customer4.ideleg.net deleg.org nsec3.deleg.org customer1.deleg.org customer2.deleg.org customer3.deleg.org customer1.nsec3.deleg.org customer2.nsec3.deleg.org customer3.nsec3.deleg.org flag0.deleg.org flag0.nsec3.deleg.org flag0.ideleg.net flag0.nsec3.ideleg.net
 UNSIGNED = customer4.deleg.org customer5.deleg.org customer4.nsec3.deleg.org customer5.nsec3.deleg.org
 
 all: $(TOSIGN:=.signed) $(UNSIGNED)
@@ -91,20 +91,42 @@ customer3.deleg.org.signed: customer3.deleg.org
 
 customer3.nsec3.deleg.org.signed: customer3.nsec3.deleg.org
 	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
-	| ldns-signzone -z 1 -f - -o $< - K$<.+013+46550 \
+	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+46550 \
 	| ldns-read-zone -u DELEG > $@.new \
 	&& mv $@.new $@
 
 customer2.nsec3.deleg.org.signed: customer2.nsec3.deleg.org
 	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
-	| ldns-signzone -z 1 -f - -o $< - K$<.+013+02762 \
+	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+02762 \
 	| ldns-read-zone -u DELEG > $@.new \
 	&& mv $@.new $@
 
 customer1.nsec3.deleg.org.signed: customer1.nsec3.deleg.org
 	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
-	| ldns-signzone -z 1 -f - -o $< - K$<.+013+34489 \
+	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+34489 \
 	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+flag0.nsec3.deleg.org.signed: flag0.nsec3.deleg.org
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -n -t 0 -p -z 1 -f - -o $< - K$<.+013+36476\
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+flag0.deleg.org.signed: flag0.deleg.org
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f - -o $< - K$<.+013+26207 \
+	| ldns-read-zone -u DELEG > $@.new \
+	&& mv $@.new $@
+
+flag0.ideleg.net.signed: flag0.ideleg.net
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -z 1 -f $@.new -o $< - K$<.+013+26224 \
+	&& mv $@.new $@
+
+flag0.nsec3.ideleg.net.signed: flag0.nsec3.ideleg.net
+	ldns-read-zone -psS YYYYMMDDxx `[ -f $@ ] && echo $@ || echo $<` \
+	| ldns-signzone -n -t 0 -p -z 1 -f $@.new -o $< - K$<.+013+45370 \
 	&& mv $@.new $@
 
 sign:
@@ -143,7 +165,9 @@ deploy-legacy: legacy.conf customer1.nsec3.ideleg.net.signed \
 		customer3.deleg.org.signed customer3.nsec3.deleg.org.signed \
 		customer2.nsec3.deleg.org.signed customer1.nsec3.deleg.org.signed \
 		customer4.nsec3.deleg.org customer5.nsec3.deleg.org \
-		customer5.deleg.org customer4.deleg.org
+		customer5.deleg.org customer4.deleg.org \
+		flag0.deleg.org.signed flag0.ideleg.net.signed \
+		flag0.nsec3.deleg.org.signed flag0.nsec3.ideleg.net.signed
 	scp customer1.nsec3.ideleg.net.signed root@{% legacy.ipv4 %}:/etc/nsd
 	scp customer2.nsec3.ideleg.net.signed root@{% legacy.ipv4 %}:/etc/nsd
 	scp customer4.nsec3.ideleg.net.signed root@{% legacy.ipv4 %}:/etc/nsd
@@ -157,6 +181,10 @@ deploy-legacy: legacy.conf customer1.nsec3.ideleg.net.signed \
 	scp customer5.nsec3.deleg.org root@{% legacy.ipv4 %}:/etc/nsd
 	scp customer5.deleg.org root@{% legacy.ipv4 %}:/etc/nsd
 	scp customer4.deleg.org root@{% legacy.ipv4 %}:/etc/nsd
+	scp flag0.deleg.org.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp flag0.nsec3.deleg.org.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp flag0.nsec3.ideleg.net.signed root@{% legacy.ipv4 %}:/etc/nsd
+	scp flag0.ideleg.net.signed root@{% legacy.ipv4 %}:/etc/nsd
 	scp legacy.conf root@{% legacy.ipv4 %}:/etc/nsd/nsd.conf
 	ssh root@{% legacy.ipv4 %} "nsd-control reconfig || nsd-control start"
 	ssh root@{% legacy.ipv4 %} "nsd-control reload || true"

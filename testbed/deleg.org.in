@@ -39,6 +39,10 @@ customer4        DELEG  1 legacy Glue4={% legacy.ipv4 %} Glue6={% legacy.ipv6 %}
 customer5        NS     legacy
 
 nsec3            NS     supporting
-nsec3            DS     26656 13 2 177fe62a33f94f8b109db831aa90743904ebcc6c0e041631dee7687093e688c5
-nsec3            DELEG  10 dsupporting   Glue4={% dsupporting.ipv4 %} Glue6={% dsupporting.ipv6 %}
+nsec3            DS     59425 13 2 e87a52e094f641e2454d920da8a97d9bebced724c1267c005d64a8e50bf0467a
+nsec3            DELEG  1 dsupporting   Glue4={% dsupporting.ipv4 %} Glue6={% dsupporting.ipv6 %}
+
+flag0            NS     legacy
+flag0            DS     26207 13 2 d2c45168079e99667c1096639aeacb5e2892a781079e999b60f953e3667e9f42
+flag0            DELEG  1 legacy   Glue4={% legacy.ipv4 %} Glue6={% legacy.ipv6 %}
 

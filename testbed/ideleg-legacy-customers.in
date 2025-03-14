@@ -1,0 +1,15 @@
+$ORIGIN {% target %}.
+$TTL 3600
+@                SOA {% legacy.name %}. willem.nlnetlabs.nl. (
+                                 2025030900 ; serial
+                                 1800       ; refresh
+                                 900        ; retry
+                                 604800     ; expire
+                                 3600       ; minimum
+                                 )
+
+                 NS     {% legacy.name %}.
+                 A      {% ideleg.ipv4 %}
+                 AAAA   {% ideleg.ipv6 %}
+		 TXT    "This is {% target %}."
+

@@ -1,30 +1,30 @@
-customer2.ideleg.net.	3600	IN	SOA	supporting.ideleg.net. wouter.petri.os3.nl. 2025031302 1800 900 604800 3600
-customer2.ideleg.net.	3600	IN	RRSIG	SOA 13 3 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. SeZOcrJypAj5B7Gjmg/6YzR7QzMni6sZbvx4SUxNKiQ9yBTPGCW7H038eWq1hng/JF7ucb7FIY0Doi/Gw2x8lg==
+customer2.ideleg.net.	3600	IN	SOA	supporting.ideleg.net. wouter.petri.os3.nl. 2025031402 1800 900 604800 3600
+customer2.ideleg.net.	3600	IN	RRSIG	SOA 13 3 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. TByw8cOBm2+VMwFxuHoG9MKhfHiR4o/Ki/h0WgIHut2A59ikRJucq0yVeCus2yIe3aAXqEk56ZS5Xk3EQQNy+w==
 customer2.ideleg.net.	3600	IN	A	128.199.252.158
-customer2.ideleg.net.	3600	IN	RRSIG	A 13 3 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. +KgXwShW/2jVntyp5NX1DEIguZPa7IBIyY67knncnq85VzgQw0EsPFw52TraZDZGfsETOb8I8YVPqZY+OpVUXA==
+customer2.ideleg.net.	3600	IN	RRSIG	A 13 3 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. Gwcig3RglCzrXKEaT/lblPT0ZXC6CTOXjOykVyIX8W8o0l/KCssbI4BzlJzwKpTke8IshHD1y2WcEed5WWU5rw==
 customer2.ideleg.net.	3600	IN	NS	ns.customer2.ideleg.net.
-customer2.ideleg.net.	3600	IN	RRSIG	NS 13 3 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. LCuyHd5+F6iAZxBs7sF6NXryKiIvSuvr77LZGL+G0bdvEc7LKIAfU/zVEBZSSevBreb7NC9C1aMOr4vmS9uZgQ==
+customer2.ideleg.net.	3600	IN	RRSIG	NS 13 3 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. tYtMvpDSpuSYXqEbpmpA4A4uMQH5CYshu8BspbaCRDgH7j0GyW0wyHLIy2TpdpYvImmJw58nMXs49K/GwkbufA==
 customer2.ideleg.net.	3600	IN	TXT	"This is customer2.ideleg.net."
-customer2.ideleg.net.	3600	IN	RRSIG	TXT 13 3 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. R6BZaNchF8XM0hUkp1f6cs2UniDMHE6hpBeVWSF+5QmZHG22chc6DmxplX9Z+yzvmXKFPWF3df2UFRarSgL6ig==
+customer2.ideleg.net.	3600	IN	RRSIG	TXT 13 3 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. NP5rIBmvHb7OI+A7khJRerM0a84WPPaCLRuU6Xon/DcTEebwE1R73qrjOL+AWwHlALPthALho9Sk1JK9Ibwczw==
 customer2.ideleg.net.	3600	IN	AAAA	2400:6180:0:d2:0:1:ac7b:9000
-customer2.ideleg.net.	3600	IN	RRSIG	AAAA 13 3 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. J3E4E4FQIMbSAYVPCuhrcoKRHCSVod3a3MyHyPUythHOnOsvzIjgxglO6D62jrtKbSkd1vxcuaBJ/oXHVkJdEw==
+customer2.ideleg.net.	3600	IN	RRSIG	AAAA 13 3 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. zEaxGjTTY5zEGWgABO4qJPGr608+nXPGTsRmhSrf0fA1CR02eU3OvxQdNrNd9yzTgz5wgak2xxC+CcuDwU0r+A==
 customer2.ideleg.net.	3600	IN	DNSKEY	257 3 13 es8z9KGRrcQPkPKY0DSJJVv+EFL8vn0qKsE4DXaTCqlgb1t8tLbu7VIZu++L4vSiBfCJIW1iCTvf5oCUZLN3WA== ;{id = 22597 (ksk), size = 256b}
-customer2.ideleg.net.	3600	IN	RRSIG	DNSKEY 13 3 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. ypI4/EFi0yVq9tiuWIfMz99YEytSOIQ4XAnlRIlJmu6TLIPg2bqtpng9WRX1maK3pITMWcae/YICH/VNfA0Kqw==
-customer2.ideleg.net.	3600	IN	ZONEMD	2025031302 1 1 8fffd8afc81f8c4e9f14047f26dc2baa4d60e47aaef6f58cb5ed7007d0158d8676c03c57ef214d37cc37ddf7dc8ef3b3
-customer2.ideleg.net.	3600	IN	RRSIG	ZONEMD 13 3 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. jSTSPq5WsZT+nxVFWBqLNtpvUQE7/fSp2snn5M+d0iBrpVKSfkWhZryjr3VldEjqSWkzRqgoVbbRShiGu3zkPA==
+customer2.ideleg.net.	3600	IN	RRSIG	DNSKEY 13 3 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. z+JCU9lpgwhG4RM021gb1+KT55D5k/QbLWdWvJMcXFZZIHtHIN2QSs8Kbe0upAywjYikNwCpRbHGbPC+7Jm3iA==
+customer2.ideleg.net.	3600	IN	ZONEMD	2025031402 1 1 1707f4f928862a0c2fd952dd4cb568ef960a95313a9af9288356f2cc59a5bc8ec331e6493e173cce0c17b08b8213b29c
+customer2.ideleg.net.	3600	IN	RRSIG	ZONEMD 13 3 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. px8qwXRH+Mfpb/BwuBSbi3hOQj/TZBUBpJh/IMoEFxnijXqeI256Pgx7VGjndCRlQZjV8KM/fTY5JAfV5rVBGw==
 customer2.ideleg.net.	3600	IN	NSEC	ideleg.customer2.ideleg.net. A NS SOA TXT AAAA RRSIG NSEC DNSKEY ZONEMD 
-customer2.ideleg.net.	3600	IN	RRSIG	NSEC 13 3 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. D/l+hhs9iewnMpMLSSg4nJKIvYqd/Rtyxi8OwqQRVVQvkcdOKFzuqDmxh11/3PEKw5LxRaMGVwlvm0PQgrfpPQ==
+customer2.ideleg.net.	3600	IN	RRSIG	NSEC 13 3 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. TR7Pqn+2bT8HNGOrFfRvXH9dVP1TKjUFJUj71c8/G3jg1uGyWJgc/pEKBOw/p+9FPxbCPvNkDS1aq7KXXzOlxw==
 ideleg.customer2.ideleg.net.	3600	IN	IDELEG	10 ns.customer2.ideleg.net. ipv4hint=159.223.42.75 ipv6hint=2400:6180:0:d2:0:1:ac7b:7000
-ideleg.customer2.ideleg.net.	3600	IN	RRSIG	IDELEG 13 4 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. fyy2i1cB//4BqfQPzS7GXlt7VAyImHAM/ZR9tN1T68gNyXHyGmpWzFmOYqm0zoggjM0PWVlsYMMlQ64kMC42sA==
+ideleg.customer2.ideleg.net.	3600	IN	RRSIG	IDELEG 13 4 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. AXUUei18yCAsrL1ofKhUuvcHcHxsKOpGW9Erw+LuJi3nRwRlPnuWXNMDdpTpEq4d8aM6q/km1H5HE7i9m7uQdQ==
 ideleg.customer2.ideleg.net.	3600	IN	NSEC	_dns.ideleg.customer2.ideleg.net. RRSIG NSEC IDELEG 
-ideleg.customer2.ideleg.net.	3600	IN	RRSIG	NSEC 13 4 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. d3Cu3yGI3rn8aJihwtMNCxPakpVZ0Uaf5bitpzZKhwteG/cQEu10PdvefxjmRk58wsYjSvjVMQoz07dcMJCqow==
+ideleg.customer2.ideleg.net.	3600	IN	RRSIG	NSEC 13 4 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. Zzl0bZDvp5P96CcKPTS4K7GHe91ooIoCXu0OCuP3sBULrCdsLUhb6221bi+dgUg+z5Gf+mt4fgmRlCyBX3l8sw==
 _dns.ideleg.customer2.ideleg.net.	3600	IN	IDELEG	10 ns.customer2.ideleg.net. ipv4hint=159.223.42.75 ipv6hint=2400:6180:0:d2:0:1:ac7b:7000
-_dns.ideleg.customer2.ideleg.net.	3600	IN	RRSIG	IDELEG 13 5 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. vFmUyLZgo/2pW5WxVv1wH+nmo+yN4kbCbxsjDT3DlZmxAOswmTxr6MUzwgFC/YV2BSeuLug2sX8VbQHcPgPbBQ==
+_dns.ideleg.customer2.ideleg.net.	3600	IN	RRSIG	IDELEG 13 5 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. pXZcXhtkkBS41tcTjYyeZhwgRAzeGpFx5nzxBr1cnMP9bgrHgQ6Dr34HZ8h87eWUSs3xW6gmcQ6QDZ6uig1z8A==
 _dns.ideleg.customer2.ideleg.net.	3600	IN	NSEC	ns.customer2.ideleg.net. RRSIG NSEC IDELEG 
-_dns.ideleg.customer2.ideleg.net.	3600	IN	RRSIG	NSEC 13 5 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. E0SImuHTohkm4ta20BVYe8oLbka+Mhw/tGEH/YUdTBvwgcsdfL1K0CFBEQq9gHYwYas5JYTBg53yhkcyjjcIVw==
+_dns.ideleg.customer2.ideleg.net.	3600	IN	RRSIG	NSEC 13 5 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. ya7Y3+NlLneHWmHuw8gxi0D1DX4AoY8swOQ/bRugG5mD9oaHGaHq6TKJvPKmIIQ4iYX6b5kJMK4AomVswzBMJA==
 ns.customer2.ideleg.net.	3600	IN	A	159.223.42.75
-ns.customer2.ideleg.net.	3600	IN	RRSIG	A 13 4 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. GjWGoCs4uAi0JbwTG6SxgCxO2dYz1nc9WK6mfynGexGxtFJRTdKLs72WTU6VqLUks7KAIp6yw0oIpeq7Hjcr8Q==
+ns.customer2.ideleg.net.	3600	IN	RRSIG	A 13 4 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. A2DBqkv7pdH5i5iJk1FjQZRIQ3v7xrdgyTHRiVygCa8AHp/3dzKHvgRfu8BWxjXN/9JrdntSW2vFBPR9Pfdayg==
 ns.customer2.ideleg.net.	3600	IN	AAAA	2400:6180:0:d2:0:1:ac7b:7000
-ns.customer2.ideleg.net.	3600	IN	RRSIG	AAAA 13 4 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. 3GUw9l35WsZzn87WclC9J94CAWaL8dwhnvyxqHWVN8v6IvgQAYLHL8orvLr2WYtTHNI5z4zvnbM1ZHhJYEHXFQ==
+ns.customer2.ideleg.net.	3600	IN	RRSIG	AAAA 13 4 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. UykJ2PCAaTH1niXZb9UWtKUdh+3hGTZIxqEM0ue4V/vz0CnuR/aGCKP04JSUa5qs9bmT20z5sT8xVyZWrzJEUg==
 ns.customer2.ideleg.net.	3600	IN	NSEC	customer2.ideleg.net. A AAAA RRSIG NSEC 
-ns.customer2.ideleg.net.	3600	IN	RRSIG	NSEC 13 4 3600 20250410172036 20250313172036 22597 customer2.ideleg.net. deQKip+7KOngfXOE8gZOU7Y24wcZP+9gY8k+OESmn9ZZ+St184wWkAlRffOpaWyo9iFRY8v73nbV5WxpVPXXFQ==
+ns.customer2.ideleg.net.	3600	IN	RRSIG	NSEC 13 4 3600 20250411102536 20250314102536 22597 customer2.ideleg.net. bIBQ7WWyBCDr1dXX8XzZ+RqUsyQ/ILr0D3fJueZWFTE+9JnDJq7dmASTSG1+bKlfmF8z/2uf8KJpdYzWiyn28g==

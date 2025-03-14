@@ -21,6 +21,7 @@ customer2._deleg IDELEG 10 ns.customer2
 customer3._deleg IDELEG 10 ideleg.nlnetlabs.nl. ipv4hint={% nlnetlabs.ipv4 %} ipv6hint={% nlnetlabs.ipv6 %}
                  IDELEG 20 legacy.ideleg.net. ipv4hint={% legacy.ipv4 %} ipv6hint={% legacy.ipv6 %}
 customer4._deleg IDELEG 0 ideleg.customer2
+flag0._deleg     IDELEG 10 legacy.ideleg.net. ipv4hint={% legacy.ipv4 %} ipv6hint={% legacy.ipv6 %}
 
 ;; Legacy delegations
 customer1        NS     legacy.ideleg.net.
@@ -35,3 +36,5 @@ customer3        NS     ideleg.nlnetlabs.nl.
 ; Assuming ideleg.customer2.nsec3.ideleg.net. IDELEG 10 ns.customer2.ideleg.net. ipv4hint={% ideleg.ipv4 %} ipv6hint={% ideleg.ipv6 %}
 customer4        NS     ns.customer2
                  DS     24809 13 2 49996ff66c0e2e456880ca7f1a95c0a5174db0be5082bc8abbd62cc437ac68df
+flag0            NS     legacy.ideleg.net.
+flag0            DS     45370 13 2 dd6ce80c4cde91f0aca7bdf815e2557a63a1ee9fb21336844bef44e439f6f9cf
