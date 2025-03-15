@@ -5,12 +5,12 @@
 DNS Delegation                                                P. Homburg
 Internet-Draft                                                NLnet Labs
 Intended status: Standards Track                             T. Wicinski
-Expires: 15 September 2025                            Cox Communications
+Expires: 16 September 2025                            Cox Communications
                                                            J. V. Zutphen
                                                  University of Amsterdam
                                                                W. Toorop
                                                               NLnet Labs
-                                                           14 March 2025
+                                                           15 March 2025
 
 
          Incrementally Deployable Extensible Delegation for DNS
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 September 2025.
+   This Internet-Draft will expire on 16 September 2025.
 
 Copyright Notice
 
@@ -1128,53 +1128,53 @@ Table of Contents
 
 9.3.  Comparison with [I-D.wesplaap-deleg]
 
-    +=========================+======================================+
-    | [?I-D.wesplaap-deleg]   | [this document]                      |
-    +=========================+======================================+
-    | Requires implementation | Only implementation required for     |
-    | in both authoritative   | functionalities following the        |
-    | name server as well as  | delegations (like in resolvers).  No |
-    | in the resolver, DNSSEC | support from the authoritative name  |
-    | signers and validators  | server, DNSSEC signers or validators |
-    | and all other DNS       | are needed.  But optimized with      |
-    | software                | updated authoritative software.      |
-    +-------------------------+--------------------------------------+
-    | DELEG resolvers need to | IDELEG resolvers can query for the   |
-    | contact DELEG           | incremental delegation data,         |
-    | authoritatives directly | therefore direct contact with IDELEG |
-    |                         | supporting authoritatives is not     |
-    |                         | necessary.  All legacy               |
-    |                         | infrastructure (including forwarders |
-    |                         | etc.) is supported.                  |
-    +-------------------------+--------------------------------------+
-    | DNSKEY flag needed to   | No DNSKEY flag needed.  Separation   |
-    | signal IDELEG support   | of concerns.                         |
-    | with all authoritative  |                                      |
-    | name servers that serve |                                      |
-    | the parent (delegating) |                                      |
-    | domain.  Special        |                                      |
-    | requirements for the    |                                      |
-    | child domain.           |                                      |
-    +-------------------------+--------------------------------------+
-    | Authoritative name      | Authoritative name servers may be    |
-    | servers need to be      | updated gradually for optimization   |
-    | updated all at once     |                                      |
-    +-------------------------+--------------------------------------+
-    | New semantics about     | Works with current DNS and DNSSEC    |
-    | what is authoritative   | semantics.  Easier to implement.     |
-    | (BOGUS with current     |                                      |
-    | DNSSEC validators)      |                                      |
-    +-------------------------+--------------------------------------+
-    | No extra queries        | One extra query, in parallel to the  |
-    |                         | legacy query, _per authoritative_    |
-    |                         | server when incremental deleg        |
-    |                         | support is not yet detected, and one |
-    |                         | extra query _per unsigned zone_ to   |
-    |                         | determine presence of the _deleg     |
-    |                         | label                                |
-    +-------------------------+--------------------------------------+
+     +========================+======================================+
+     | [?I-D.wesplaap-deleg]  | [this document]                      |
+     +========================+======================================+
+     | Requires               | Only implementation required for     |
+     | implementation in both | functionalities following the        |
+     | authoritative name     | delegations (like in resolvers).  No |
+     | server as well as in   | support from the authoritative name  |
+     | the resolver, DNSSEC   | server, DNSSEC signers or validators |
+     | signers and validators | are needed.  But optimized with      |
+     |                        | updated authoritative software.      |
+     +------------------------+--------------------------------------+
+     | DELEG resolvers need   | IDELEG resolvers can query for the   |
+     | to contact DELEG       | incremental delegation data,         |
+     | authoritatives         | therefore direct contact with IDELEG |
+     | directly               | supporting authoritatives is not     |
+     |                        | necessary.  All legacy               |
+     |                        | infrastructure (including forwarders |
+     |                        | etc.) is supported.                  |
+     +------------------------+--------------------------------------+
+     | DNSKEY flag needed to  | No DNSKEY flag needed.  Separation   |
+     | signal IDELEG support  | of concerns.                         |
+     | with all authoritative |                                      |
+     | name servers that      |                                      |
+     | serve the parent       |                                      |
+     | (delegating) domain.   |                                      |
+     | Special requirements   |                                      |
+     | for the child domain.  |                                      |
+     +------------------------+--------------------------------------+
+     | Authoritative name     | Authoritative name servers may be    |
+     | servers need to be     | updated gradually for optimization   |
+     | updated all at once    |                                      |
+     +------------------------+--------------------------------------+
+     | New semantics about    | Works with current DNS and DNSSEC    |
+     | what is authoritative  | semantics.  Easier to implement.     |
+     | (BOGUS with current    |                                      |
+     | DNSSEC validators)     |                                      |
+     +------------------------+--------------------------------------+
+     | No extra queries       | One extra query, in parallel to the  |
+     |                        | legacy query, _per authoritative_    |
+     |                        | server when incremental deleg        |
+     |                        | support is not yet detected, and one |
+     |                        | extra query _per unsigned zone_ to   |
+     |                        | determine presence of the _deleg     |
+     |                        | label                                |
+     +------------------------+--------------------------------------+
 
-     Table 2: Comparison of [I-D.wesplaap-deleg] with [this document]
+      Table 2: Comparison of [I-D.wesplaap-deleg] with [this document]
 
 10.  Implementation Status
 
