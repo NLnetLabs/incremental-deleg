@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-13T00:29:28.856068+00:00",
+  "timestamp": "2025-03-16T00:32:18.109420+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -178,6 +178,22 @@
       "createdAt": "2025-03-08T23:16:16Z",
       "updatedAt": "2025-03-09T12:02:25Z",
       "closedAt": "2025-03-09T12:02:25Z",
+      "comments": []
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOMN-KqM6uCPye",
+      "title": "'Outsourced with an AliasMode IDELEG RR' example is wrong",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/issues/21",
+      "state": "OPEN",
+      "author": "Philip-NLnetLabs",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Figure 5 (Operator zone) is used for both Figure 3 (Outsourced with CNAME) and Figure 4 (Outsourced with an AliasMode IDELEG RR).\n\nFigure 5 is correct for Figure 3. The CNAME in Figure 3 refers to a IDELEG RRset in Figure 5.\n\nHowever in AliasMode, the IDELEG RRset in Figure 4 should refer to an SVCB RRset.",
+      "createdAt": "2025-03-14T10:25:49Z",
+      "updatedAt": "2025-03-14T10:25:49Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -2028,50 +2044,81 @@
       "id": "PR_kwDOMN-KqM6N-nd3",
       "title": "Suggestions from H\u00e5vard Eidnes",
       "url": "https://github.com/NLnetLabs/incremental-deleg/pull/18",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "wtoorop",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "I like all these suggestions. @moonshiner and @Philip-NLnetLabs, please approve if you like them too.",
       "createdAt": "2025-03-10T11:32:02Z",
-      "updatedAt": "2025-03-10T12:36:21Z",
+      "updatedAt": "2025-03-13T13:20:38Z",
       "baseRepository": "NLnetLabs/incremental-deleg",
       "baseRefName": "main",
       "baseRefOid": "8515030361227919d13d1c96d157aac3edbf659e",
       "headRepository": "NLnetLabs/incremental-deleg",
       "headRefName": "suggestions-from-h\u00e5vard",
       "headRefOid": "9aac6a778ccd03817a83ece0fea6a7f04139a7d0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-03-13T13:20:38Z",
+      "mergedAt": "2025-03-13T13:20:38Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "dd13629c6c9e6d6466f3cf71f4ccf5867639d60f"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6f0ci-",
+          "commit": {
+            "abbreviatedOid": "9aac6a7"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-13T10:24:06Z",
+          "updatedAt": "2025-03-13T10:24:06Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6f2gvy",
+          "commit": {
+            "abbreviatedOid": "9aac6a7"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-13T13:15:19Z",
+          "updatedAt": "2025-03-13T13:15:19Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 19,
       "id": "PR_kwDOMN-KqM6N-thD",
       "title": "Suggestions from Stephane Bortzmeyer",
       "url": "https://github.com/NLnetLabs/incremental-deleg/pull/19",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "wtoorop",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "@moonshiner and @Philip-NLnetLabs , please approve if you approve, or comment or make suggestions otherwise.",
       "createdAt": "2025-03-10T11:43:16Z",
-      "updatedAt": "2025-03-10T20:13:45Z",
+      "updatedAt": "2025-03-13T12:45:00Z",
       "baseRepository": "NLnetLabs/incremental-deleg",
       "baseRefName": "main",
       "baseRefOid": "8515030361227919d13d1c96d157aac3edbf659e",
       "headRepository": "NLnetLabs/incremental-deleg",
       "headRefName": "suggestions-from-stephane",
       "headRefOid": "2632df0cb04f60fa05f1d8d5419a635afb03489d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-03-13T12:45:00Z",
+      "mergedAt": "2025-03-13T12:45:00Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "4fb0fe0eb245856deba42e0acd64416614b4c618"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2106,6 +2153,19 @@
               "updatedAt": "2025-03-10T20:13:16Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6f0cpX",
+          "commit": {
+            "abbreviatedOid": "2632df0"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-13T10:24:17Z",
+          "updatedAt": "2025-03-13T10:24:17Z",
+          "comments": []
         }
       ]
     },
@@ -2144,6 +2204,61 @@
         }
       ],
       "reviews": []
+    },
+    {
+      "number": 22,
+      "id": "PR_kwDOMN-KqM6OqCkd",
+      "title": "\"all other software\" is a bit broad",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/22",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "As remarked by @pspacek on the dd list.\r\n@Philip-NLnetLabs and @moonshiner can you approve if you agree? Thanks!",
+      "createdAt": "2025-03-14T11:07:44Z",
+      "updatedAt": "2025-03-15T22:37:57Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "b1f37d0c6703e33377eb01e04e6a70170cd915d2",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "comment-from-petr",
+      "headRefOid": "53f1ffb4599b73dd6cabf58cd0aa763611de7ef3",
+      "closedAt": "2025-03-15T22:37:57Z",
+      "mergedAt": "2025-03-15T22:37:57Z",
+      "mergedBy": "moonshiner",
+      "mergeCommit": {
+        "oid": "0f3f7ec9b47e44cf1c2b1647a8d9290348bfb5d8"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6gF0vF",
+          "commit": {
+            "abbreviatedOid": "53f1ffb"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-14T15:11:33Z",
+          "updatedAt": "2025-03-14T15:11:33Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6gPe5A",
+          "commit": {
+            "abbreviatedOid": "53f1ffb"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-15T22:37:53Z",
+          "updatedAt": "2025-03-15T22:37:53Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
