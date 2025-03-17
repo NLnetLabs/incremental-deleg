@@ -5,12 +5,12 @@
 DNS Delegation                                                P. Homburg
 Internet-Draft                                                NLnet Labs
 Intended status: Standards Track                             T. Wicinski
-Expires: 16 September 2025                            Cox Communications
+Expires: 18 September 2025                            Cox Communications
                                                            J. V. Zutphen
                                                  University of Amsterdam
                                                                W. Toorop
                                                               NLnet Labs
-                                                           15 March 2025
+                                                           17 March 2025
 
 
          Incrementally Deployable Extensible Delegation for DNS
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 September 2025.
+   This Internet-Draft will expire on 18 September 2025.
 
 Copyright Notice
 
@@ -381,9 +381,10 @@ Table of Contents
    the CNAME configuration above.  It is RECOMMENDED to use a CNAME over
    an IDELEG RRset with a single IDELEG RR in AliasMode (Section 10.2 of
    [RFC9460]).  Note that an IDELEG RRset refers with TargetName to a
-   DNS service, which will be looked up using Port Prefix Naming
-   Section 3 of [RFC9461], but that CNAME refers to the domain name of
-   the target IDELEG RRset (or CNAME) which may have a _dns prefix.
+   DNS service [RFC9461], which will be looked up using Port Prefix
+   Naming Section 3 of [RFC9461], but that an CNAME refers to the domain
+   name of the target SVCB RRset instead (or CNAME) which may have a
+   _dns prefix.
 
    $ORIGIN example.
    @                 IN  SOA    ns zonemaster ...
@@ -391,16 +392,16 @@ Table of Contents
 
               Figure 4: Outsourced with an AliasMode IDELEG RR
 
-   The operator IDELEG RRset could for example be:
+   The operator SVCB RRset could for example be:
 
    $ORIGIN operator1.example.
    @                 IN  SOA    ns zonemaster ...
-   _dns.ns           IN  IDELEG 1 ns ( alpn=h2,dot,h3,doq
+   _dns.ns           IN  SVCB   1 ns ( alpn=h2,dot,h3,doq
                                        ipv4hint=192.0.2.1
                                        ipv6hint=2001:db8:3::1
                                        dohpath=/q{?dns}
                                      )
-                     IN  IDELEG 2 ns ( ipv4hint=192.0.2.2
+                     IN  SVCB   2 ns ( ipv4hint=192.0.2.2
                                        ipv6hint=2001:db8:3::2
                                      )
    ns                IN  AAAA   2001:db8:3::1
