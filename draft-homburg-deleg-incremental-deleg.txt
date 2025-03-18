@@ -5,12 +5,12 @@
 DNS Delegation                                                P. Homburg
 Internet-Draft                                                NLnet Labs
 Intended status: Standards Track                             T. Wicinski
-Expires: 18 September 2025                            Cox Communications
+Expires: 19 September 2025                            Cox Communications
                                                            J. V. Zutphen
                                                  University of Amsterdam
                                                                W. Toorop
                                                               NLnet Labs
-                                                           17 March 2025
+                                                           18 March 2025
 
 
          Incrementally Deployable Extensible Delegation for DNS
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 September 2025.
+   This Internet-Draft will expire on 19 September 2025.
 
 Copyright Notice
 
