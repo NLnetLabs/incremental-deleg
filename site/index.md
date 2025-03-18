@@ -33,7 +33,7 @@ See [this page](/ldns.html) for instructions how to compile LDNS and `drill` wit
 For example, to get an incremental deleg referral from `{{ tb.ideleg.name }}``:
 
 ```
-$ drill/drill -Dord @78.47.51.169 www.customer1.ideleg.net.
+$ drill/drill -Dord @{{ ideleg.ipv4 }} www.customer1.ideleg.net.
 ;; ->>HEADER<<- opcode: QUERY, rcode: NOERROR, id: 40708
 ;; flags: qr ; QUERY: 1, ANSWER: 0, AUTHORITY: 5, ADDITIONAL: 4 
 ;; QUESTION SECTION:
@@ -64,7 +64,7 @@ supporting.ideleg.net.	3600	IN	RRSIG	AAAA 13 3 3600 (
 
 ;; Query time: 25 msec
 ;; EDNS: version 0; flags: do ; udp: 1232
-;; SERVER: 78.47.51.169
+;; SERVER: {{ ideleg.ipv4 }}
 ;; WHEN: Thu Mar  6 16:49:55 2025
 ;; MSG SIZE  rcvd: 670
 ```
@@ -85,7 +85,7 @@ All the name servers in the testbed allow anyone to transfer all the zones that 
 For example to transfer the `ideleg.net` zone:
 
 ```
-$ drill -Dord @78.47.51.169 ideleg.net AXFR
+$ drill -Dord @{{ ideleg.ipv4 }} ideleg.net AXFR
 ideleg.net.	3600	IN	SOA	ideleg.net. wouter.petri.os3.nl. ...
 ideleg.net.	3600	IN	RRSIG	SOA 13 2 3600 20250403135716 ...
 ideleg.net.	3600	IN	RRSIG	A 13 2 3600 20250403135716 ...
