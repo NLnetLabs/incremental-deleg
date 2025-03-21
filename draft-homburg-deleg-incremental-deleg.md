@@ -622,6 +622,63 @@ The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`)
 
 This method of signalling that the legacy delegation MUST be used, is RECOMMENDED.
 
+# Fewer queries
+
+The algorithm described in {{recursive-resolver-behavior}} is optimized for
+low latency.
+The additional queries required are sent at the same time as query for
+legacy delegations.
+It is also possible optimize for a lowest number of additional queries.
+However, this may in some cases result in extra latency.
+
+To achieve this, the behavior of the recursive resolver is modified as follows.
+If the state state of the zone is known, then queries are executed as
+described in {{recursive-resolver-behavior}} and {{behavior-with-auth-support}}.
+
+If the state of the zone is unknown then initially only conventional queries
+are sent. If a reply arrives that does not contain a legacy delegation then
+the algorithm is done and no further queries are sent.
+
+If the reply contains a legacy delegation then the follow up query or queries
+depend on whether the zone is DNSSEC signed or not.
+If the zone is signed then a deleg query is sent that matches
+the legacy delegation.
+In a signed zone, the query is either successful and returns an IDELEG RRset or
+the query contains a proof of non-existence from which it is possible to
+deduce whether the zone contains an _deleg label or not.
+
+If the zone is not signed then two separate queries are needed.
+One query just for the _deleg label and one deleg query that
+matches legacy delegation.
+
+If the reply the _deleg query is NXDOMAIN then the zone does not contain any
+IDELEG delegations and further queries are unnecessary.
+See {{presence}} for processing the response to the _deleg query.
+The response to the deleg query is processed as described in
+{{recursive-resolver-behavior}}.
+
+The effect on the number of extra queries is the following.
+If the response does not contain a legacy delegation then no extra queries
+are sent.
+
+If the nameserver supports _deleg and the zone is signed then no additional
+queries will be sent independent of whether zone contains the _deleg label or
+not.
+
+If the nameserver supports _deleg, the zone is not signed and no IDELEG RRset
+is returned in the response then two follow up queries need to be sent.
+The response to the _deleg query will be cached until the TTL expires.
+
+If the nameserver does not support _deleg but the zone is signed then one
+follow up queries will be sent: a deleg query that matches the legacy
+delegation.
+Presence or absence of the _deleg label will be cached.
+IF the _deleg label is absent then no further additonal queries will be sent.
+
+Finally, if the nameserver does not support _deleg and the zone is not signed
+then two follow up queries will be sent.
+The response to the _deleg query will be cached until the TTL expires.
+
 # Priming queries {#priming-queries}
 
 Some zones, such as the root zone, are targeted directly from hints files.
