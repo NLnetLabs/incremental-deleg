@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-20T00:29:08.242255+00:00",
+  "timestamp": "2025-03-23T00:32:31.410211+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -2259,6 +2259,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOMN-KqM6PoPu9",
+      "title": "Fewer queries",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/23",
+      "state": "OPEN",
+      "author": "Philip-NLnetLabs",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-03-21T14:34:26Z",
+      "updatedAt": "2025-03-21T14:34:27Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "77da1fd47a6a261b17ea68828d73739b9719ac2e",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "fewer-packets",
+      "headRefOid": "c808531744ddd0b3f1bea0758307cd6726a7d85a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
