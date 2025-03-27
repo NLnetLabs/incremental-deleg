@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-25T00:30:02.499884+00:00",
+  "timestamp": "2025-03-27T00:29:46.019934+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -193,6 +193,22 @@
       "body": "Figure 5 (Operator zone) is used for both Figure 3 (Outsourced with CNAME) and Figure 4 (Outsourced with an AliasMode IDELEG RR).\n\nFigure 5 is correct for Figure 3. The CNAME in Figure 3 refers to a IDELEG RRset in Figure 5.\n\nHowever in AliasMode, the IDELEG RRset in Figure 4 should refer to an SVCB RRset.",
       "createdAt": "2025-03-14T10:25:49Z",
       "updatedAt": "2025-03-14T10:25:49Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOMN-KqM6voT5M",
+      "title": "Make it easier to understand Section 4.1 (Recursive Resolver behavior)",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/issues/24",
+      "state": "OPEN",
+      "author": "Philip-NLnetLabs",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "From Michael Richardson:\n\n    >> Could this document in section 4.1, paragraph two, give names to the two\n    >> parallel queries? I don't care what name you use, Abbott and Castello if\nyou l\n    >> ike, but give\n    >> them names?\n\n    > Just checking, you want names for the legacy delegation query and for the\n    > IDELEG query?\n\nYou listed pairs of queries above.\nOne was for NS (Abbot) and one for IDELEG (Castello).\nI'm asking you to name those two queries.  I don't care what.\nThen we can talk about a qname-minimized Abbot query.\n",
+      "createdAt": "2025-03-25T13:38:34Z",
+      "updatedAt": "2025-03-25T13:38:34Z",
       "closedAt": null,
       "comments": []
     }
