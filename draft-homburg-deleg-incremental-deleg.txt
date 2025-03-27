@@ -5,12 +5,12 @@
 DNS Delegation                                                P. Homburg
 Internet-Draft                                                NLnet Labs
 Intended status: Standards Track                             T. Wicinski
-Expires: 19 September 2025                            Cox Communications
+Expires: 28 September 2025                            Cox Communications
                                                            J. V. Zutphen
                                                  University of Amsterdam
                                                                W. Toorop
                                                               NLnet Labs
-                                                           18 March 2025
+                                                           27 March 2025
 
 
          Incrementally Deployable Extensible Delegation for DNS
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 September 2025.
+   This Internet-Draft will expire on 28 September 2025.
 
 Copyright Notice
 
@@ -1382,9 +1382,9 @@ Table of Contents
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
               Encrypted Client Hello", Work in Progress, Internet-Draft,
-              draft-ietf-tls-esni-23, 19 February 2025,
+              draft-ietf-tls-esni-24, 20 March 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              esni-23>.
+              esni-24>.
 
    [I-D.tapril-ns2]
               April, T., "Parameterized Nameserver Delegation with NS2
