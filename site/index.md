@@ -1,5 +1,5 @@
 ---
-title: Incrementally Deployable Extensible Delegation testbed
+title: Extensible Delegation testbed
 layout: default
 permalink: /
 ---
@@ -8,7 +8,7 @@ This website hosts information on the domains we have deployed for evaluating an
 ## Zones and name servers
 
 {% assign tb = site.data.testbed %}
-The `{{ tb.zone }}` zone has been provisioned with several incremental delegations (using 65280 as the value for the `IDELEG` RR type), and is served by two [incremental deleg supporting authoritative name servers](/nsd.html) (`{{ tb.ideleg.name }}` and `{{ tb.nlnetlabs.name }}`) and one legacy, non incremental deleg supporting, authoritative name server (`{{ tb.legacy.name }}`) as hidden secondary:
+The `{{ tb.zone }}` zone has been provisioned with several IDELEG delegations (using 65280 as the value for the `IDELEG` RR type), and is served by two [IDELEG supporting authoritative name servers](/nsd.html) (`{{ tb.ideleg.name }}` and `{{ tb.nlnetlabs.name }}`) and one legacy, non IDELEG supporting, authoritative name server (`{{ tb.legacy.name }}`) as hidden secondary:
 
 |        name         |       IPv4        |       IPv6        |       location       |
 |---------------------|-------------------|-------------------|----------------------|
@@ -16,7 +16,7 @@ The `{{ tb.zone }}` zone has been provisioned with several incremental delegatio
 | `{{ tb.nlnetlabs.name }}` | <a href="" onclick="navigator.clipboard.writeText('{{ tb.nlnetlabs.ipv4}}')" title="copy '{{ tb.nlnetlabs.ipv4}}' to clipboard">{{ tb.nlnetlabs.ipv4}}</a> | <a href="" onclick="navigator.clipboard.writeText('{{ tb.nlnetlabs.ipv6}}')" title="copy '{{ tb.nlnetlabs.ipv6}}' to clipboard">{{ tb.nlnetlabs.ipv6}}</a> | {{ tb.nlnetlabs.location}} |
 | `{{ tb.legacy.name }}` | <a href="" onclick="navigator.clipboard.writeText('{{ tb.legacy.ipv4}}')" title="copy '{{ tb.legacy.ipv4}}' to clipboard">{{ tb.legacy.ipv4}}</a> | <a href="" onclick="navigator.clipboard.writeText('{{ tb.legacy.ipv6}}')" title="copy '{{ tb.legacy.ipv6}}' to clipboard">{{ tb.legacy.ipv6}}</a> | {{ tb.legacy.location}} |
 
-The `{{ tb.deleg.name }}` zone has been provisioned with several wesplaap-deleg delegations (using 65432 as the value for the `DELEG` RR type), and is served by two wesplaap-deleg supporting authoritative name servers (`{{ tb.deleg.name }}` and `{{ tb.dnlnetlabs.name }}`) and one legacy, non incremental deleg supporting, authoritative name server (`{{ tb.legacy.name }}`) as hidden secondary:
+The `{{ tb.deleg.name }}` zone has been provisioned with several wesplaap-deleg delegations (using 65432 as the value for the `DELEG` RR type), and is served by two wesplaap-deleg supporting authoritative name servers (`{{ tb.deleg.name }}` and `{{ tb.dnlnetlabs.name }}`) and one legacy, non IDELEG supporting, authoritative name server (`{{ tb.legacy.name }}`) as hidden secondary:
 
 |        name         |       IPv4        |       IPv6        |       location       |
 |---------------------|-------------------|-------------------|----------------------|
@@ -30,7 +30,7 @@ These IP addresses can be queried directly to get a taste for the referral respo
 If queried with a [specially compiled version](/ldns.html) of `drill`, the `IDELEG` RRs will be displayed as intended.
 See [this page](/ldns.html) for instructions how to compile LDNS and `drill` with `IDELEG` support.
 
-For example, to get an incremental deleg referral from `{{ tb.ideleg.name }}``:
+For example, to get an IDELEG referral from `{{ tb.ideleg.name }}``:
 
 ```
 $ drill/drill -Dord @{{ ideleg.ipv4 }} www.customer1.ideleg.net.
@@ -72,7 +72,7 @@ _(This drill output has been edited for readability)_
 
 ## The NSEC3 signed zone
 
-There is also a version with the same kinds of delegations, but NSEC3 signed, in the `nsec3.ideleg.net` zone, served by an [ideleg supporting authoritative name server](/nsd.html) (`{{ tb.supporting.name }}`) and also at one legacy, non incremental deleg supporting, auithoritative name server (`{{ tb.legacy.name }}`) as hidden secondary:
+There is also a version with the same kinds of delegations, but NSEC3 signed, in the `nsec3.ideleg.net` zone, served by an [ideleg supporting authoritative name server](/nsd.html) (`{{ tb.supporting.name }}`) and also at one legacy, non IDELEG supporting, authoritative name server (`{{ tb.legacy.name }}`) as hidden secondary:
 
 |        name         |       IPv4        |       IPv6        |       location       |
 |---------------------|-------------------|-------------------|----------------------|

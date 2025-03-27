@@ -1,5 +1,5 @@
 ---
-title: Incremental deleg support in Unbound
+title: IDELEG support in Unbound
 layout: default
 permalink: /unbound.html
 ---
@@ -140,5 +140,5 @@ if test ! -e "/usr/local/etc/unbound/unbound.conf"; then /bin/bash ./install-sh 
 This version of Unbound performs the algorithm as described in [Section 4. Minimal implementation](https://ideleg.net/draft-homburg-deleg-incremental-deleg-latest.html#name-minimal-implementation) in the draft.
 It does not (yet) leverage optimized responses.
 It also does not (yet) support the AliasMode.
-It can be used to test your own incremental delegations, as long as they do not involve AliasMode IDELEG RRs.
+It can be used to test your own IDELEG delegations, as long as they do not involve AliasMode IDELEG RRs.
 

@@ -1,11 +1,13 @@
-- title: IDELEG testbed
+- title: deleg testbed
   url: /
 - title: Software support
   subnav:
     - title: ldns
       url: /ldns.html
-    - title: NSD
+    - title: NSD IDELEG
       url: /nsd.html
+    - title: NSD DELEG
+      url: /nsd-deleg.html
     - title: Unbound
       url: /unbound.html
 - title: Internet draft

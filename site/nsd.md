@@ -1,5 +1,5 @@
 ---
-title: Incremental deleg support in NSD
+title: IDELEG support in NSD
 layout: default
 permalink: /nsd.html
 ---

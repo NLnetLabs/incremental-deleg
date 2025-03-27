@@ -1,10 +1,10 @@
 ---
-title: Incremental deleg support in ldns
+title: Extensible delegations support in ldns
 layout: default
 permalink: /ldns.html
 ---
 
-The [ldns DNS library and tools](https://nlnetlabs.nl/projects/ldns/about/) software has been extended with support for incremental deleg (IDELEG) and also wesplaap-deleg (DELEG), which is available in the [`deleg-and-ideleg`](https://github.com/NLnetLabs/ldns/tree/deleg-and-ideleg) branch of the `NLnetLabs/ldns` github repository.
+The [ldns DNS library and tools](https://nlnetlabs.nl/projects/ldns/about/) software has been extended with support for homburg-deleg (IDELEG) and also wesplaap-deleg (DELEG), which is available in the [`deleg-and-ideleg`](https://github.com/NLnetLabs/ldns/tree/deleg-and-ideleg) branch of the `NLnetLabs/ldns` github repository.
 
 To build the `drill` DNS query tool and the other tools (among which the DNSSEC signer `ldns-signzone` with which the testbed's zones were signed) from source, we need to install several packages.
 Below is shown how to install those prerequisites on an Ubuntu Linux machine:
