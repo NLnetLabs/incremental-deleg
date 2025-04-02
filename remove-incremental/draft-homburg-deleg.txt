@@ -107,17 +107,18 @@ Table of Contents
      5.1.  Authoritative name server support
      5.2.  Resolver behavior with authoritative name server support
    6.  Extra optimized implementation
-   7.  Priming queries
-   8.  How does the protocol described in this draft meet the
+   7.  Fewer queries
+   8.  Priming queries
+   9.  How does the protocol described in this draft meet the
            requirements
-   9.  Implementation Status
-   10. Security Considerations
-   11. IANA Considerations
-     11.1.  IDELEG RR type
-     11.2.  _deleg Node Name
-   12. References
-     12.1.  Normative References
-     12.2.  Informative References
+   10. Implementation Status
+   11. Security Considerations
+   12. IANA Considerations
+     12.1.  IDELEG RR type
+     12.2.  _deleg Node Name
+   13. References
+     13.1.  Normative References
+     13.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -283,7 +284,7 @@ Table of Contents
    resolvers to perform iterative resolution (Section 5.3.3 of
    [RFC1034]).  The IDELEG type requires registration in the "Resource
    Record (RR) TYPEs" registry under the "Domain Name System (DNS)
-   Parameters" registry group (see IDELEG RR type (Section 11.1)).  The
+   Parameters" registry group (see IDELEG RR type (Section 12.1)).  The
    protocol-specific mapping specification for iterative resolutions are
    the same as those for "DNS Servers" [RFC9461].
 
@@ -323,7 +324,7 @@ Table of Contents
    label with the name _deleg at the apex of the delegating zone.  The
    _deleg label scopes the interpretation of the IDELEG records and
    requires registration in the "Underscored and Globally Scoped DNS
-   Node Names" registry (see _deleg Node Name (Section 11.2)).  The full
+   Node Names" registry (see _deleg Node Name (Section 12.2)).  The full
    scoping of delegations includes the labels that are *below* the
    _deleg label and those, together with the name of the delegating
    domain, make up the name of the subzone to which the delegation
@@ -872,7 +873,65 @@ Table of Contents
    This method of signalling that the legacy delegation MUST be used, is
    RECOMMENDED.
 
-7.  Priming queries
+7.  Fewer queries
+
+   The algorithm described in Section 4.1 is optimized for low latency.
+   The additional queries required are sent at the same time as query
+   for legacy delegations.  It is also possible optimize for a lowest
+   number of additional queries.  However, this may in some cases result
+   in extra latency.
+
+   To achieve this, the behavior of the recursive resolver is modified
+   as follows.  If the state of the zone is known (the _deleg.<apex> is
+   known to exist or not to exist), then queries are executed as
+   described in Section 4.1 and Section 5.2.
+
+   If the state of the zone is unknown then initially only conventional
+   queries are sent.  If a reply arrives that does not contain a legacy
+   delegation then the algorithm is done and no further queries are
+   sent.
+
+   If the reply contains a legacy delegation then the follow up query or
+   queries depend on whether the zone is DNSSEC signed or not.  If the
+   zone is signed then a deleg query is sent that matches the legacy
+   delegation.  In a signed zone, the query is either successful and
+   returns an IDELEG RRset or the query contains a proof of non-
+   existence from which it is possible to deduce whether the zone
+   contains an _deleg label or not.
+
+   If the zone is not signed then two separate queries are needed.  One
+   query just for the _deleg label and one deleg query that matches
+   legacy delegation.
+
+   If the reply the _deleg query is NXDOMAIN then the zone does not
+   contain any IDELEG delegations and further queries are unnecessary.
+   See Section 4.2 for processing the response to the _deleg query.  The
+   response to the deleg query is processed as described in Section 4.1.
+
+   The effect on the number of extra queries is the following.  If the
+   response does not contain a legacy delegation then no extra queries
+   are sent.
+
+   If the nameserver supports deleg and the zone is signed then no
+   additional queries will be sent independent of whether zone contains
+   the _deleg label or not.
+
+   If the nameserver supports deleg, the zone is not signed and no
+   IDELEG RRset is returned in the response then two follow up queries
+   need to be sent.  The response to the _deleg query will be cached
+   until the TTL expires.
+
+   If the nameserver does not support deleg but the zone is signed then
+   one follow up queries will be sent: a deleg query that matches the
+   legacy delegation.  Presence or absence of the _deleg label will be
+   cached.  IF the _deleg label is absent then no further additonal
+   queries will be sent.
+
+   Finally, if the nameserver does not support deleg and the zone is not
+   signed then two follow up queries will be sent.  The response to the
+   _deleg query will be cached until the TTL expires.
+
+8.  Priming queries
 
    Some zones, such as the root zone, are targeted directly from hints
    files.  Information about which authoritative name servers and with
@@ -882,7 +941,7 @@ Table of Contents
    parallel to the legacy <apex> NS query and process the content as if
    it was found through an referral response.
 
-8.  How does the protocol described in this draft meet the requirements
+9.  How does the protocol described in this draft meet the requirements
 
    This section will discuss how deleg meets the requirements for a new
    delegation mechanism as described in [I-D.ietf-deleg-requirements-02]
@@ -993,7 +1052,7 @@ Table of Contents
       Extensible delegations are protected by DNSSEC, unlike NS records
       at the parent zone.
 
-9.  Implementation Status
+10.  Implementation Status
 
    *Note to the RFC Editor*: please remove this entire section before
    publication.
@@ -1033,7 +1092,7 @@ Table of Contents
    122 in Bangkok (https://datatracker.ietf.org/meeting/122/
    proceedings).
 
-10.  Security Considerations
+11.  Security Considerations
 
    Deleg moves the location of referral information to a unique location
    that currently exists.  However, as this is a new approach, thought
@@ -1053,9 +1112,9 @@ Table of Contents
 
    There are bound to be other considerations.
 
-11.  IANA Considerations
+12.  IANA Considerations
 
-11.1.  IDELEG RR type
+12.1.  IDELEG RR type
 
    IANA is requested to update the "Resource Record (RR) TYPEs" registry
    under the "Domain Name System (DNS) Parameters" registry group as
@@ -1069,7 +1128,7 @@ Table of Contents
 
                                   Table 1
 
-11.2.  _deleg Node Name
+12.2.  _deleg Node Name
 
    Per [RFC8552], IANA is requested to add the following entry to the
    DNS "Underscored and Globally Scoped DNS Node Names" registry:
@@ -1084,9 +1143,9 @@ Table of Contents
                       Globally Scoped DNS Node Names
                                  registry
 
-12.  References
+13.  References
 
-12.1.  Normative References
+13.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -1150,7 +1209,7 @@ Table of Contents
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
 
-12.2.  Informative References
+13.2.  Informative References
 
    [BCP219]   Best Current Practice 219,
               <https://www.rfc-editor.org/info/bcp219>.
