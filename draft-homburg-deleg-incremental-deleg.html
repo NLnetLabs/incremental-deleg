@@ -1224,11 +1224,11 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">incremental-deleg</td>
-<td class="right">March 2025</td>
+<td class="right">April 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Homburg, et al.</td>
-<td class="center">Expires 28 September 2025</td>
+<td class="center">Expires 4 October 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1241,12 +1241,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-homburg-deleg-incremental-deleg-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-03-27" class="published">27 March 2025</time>
+<time datetime="2025-04-02" class="published">2 April 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-09-28">28 September 2025</time></dd>
+<dd class="expires"><time datetime="2025-10-04">4 October 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1314,7 +1314,7 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 4 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1423,63 +1423,38 @@ None, mixed or full deployment of the mechanism on authoritative name servers ar
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-how-does-incremental-deleg-" class="internal xref">How does incremental deleg meet the requirements</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-comparison-with-other-deleg" class="internal xref">Comparison with other delegation mechanisms</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-comparison-with-legacy-dele" class="internal xref">Comparison with legacy delegations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.1">
-                    <p id="section-toc.1-1.9.2.1.2.1.1"><a href="#section-9.1.1" class="auto internal xref">9.1.1</a>.  <a href="#name-the-delegation-point" class="internal xref">The delegation point</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-ideleg-rr-type" class="internal xref">IDELEG RR type</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.2">
-                    <p id="section-toc.1-1.9.2.1.2.2.1"><a href="#section-9.1.2" class="auto internal xref">9.1.2</a>.  <a href="#name-legacy-referrals" class="internal xref">Legacy referrals</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.3">
-                    <p id="section-toc.1-1.9.2.1.2.3.1"><a href="#section-9.1.3" class="auto internal xref">9.1.3</a>.  <a href="#name-number-of-queries" class="internal xref">Number of queries</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-comparison-with-name-dns-qu" class="internal xref">Comparison with Name DNS Query Name Minimisation</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-comparison-with" class="internal xref">Comparison with I-D.wesplaap-deleg</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-_deleg-node-name" class="internal xref">_deleg Node Name</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
-</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-ideleg-rr-type" class="internal xref">IDELEG RR type</a></p>
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-_deleg-node-name" class="internal xref">_deleg Node Name</a></p>
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-references" class="internal xref">References</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
-                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="auto internal xref">13.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
-                <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="auto internal xref">13.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1630,7 +1605,7 @@ With incremental deleg, this is the location given by the delegating name.<a hre
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-the-ideleg-resource-record-" class="section-name selfRef">The IDELEG resource record type</a>
       </h2>
 <p id="section-2-1">The IDELEG RR type is a variant of SVCB <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> for use with resolvers to perform iterative resolution (<span><a href="https://rfc-editor.org/rfc/rfc1034#section-5.3.3" class="relref">Section 5.3.3</a> of [<a href="#RFC1034" class="cite xref">RFC1034</a>]</span>).
-The IDELEG type requires registration in the "Resource Record (RR) TYPEs" registry under the "Domain Name System (DNS) Parameters" registry group (see <span><a href="#deleg-rr-type" class="internal xref">IDELEG RR type</a> (<a href="#deleg-rr-type" class="auto internal xref">Section 12.1</a>)</span>).
+The IDELEG type requires registration in the "Resource Record (RR) TYPEs" registry under the "Domain Name System (DNS) Parameters" registry group (see <span><a href="#deleg-rr-type" class="internal xref">IDELEG RR type</a> (<a href="#deleg-rr-type" class="auto internal xref">Section 11.1</a>)</span>).
 The protocol-specific mapping specification for iterative resolutions are the same as those for "DNS Servers" <span>[<a href="#RFC9461" class="cite xref">RFC9461</a>]</span>.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2"><span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.2" class="relref">Section 2.4.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> states that SVCB RRsets <span class="bcp14">SHOULD</span> only have a single RR in AliasMode, and that if multiple AliasMode RRs are present, clients or recursive resolvers <span class="bcp14">SHOULD</span> pick one at random.
 Different from SVCB (<span><a href="https://rfc-editor.org/rfc/rfc9460#section-2.4.2" class="relref">Section 2.4.2</a> of [<a href="#RFC9460" class="cite xref">RFC9460</a>]</span>), IDELEG allows for multiple AliasMode RRs to be present in a single IDELEG RRset.
@@ -1650,7 +1625,7 @@ Port Prefix Naming <span><a href="https://rfc-editor.org/rfc/rfc9461#section-3" 
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-delegation-administration" class="section-name selfRef">Delegation administration</a>
       </h2>
 <p id="section-3-1">An extensible delegation is realized with an IDELEG Resource Record set (RRset) <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> below a specially for the purpose reserved label with the name <code>_deleg</code> at the apex of the delegating zone.
-The <code>_deleg</code> label scopes the interpretation of the IDELEG records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see <span><a href="#node-name" class="internal xref">_deleg Node Name</a> (<a href="#node-name" class="auto internal xref">Section 12.2</a>)</span>).
+The <code>_deleg</code> label scopes the interpretation of the IDELEG records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see <span><a href="#node-name" class="internal xref">_deleg Node Name</a> (<a href="#node-name" class="auto internal xref">Section 11.2</a>)</span>).
 The full scoping of delegations includes the labels that are <strong>below</strong> the <code>_deleg</code> label and those, together with the name of the delegating domain, make up the name of the subzone to which the delegation refers.
 For example, if the delegating zone is <code>example.</code>, then a delegation to subzone <code>customer.example.</code> is realized by a IDELEG RRset at the name <code>customer._deleg.example.</code> in the parent zone.
 A fully scoped delegating name (such as <code>customer._deleg.example.</code>) is referred to further in this document as the "delegation point".<a href="#section-3-1" class="pilcrow">¶</a></p>
@@ -2256,251 +2231,49 @@ NS records at the parent zone.<a href="#section-8-2.14.2" class="pilcrow">¶</a>
       </ul>
 </section>
 </div>
-<div id="comparison-with-other-delegation-mechanisms">
-<section id="section-9">
-      <h2 id="name-comparison-with-other-deleg">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-comparison-with-other-deleg" class="section-name selfRef">Comparison with other delegation mechanisms</a>
-      </h2>
-<p id="section-9-1">Table <a href="#xtraqueries" class="auto internal xref">Table 1</a> provides an overview of when extra queries, in parallel to the legacy query, are sent.<a href="#section-9-1" class="pilcrow">¶</a></p>
-<span id="name-additional-queries-in-paral"></span><div id="xtraqueries">
-<table class="center" id="table-1">
-        <caption>
-<a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-additional-queries-in-paral" class="selfRef">Additional queries in parallel to the legacy query</a>
-        </caption>
-<thead>
-          <tr>
-            <th class="text-center" rowspan="1" colspan="1"> </th>
-            <th class="text-center" rowspan="1" colspan="1">apex query</th>
-            <th class="text-center" rowspan="1" colspan="1">auth support</th>
-            <th class="text-center" rowspan="1" colspan="1">_deleg presence</th>
-            <th class="text-left" rowspan="1" colspan="1"> </th>
-            <th class="text-center" rowspan="1" colspan="1">&lt;sub&gt;._deleg.&lt;apex&gt; IDELEG</th>
-            <th class="text-center" rowspan="1" colspan="1">_deleg.&lt;apex&gt; A</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">1</td>
-            <td class="text-center" rowspan="1" colspan="1">Yes</td>
-            <td class="text-center" rowspan="1" colspan="1">*</td>
-            <td class="text-center" rowspan="1" colspan="1">*</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">2</td>
-            <td class="text-center" rowspan="1" colspan="1">No</td>
-            <td class="text-center" rowspan="1" colspan="1">*</td>
-            <td class="text-center" rowspan="1" colspan="1">No</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">3</td>
-            <td class="text-center" rowspan="1" colspan="1">No</td>
-            <td class="text-center" rowspan="1" colspan="1">Yes</td>
-            <td class="text-center" rowspan="1" colspan="1">*</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">4</td>
-            <td class="text-center" rowspan="1" colspan="1">No</td>
-            <td class="text-center" rowspan="1" colspan="1">Unknown</td>
-            <td class="text-center" rowspan="1" colspan="1">Yes</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1">X</td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">5</td>
-            <td class="text-center" rowspan="1" colspan="1">No</td>
-            <td class="text-center" rowspan="1" colspan="1">Unknown</td>
-            <td class="text-center" rowspan="1" colspan="1">Unknown</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1">X</td>
-            <td class="text-center" rowspan="1" colspan="1">only for unsigned zones</td>
-          </tr>
-        </tbody>
-      </table>
-</div>
-<p id="section-9-3">The three headers on the left side of the table mean the following:<a href="#section-9-3" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlNewline" id="section-9-4">
-        <dt id="section-9-4.1">apex query:</dt>
-        <dd style="margin-left: 1.5em" id="section-9-4.2">
-          <p id="section-9-4.2.1">Whether the query is for the apex of the target zone.
-"Yes" means an apex query, "No" means a query below the apex which may be delegated<a href="#section-9-4.2.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-9-4.3">auth support:</dt>
-        <dd style="margin-left: 1.5em" id="section-9-4.4">
-          <p id="section-9-4.4.1">Whether or not the target authoritative server supports incremental deleg.
-"Yes" means it supports it and "Unknown" means support is not detected.
-"*" means it does not matter<a href="#section-9-4.4.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-<dt id="section-9-4.5">
-<code>_deleg</code> presence:</dt>
-        <dd style="margin-left: 1.5em" id="section-9-4.6">
-          <p id="section-9-4.6.1">Whether or not the <code>_deleg</code> label is present in the target zone (and thus incremental delegations)<a href="#section-9-4.6.1" class="pilcrow">¶</a></p>
-</dd>
-      <dd class="break"></dd>
-</dl>
-<p id="section-9-5">On the right side of the table are the extra queries, to be sent in parallel with the legacy query.
-The <code>_deleg</code> presence test query (most right column) only needs to be sent to unsigned target zones, because its non-existence will be shown in the NSEC(3) records showing the non-existence of the incremental delegation (second from right column).<a href="#section-9-5" class="pilcrow">¶</a></p>
-<p id="section-9-6">If the query name is the same as the apex of the target zone, no extra queries need to be sent (Row 1).
-If the <code>_deleg</code> label is known not to exist in the target zone (Row 2) or if the target name server is known to support incremental deleg (Row 3), no extra queries need to be sent.
-Only if it is unknown that the target name server supports incremental deleg, and the <code>_deleg</code> label is known to exist in the target zone (Row 4) or it is not known whether or not the <code>_deleg</code> label exists (Row 5), and extra incremental deleg query is sent in parallel to the legacy query.
-If the target zone is unsigned, presence of the <code>_deleg</code> label needs to be tested explicitly (Row 5).<a href="#section-9-6" class="pilcrow">¶</a></p>
-<div id="comparison-with-legacy-delegations">
-<section id="section-9.1">
-        <h3 id="name-comparison-with-legacy-dele">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-comparison-with-legacy-dele" class="section-name selfRef">Comparison with legacy delegations</a>
-        </h3>
-<div id="the-delegation-point">
-<section id="section-9.1.1">
-          <h4 id="name-the-delegation-point">
-<a href="#section-9.1.1" class="section-number selfRef">9.1.1. </a><a href="#name-the-delegation-point" class="section-name selfRef">The delegation point</a>
-          </h4>
-<p id="section-9.1.1-1">Legacy delegations are realized by a non-authoritative NS RRset at the name of the delegated zone, but in the delegating zone (the parent side of the zone cut).
-However, there is another NS RRset by the same name, but now authoritative, in the delegated zone (the child side of the zone cut).
-Some resolvers prefer to use the authoritative child side NS RRset (see <span><a href="https://rfc-editor.org/rfc/rfc2181#section-5.4.1" class="relref">Section 5.4.1</a> of [<a href="#RFC2181" class="cite xref">RFC2181</a>]</span>) for contacting the authoritative name servers of the delegated zone, and will use it to reach the zone if they encounter the child side NS RRset authoritatively in responses.
-Some resolvers query explicitly for the authoritative child side NS RRset <span>[<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>.
-However, these NS RRsets can differ in content leading to errors and inconsistencies (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-ns-revalidation-09#section-3" class="relref">Section 3</a> of [<a href="#I-D.ietf-dnsop-ns-revalidation" class="cite xref">I-D.ietf-dnsop-ns-revalidation</a>]</span>).<a href="#section-9.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.1.1-2">Incremental deleg eliminates these issues by placing the referral information, not at the name of the delegated zone, but authoritatively in the delegating zone.<a href="#section-9.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.1.1-3">Having the referral information at an authoritative location brings clarity.
-There can be no misinterpretation about who is providing the referral (the delegating zone, or the delegated zone).
-In a future world where all delegations would be incremental delegations, all names will only be authoritative data, derivable from the name, for resolvers and other applications alike.<a href="#section-9.1.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="legacy-referrals">
-<section id="section-9.1.2">
-          <h4 id="name-legacy-referrals">
-<a href="#section-9.1.2" class="section-number selfRef">9.1.2. </a><a href="#name-legacy-referrals" class="section-name selfRef">Legacy referrals</a>
-          </h4>
-<p id="section-9.1.2-1">Resolvers that support only legacy referrals will be on the internet for the foreseeable future, therefore a legacy referral <span class="bcp14">MUST</span> always be provided alongside the incremental referral.<a href="#section-9.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.1.2-2">Legacy referrals can be deduced from the incremental delegation.
-An authoritative name server could (in some cases) synthesize the legacy referral from the incremental delegation, however this is <span class="bcp14">NOT RECOMMENDED</span>.
-It introduces an element of dynamism which is at the time of writing not part of authoritative name server behavior specification.
-Moreover, authoritative name servers could transfer the zone data to non incremental deleg supporting and aware name servers, which would not have this feature.
-We leave provisioning of legacy referrals from incremental delegations (for now) out of scope for this document.<a href="#section-9.1.2-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="number-of-queries">
-<section id="section-9.1.3">
-          <h4 id="name-number-of-queries">
-<a href="#section-9.1.3" class="section-number selfRef">9.1.3. </a><a href="#name-number-of-queries" class="section-name selfRef">Number of queries</a>
-          </h4>
-<p id="section-9.1.3-1">Legacy resolvers that do not do DNS Query Name Minimisation, will get a referral in a single query.
-The resolution process with incremental delegations must find the exact zone cut explicitly, comparable with DNS Query Name Minimisation.
-The query increase to find the zone cut (and referral) is comparable to that of a resolver performing DNS Query Name minimisation.<a href="#section-9.1.3-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="comparison-with-name-dns-query-name-minimisation">
-<section id="section-9.2">
-        <h3 id="name-comparison-with-name-dns-qu">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-comparison-with-name-dns-qu" class="section-name selfRef">Comparison with Name DNS Query Name Minimisation</a>
-        </h3>
-<p id="section-9.2-1">There are no extra queries needed in most cases if the authoritative name server has incremental deleg support. The exception is when the parent zone is not signed and has no incremental deleg records.
-In that case, one extra query is needed when the parent zone is first contacted (and every TTL)<a href="#section-9.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="comparison-with-i-dwesplaap-deleg">
-<section id="section-9.3">
-        <h3 id="name-comparison-with">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-comparison-with" class="section-name selfRef">Comparison with <span class="cite xref">[I-D.wesplaap-deleg]</span></a>
-        </h3>
-<span id="name-comparison-of-i-dwesplaap-d"></span><table class="center" id="table-2">
-          <caption>
-<a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-comparison-of-i-dwesplaap-d" class="selfRef">Comparison of [I-D.wesplaap-deleg] with [this document]</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-left" rowspan="1" colspan="1">[?I-D.wesplaap-deleg]</th>
-              <th class="text-left" rowspan="1" colspan="1">[this document]</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">Requires implementation in both authoritative name server as well as in the resolver, DNSSEC signers and validators</td>
-              <td class="text-left" rowspan="1" colspan="1">Only implementation required for functionalities following the delegations (like in resolvers). No support from the authoritative name server, DNSSEC signers or validators are needed. But optimized with updated authoritative software.</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">DELEG resolvers need to contact DELEG authoritatives directly</td>
-              <td class="text-left" rowspan="1" colspan="1">IDELEG resolvers can query for the incremental delegation data, therefore direct contact with IDELEG supporting authoritatives is not necessary. All legacy infrastructure (including forwarders etc.) is supported.</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">DNSKEY flag needed to signal IDELEG support with all authoritative name servers that serve the parent (delegating) domain. Special requirements for the child domain.</td>
-              <td class="text-left" rowspan="1" colspan="1">No DNSKEY flag needed. Separation of concerns.</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">Authoritative name servers need to be updated all at once</td>
-              <td class="text-left" rowspan="1" colspan="1">Authoritative name servers may be updated gradually for optimization</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">New semantics about what is authoritative (BOGUS with current DNSSEC validators)</td>
-              <td class="text-left" rowspan="1" colspan="1">Works with current DNS and DNSSEC semantics. Easier to implement.</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">No extra queries</td>
-              <td class="text-left" rowspan="1" colspan="1">One extra query, in parallel to the legacy query, <em>per authoritative</em> server when incremental deleg support is not yet detected, and one extra query <em>per unsigned zone</em> to determine presence of the <code>_deleg</code> label</td>
-            </tr>
-          </tbody>
-        </table>
-</section>
-</div>
-</section>
-</div>
 <div id="implementation-status">
-<section id="section-10">
+<section id="section-9">
       <h2 id="name-implementation-status">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
       </h2>
-<p id="section-10-1"><strong>Note to the RFC Editor</strong>: please remove this entire section before publication.<a href="#section-10-1" class="pilcrow">¶</a></p>
-<p id="section-10-2">We are using RR type code 65280 for experiments.<a href="#section-10-2" class="pilcrow">¶</a></p>
-<p id="section-10-3">Jesse van Zutphen has built a proof of concept implementation supporting incremental delegations as specified in a previous version of this document <span>[<a href="#I-D.homburg-deleg-incremental-deleg-00" class="cite xref">I-D.homburg-deleg-incremental-deleg-00</a>]</span> for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam <span>[<a href="#JZUTPHEN" class="cite xref">JZUTPHEN</a>]</span>.
+<p id="section-9-1"><strong>Note to the RFC Editor</strong>: please remove this entire section before publication.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">We are using RR type code 65280 for experiments.<a href="#section-9-2" class="pilcrow">¶</a></p>
+<p id="section-9-3">Jesse van Zutphen has built a proof of concept implementation supporting incremental delegations as specified in a previous version of this document <span>[<a href="#I-D.homburg-deleg-incremental-deleg-00" class="cite xref">I-D.homburg-deleg-incremental-deleg-00</a>]</span> for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam <span>[<a href="#JZUTPHEN" class="cite xref">JZUTPHEN</a>]</span>.
 Jesse's implementation has been adapted to query for the IDELEG RR types (with code point 65280).
 This version is available in the <code>ideleg</code> branch of the <code>NLnetLabs/unbound</code> github repository <span>[<a href="#IDELEG4UNBOUND" class="cite xref">IDELEG4UNBOUND</a>]</span>.
-Note that this implementation does not yet support <span><a href="#behavior-with-auth-support" class="internal xref">optimized behaviour</a> (<a href="#behavior-with-auth-support" class="auto internal xref">Section 5.2</a>)</span>, and also does not yet follow AliasMode IDELEG RRs.<a href="#section-10-3" class="pilcrow">¶</a></p>
-<p id="section-10-4">The ldns DNS library and tools software has been extended with support for IDELEG, which is available in the <code>features/ideleg</code> branch of the <code>NLnetLabs/ldns</code> github repository <span>[<a href="#IDELEG4LDNS" class="cite xref">IDELEG4LDNS</a>]</span>.
-This includes support for IDELEG in the DNS lookup utility <code>drill</code>, as well as in the DNSSEC zone signer <code>ldns-signzone</code> and all other tools and examples included with the ldns software.<a href="#section-10-4" class="pilcrow">¶</a></p>
-<p id="section-10-5">Wouter Petri has built a proof of concept support for IDELEG in the NSD authoritative name server software as part of a research project for the Security and Network Engineering master program of the University of Amsterdam <span>[<a href="#WPETRI" class="cite xref">WPETRI</a>]</span>.
-The source code of his implementation is available on github <span>[<a href="#IDELEG4NSD" class="cite xref">IDELEG4NSD</a>]</span>.<a href="#section-10-5" class="pilcrow">¶</a></p>
-<p id="section-10-6">Wouter's implementation is serving the <code>ideleg.net.</code> domain, containing a variety of different incremental delegations, for evaluation purposes.
-We are planning to provide information about the deployment, including what software to evaluate these delegations, at <a href="http://ideleg.net/">http://ideleg.net/</a>, hopefully before the <a href="https://datatracker.ietf.org/meeting/122/proceedings">IETF 122 in Bangkok</a>.<a href="#section-10-6" class="pilcrow">¶</a></p>
+Note that this implementation does not yet support <span><a href="#behavior-with-auth-support" class="internal xref">optimized behaviour</a> (<a href="#behavior-with-auth-support" class="auto internal xref">Section 5.2</a>)</span>, and also does not yet follow AliasMode IDELEG RRs.<a href="#section-9-3" class="pilcrow">¶</a></p>
+<p id="section-9-4">The ldns DNS library and tools software has been extended with support for IDELEG, which is available in the <code>features/ideleg</code> branch of the <code>NLnetLabs/ldns</code> github repository <span>[<a href="#IDELEG4LDNS" class="cite xref">IDELEG4LDNS</a>]</span>.
+This includes support for IDELEG in the DNS lookup utility <code>drill</code>, as well as in the DNSSEC zone signer <code>ldns-signzone</code> and all other tools and examples included with the ldns software.<a href="#section-9-4" class="pilcrow">¶</a></p>
+<p id="section-9-5">Wouter Petri has built a proof of concept support for IDELEG in the NSD authoritative name server software as part of a research project for the Security and Network Engineering master program of the University of Amsterdam <span>[<a href="#WPETRI" class="cite xref">WPETRI</a>]</span>.
+The source code of his implementation is available on github <span>[<a href="#IDELEG4NSD" class="cite xref">IDELEG4NSD</a>]</span>.<a href="#section-9-5" class="pilcrow">¶</a></p>
+<p id="section-9-6">Wouter's implementation is serving the <code>ideleg.net.</code> domain, containing a variety of different incremental delegations, for evaluation purposes.
+We are planning to provide information about the deployment, including what software to evaluate these delegations, at <a href="http://ideleg.net/">http://ideleg.net/</a>, hopefully before the <a href="https://datatracker.ietf.org/meeting/122/proceedings">IETF 122 in Bangkok</a>.<a href="#section-9-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-11">
+<section id="section-10">
       <h2 id="name-security-considerations">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-11-1">Incremental deleg moves the location of  referral information to a unique  location that currently exists. However, as this is a new approach, thought must be given to usage.   There must be some checks to ensure that the registering a _deleg subdomain happens at the time the domain is provisioned. The same care needs to be addressed when a domain is de-provisioned that the _deleg is removed.  This is similar to what happens to A/AAAA glue records for NS records deployed in parent zones.<a href="#section-11-1" class="pilcrow">¶</a></p>
-<p id="section-11-2">While the recommendation is to deploy DNSSEC with incremental deleg, it is not mandatory.  However, using incremental deleg with unsigned zones can create possibilities of domain hijackings. This could  be hard to detect when not speaking directly to the authoritative name server.
-This risk of domain hijacking is not expected to increase significantly compared to the situation without incremental deleg.<a href="#section-11-2" class="pilcrow">¶</a></p>
-<p id="section-11-3">There are bound to be other considerations.<a href="#section-11-3" class="pilcrow">¶</a></p>
+<p id="section-10-1">Incremental deleg moves the location of  referral information to a unique  location that currently exists. However, as this is a new approach, thought must be given to usage.   There must be some checks to ensure that the registering a _deleg subdomain happens at the time the domain is provisioned. The same care needs to be addressed when a domain is de-provisioned that the _deleg is removed.  This is similar to what happens to A/AAAA glue records for NS records deployed in parent zones.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-10-2">While the recommendation is to deploy DNSSEC with incremental deleg, it is not mandatory.  However, using incremental deleg with unsigned zones can create possibilities of domain hijackings. This could  be hard to detect when not speaking directly to the authoritative name server.
+This risk of domain hijacking is not expected to increase significantly compared to the situation without incremental deleg.<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-10-3">There are bound to be other considerations.<a href="#section-10-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-12">
+<section id="section-11">
       <h2 id="name-iana-considerations">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
 <div id="deleg-rr-type">
-<section id="section-12.1">
+<section id="section-11.1">
         <h3 id="name-ideleg-rr-type">
-<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-ideleg-rr-type" class="section-name selfRef">IDELEG RR type</a>
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-ideleg-rr-type" class="section-name selfRef">IDELEG RR type</a>
         </h3>
-<p id="section-12.1-1">IANA is requested to update the "Resource Record (RR) TYPEs" registry under the "Domain Name System (DNS) Parameters" registry group as follows:<a href="#section-12.1-1" class="pilcrow">¶</a></p>
-<table class="center" id="table-3">
-          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<p id="section-11.1-1">IANA is requested to update the "Resource Record (RR) TYPEs" registry under the "Domain Name System (DNS) Parameters" registry group as follows:<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
 <thead>
             <tr>
               <th class="text-left" rowspan="1" colspan="1">TYPE</th>
@@ -2521,14 +2294,14 @@ This risk of domain hijacking is not expected to increase significantly compared
 </section>
 </div>
 <div id="node-name">
-<section id="section-12.2">
+<section id="section-11.2">
         <h3 id="name-_deleg-node-name">
-<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-_deleg-node-name" class="section-name selfRef">_deleg Node Name</a>
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-_deleg-node-name" class="section-name selfRef">_deleg Node Name</a>
         </h3>
-<p id="section-12.2-1">Per <span>[<a href="#RFC8552" class="cite xref">RFC8552</a>]</span>, IANA is requested to add the following entry to the DNS "Underscored and Globally Scoped DNS Node Names" registry:<a href="#section-12.2-1" class="pilcrow">¶</a></p>
-<span id="name-entry-in-the-underscored-an"></span><table class="center" id="table-4">
+<p id="section-11.2-1">Per <span>[<a href="#RFC8552" class="cite xref">RFC8552</a>]</span>, IANA is requested to add the following entry to the DNS "Underscored and Globally Scoped DNS Node Names" registry:<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+<span id="name-entry-in-the-underscored-an"></span><table class="center" id="table-2">
           <caption>
-<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#table-2" class="selfRef">Table 2</a>:
 <a href="#name-entry-in-the-underscored-an" class="selfRef">Entry in the Underscored and Globally Scoped DNS Node Names registry</a>
           </caption>
 <thead>
@@ -2551,23 +2324,19 @@ This risk of domain hijacking is not expected to increase significantly compared
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-13">
+<section id="section-12">
       <h2 id="name-references">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-13.1">
+<section id="section-12.1">
         <h3 id="name-normative-references">
-<a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC2181">[RFC2181]</dt>
-        <dd>
-<span class="refAuthor">Elz, R.</span> and <span class="refAuthor">R. Bush</span>, <span class="refTitle">"Clarifications to the DNS Specification"</span>, <span class="seriesInfo">RFC 2181</span>, <span class="seriesInfo">DOI 10.17487/RFC2181</span>, <time datetime="1997-07" class="refDate">July 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2181">https://www.rfc-editor.org/rfc/rfc2181</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC3597">[RFC3597]</dt>
         <dd>
@@ -2623,9 +2392,9 @@ This risk of domain hijacking is not expected to increase significantly compared
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-13.2">
+<section id="section-12.2">
         <h3 id="name-informative-references">
-<a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="BCP219">[BCP219]</dt>

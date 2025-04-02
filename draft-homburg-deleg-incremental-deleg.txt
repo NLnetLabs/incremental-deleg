@@ -5,12 +5,12 @@
 DNS Delegation                                                P. Homburg
 Internet-Draft                                                NLnet Labs
 Intended status: Standards Track                             T. Wicinski
-Expires: 28 September 2025                            Cox Communications
+Expires: 4 October 2025                               Cox Communications
                                                            J. V. Zutphen
                                                  University of Amsterdam
                                                                W. Toorop
                                                               NLnet Labs
-                                                           27 March 2025
+                                                            2 April 2025
 
 
          Incrementally Deployable Extensible Delegation for DNS
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 September 2025.
+   This Internet-Draft will expire on 4 October 2025.
 
 Copyright Notice
 
@@ -109,21 +109,14 @@ Table of Contents
    6.  Extra optimized implementation
    7.  Priming queries
    8.  How does incremental deleg meet the requirements
-   9.  Comparison with other delegation mechanisms
-     9.1.  Comparison with legacy delegations
-       9.1.1.  The delegation point
-       9.1.2.  Legacy referrals
-       9.1.3.  Number of queries
-     9.2.  Comparison with Name DNS Query Name Minimisation
-     9.3.  Comparison with I-D.wesplaap-deleg
-   10. Implementation Status
-   11. Security Considerations
-   12. IANA Considerations
-     12.1.  IDELEG RR type
-     12.2.  _deleg Node Name
-   13. References
-     13.1.  Normative References
-     13.2.  Informative References
+   9.  Implementation Status
+   10. Security Considerations
+   11. IANA Considerations
+     11.1.  IDELEG RR type
+     11.2.  _deleg Node Name
+   12. References
+     12.1.  Normative References
+     12.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -286,7 +279,7 @@ Table of Contents
    resolvers to perform iterative resolution (Section 5.3.3 of
    [RFC1034]).  The IDELEG type requires registration in the "Resource
    Record (RR) TYPEs" registry under the "Domain Name System (DNS)
-   Parameters" registry group (see IDELEG RR type (Section 12.1)).  The
+   Parameters" registry group (see IDELEG RR type (Section 11.1)).  The
    protocol-specific mapping specification for iterative resolutions are
    the same as those for "DNS Servers" [RFC9461].
 
@@ -326,7 +319,7 @@ Table of Contents
    label with the name _deleg at the apex of the delegating zone.  The
    _deleg label scopes the interpretation of the IDELEG records and
    requires registration in the "Underscored and Globally Scoped DNS
-   Node Names" registry (see _deleg Node Name (Section 12.2)).  The full
+   Node Names" registry (see _deleg Node Name (Section 11.2)).  The full
    scoping of delegations includes the labels that are *below* the
    _deleg label and those, together with the name of the delegating
    domain, make up the name of the subzone to which the delegation
@@ -1007,177 +1000,7 @@ Table of Contents
       Incremental delegations are protected by DNSSEC, unlike NS records
       at the parent zone.
 
-9.  Comparison with other delegation mechanisms
-
-   Table Table 1 provides an overview of when extra queries, in parallel
-   to the legacy query, are sent.
-
-   +=+=====+=======+==========++=====================+================+
-   | | apex|  auth |  _deleg  || <sub>._deleg.<apex> | _deleg.<apex>  |
-   | |query|support| presence ||        IDELEG       |       A        |
-   +=+=====+=======+==========++=====================+================+
-   |1| Yes |   *   |    *     ||                     |                |
-   +-+-----+-------+----------++---------------------+----------------+
-   |2|  No |   *   |    No    ||                     |                |
-   +-+-----+-------+----------++---------------------+----------------+
-   |3|  No |  Yes  |    *     ||                     |                |
-   +-+-----+-------+----------++---------------------+----------------+
-   |4|  No |Unknown|   Yes    ||          X          |                |
-   +-+-----+-------+----------++---------------------+----------------+
-   |5|  No |Unknown| Unknown  ||          X          |    only for    |
-   | |     |       |          ||                     | unsigned zones |
-   +-+-----+-------+----------++---------------------+----------------+
-
-       Table 1: Additional queries in parallel to the legacy query
-
-   The three headers on the left side of the table mean the following:
-
-   apex query:
-      Whether the query is for the apex of the target zone.  "Yes" means
-      an apex query, "No" means a query below the apex which may be
-      delegated
-
-   auth support:
-      Whether or not the target authoritative server supports
-      incremental deleg.  "Yes" means it supports it and "Unknown" means
-      support is not detected. "*" means it does not matter
-
-   _deleg presence:
-      Whether or not the _deleg label is present in the target zone (and
-      thus incremental delegations)
-
-   On the right side of the table are the extra queries, to be sent in
-   parallel with the legacy query.  The _deleg presence test query (most
-   right column) only needs to be sent to unsigned target zones, because
-   its non-existence will be shown in the NSEC(3) records showing the
-   non-existence of the incremental delegation (second from right
-   column).
-
-   If the query name is the same as the apex of the target zone, no
-   extra queries need to be sent (Row 1).  If the _deleg label is known
-   not to exist in the target zone (Row 2) or if the target name server
-   is known to support incremental deleg (Row 3), no extra queries need
-   to be sent.  Only if it is unknown that the target name server
-   supports incremental deleg, and the _deleg label is known to exist in
-   the target zone (Row 4) or it is not known whether or not the _deleg
-   label exists (Row 5), and extra incremental deleg query is sent in
-   parallel to the legacy query.  If the target zone is unsigned,
-   presence of the _deleg label needs to be tested explicitly (Row 5).
-
-9.1.  Comparison with legacy delegations
-
-9.1.1.  The delegation point
-
-   Legacy delegations are realized by a non-authoritative NS RRset at
-   the name of the delegated zone, but in the delegating zone (the
-   parent side of the zone cut).  However, there is another NS RRset by
-   the same name, but now authoritative, in the delegated zone (the
-   child side of the zone cut).  Some resolvers prefer to use the
-   authoritative child side NS RRset (see Section 5.4.1 of [RFC2181])
-   for contacting the authoritative name servers of the delegated zone,
-   and will use it to reach the zone if they encounter the child side NS
-   RRset authoritatively in responses.  Some resolvers query explicitly
-   for the authoritative child side NS RRset
-   [I-D.ietf-dnsop-ns-revalidation].  However, these NS RRsets can
-   differ in content leading to errors and inconsistencies (see
-   Section 3 of [I-D.ietf-dnsop-ns-revalidation]).
-
-   Incremental deleg eliminates these issues by placing the referral
-   information, not at the name of the delegated zone, but
-   authoritatively in the delegating zone.
-
-   Having the referral information at an authoritative location brings
-   clarity.  There can be no misinterpretation about who is providing
-   the referral (the delegating zone, or the delegated zone).  In a
-   future world where all delegations would be incremental delegations,
-   all names will only be authoritative data, derivable from the name,
-   for resolvers and other applications alike.
-
-9.1.2.  Legacy referrals
-
-   Resolvers that support only legacy referrals will be on the internet
-   for the foreseeable future, therefore a legacy referral MUST always
-   be provided alongside the incremental referral.
-
-   Legacy referrals can be deduced from the incremental delegation.  An
-   authoritative name server could (in some cases) synthesize the legacy
-   referral from the incremental delegation, however this is NOT
-   RECOMMENDED.  It introduces an element of dynamism which is at the
-   time of writing not part of authoritative name server behavior
-   specification.  Moreover, authoritative name servers could transfer
-   the zone data to non incremental deleg supporting and aware name
-   servers, which would not have this feature.  We leave provisioning of
-   legacy referrals from incremental delegations (for now) out of scope
-   for this document.
-
-9.1.3.  Number of queries
-
-   Legacy resolvers that do not do DNS Query Name Minimisation, will get
-   a referral in a single query.  The resolution process with
-   incremental delegations must find the exact zone cut explicitly,
-   comparable with DNS Query Name Minimisation.  The query increase to
-   find the zone cut (and referral) is comparable to that of a resolver
-   performing DNS Query Name minimisation.
-
-9.2.  Comparison with Name DNS Query Name Minimisation
-
-   There are no extra queries needed in most cases if the authoritative
-   name server has incremental deleg support.  The exception is when the
-   parent zone is not signed and has no incremental deleg records.  In
-   that case, one extra query is needed when the parent zone is first
-   contacted (and every TTL)
-
-9.3.  Comparison with [I-D.wesplaap-deleg]
-
-     +========================+======================================+
-     | [?I-D.wesplaap-deleg]  | [this document]                      |
-     +========================+======================================+
-     | Requires               | Only implementation required for     |
-     | implementation in both | functionalities following the        |
-     | authoritative name     | delegations (like in resolvers).  No |
-     | server as well as in   | support from the authoritative name  |
-     | the resolver, DNSSEC   | server, DNSSEC signers or validators |
-     | signers and validators | are needed.  But optimized with      |
-     |                        | updated authoritative software.      |
-     +------------------------+--------------------------------------+
-     | DELEG resolvers need   | IDELEG resolvers can query for the   |
-     | to contact DELEG       | incremental delegation data,         |
-     | authoritatives         | therefore direct contact with IDELEG |
-     | directly               | supporting authoritatives is not     |
-     |                        | necessary.  All legacy               |
-     |                        | infrastructure (including forwarders |
-     |                        | etc.) is supported.                  |
-     +------------------------+--------------------------------------+
-     | DNSKEY flag needed to  | No DNSKEY flag needed.  Separation   |
-     | signal IDELEG support  | of concerns.                         |
-     | with all authoritative |                                      |
-     | name servers that      |                                      |
-     | serve the parent       |                                      |
-     | (delegating) domain.   |                                      |
-     | Special requirements   |                                      |
-     | for the child domain.  |                                      |
-     +------------------------+--------------------------------------+
-     | Authoritative name     | Authoritative name servers may be    |
-     | servers need to be     | updated gradually for optimization   |
-     | updated all at once    |                                      |
-     +------------------------+--------------------------------------+
-     | New semantics about    | Works with current DNS and DNSSEC    |
-     | what is authoritative  | semantics.  Easier to implement.     |
-     | (BOGUS with current    |                                      |
-     | DNSSEC validators)     |                                      |
-     +------------------------+--------------------------------------+
-     | No extra queries       | One extra query, in parallel to the  |
-     |                        | legacy query, _per authoritative_    |
-     |                        | server when incremental deleg        |
-     |                        | support is not yet detected, and one |
-     |                        | extra query _per unsigned zone_ to   |
-     |                        | determine presence of the _deleg     |
-     |                        | label                                |
-     +------------------------+--------------------------------------+
-
-      Table 2: Comparison of [I-D.wesplaap-deleg] with [this document]
-
-10.  Implementation Status
+9.  Implementation Status
 
    *Note to the RFC Editor*: please remove this entire section before
    publication.
@@ -1217,7 +1040,7 @@ Table of Contents
    122 in Bangkok (https://datatracker.ietf.org/meeting/122/
    proceedings).
 
-11.  Security Considerations
+10.  Security Considerations
 
    Incremental deleg moves the location of referral information to a
    unique location that currently exists.  However, as this is a new
@@ -1237,9 +1060,9 @@ Table of Contents
 
    There are bound to be other considerations.
 
-12.  IANA Considerations
+11.  IANA Considerations
 
-12.1.  IDELEG RR type
+11.1.  IDELEG RR type
 
    IANA is requested to update the "Resource Record (RR) TYPEs" registry
    under the "Domain Name System (DNS) Parameters" registry group as
@@ -1251,9 +1074,9 @@ Table of Contents
              | IDELEG | TBD   | Delegation | [this document] |
              +--------+-------+------------+-----------------+
 
-                                  Table 3
+                                  Table 1
 
-12.2.  _deleg Node Name
+11.2.  _deleg Node Name
 
    Per [RFC8552], IANA is requested to add the following entry to the
    DNS "Underscored and Globally Scoped DNS Node Names" registry:
@@ -1264,22 +1087,18 @@ Table of Contents
                 | IDELEG  | _deleg     | [this document] |
                 +---------+------------+-----------------+
 
-                  Table 4: Entry in the Underscored and
+                  Table 2: Entry in the Underscored and
                       Globally Scoped DNS Node Names
                                  registry
 
-13.  References
+12.  References
 
-13.1.  Normative References
+12.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
-
-   [RFC2181]  Elz, R. and R. Bush, "Clarifications to the DNS
-              Specification", RFC 2181, DOI 10.17487/RFC2181, July 1997,
-              <https://www.rfc-editor.org/rfc/rfc2181>.
 
    [RFC3597]  Gustafsson, A., "Handling of Unknown DNS Resource Record
               (RR) Types", RFC 3597, DOI 10.17487/RFC3597, September
@@ -1338,7 +1157,7 @@ Table of Contents
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
 
-13.2.  Informative References
+12.2.  Informative References
 
    [BCP219]   Best Current Practice 219,
               <https://www.rfc-editor.org/info/bcp219>.
