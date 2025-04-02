@@ -651,15 +651,15 @@ If the zone is signed then a deleg query is sent that matches
 the legacy delegation.
 In a signed zone, the query is either successful and returns an IDELEG RRset or
 the query contains a proof of non-existence from which it is possible to
-deduce whether the zone contains an _deleg label or not.
+deduce whether the zone contains an `_deleg` label or not.
 
 If the zone is not signed then two separate queries are needed.
-One query just for the _deleg label and one deleg query that
+One query just for the `_deleg` label and one deleg query that
 matches legacy delegation.
 
-If the reply the _deleg query is NXDOMAIN then the zone does not contain any
+If the reply the `_deleg` query is NXDOMAIN then the zone does not contain any
 IDELEG delegations and further queries are unnecessary.
-See {{presence}} for processing the response to the _deleg query.
+See {{presence}} for processing the response to the `_deleg` query.
 The response to the deleg query is processed as described in
 {{recursive-resolver-behavior}}.
 
@@ -667,23 +667,23 @@ The effect on the number of extra queries is the following.
 If the response does not contain a legacy delegation then no extra queries
 are sent.
 
-If the nameserver supports _deleg and the zone is signed then no additional
-queries will be sent independent of whether zone contains the _deleg label or
+If the nameserver supports deleg and the zone is signed then no additional
+queries will be sent independent of whether zone contains the `_deleg` label or
 not.
 
-If the nameserver supports _deleg, the zone is not signed and no IDELEG RRset
+If the nameserver supports deleg, the zone is not signed and no IDELEG RRset
 is returned in the response then two follow up queries need to be sent.
-The response to the _deleg query will be cached until the TTL expires.
+The response to the `_deleg` query will be cached until the TTL expires.
 
-If the nameserver does not support _deleg but the zone is signed then one
+If the nameserver does not support deleg but the zone is signed then one
 follow up queries will be sent: a deleg query that matches the legacy
 delegation.
-Presence or absence of the _deleg label will be cached.
-IF the _deleg label is absent then no further additonal queries will be sent.
+Presence or absence of the `_deleg` label will be cached.
+IF the `_deleg` label is absent then no further additonal queries will be sent.
 
-Finally, if the nameserver does not support _deleg and the zone is not signed
+Finally, if the nameserver does not support deleg and the zone is not signed
 then two follow up queries will be sent.
-The response to the _deleg query will be cached until the TTL expires.
+The response to the `_deleg` query will be cached until the TTL expires.
 
 # Priming queries {#priming-queries}
 
@@ -803,7 +803,7 @@ We are planning to provide information about the deployment, including what soft
 
 # Security Considerations
 
-Deleg moves the location of  referral information to a unique  location that currently exists. However, as this is a new approach, thought must be given to usage.   There must be some checks to ensure that the registering a _deleg subdomain happens at the time the domain is provisioned. The same care needs to be addressed when a domain is de-provisioned that the _deleg is removed.  This is similar to what happens to A/AAAA glue records for NS records deployed in parent zones.
+Deleg moves the location of  referral information to a unique  location that currently exists. However, as this is a new approach, thought must be given to usage.   There must be some checks to ensure that the registering a `_deleg` subdomain happens at the time the domain is provisioned. The same care needs to be addressed when a domain is de-provisioned that the `_deleg` is removed.  This is similar to what happens to A/AAAA glue records for NS records deployed in parent zones.
 
 While the recommendation is to deploy DNSSEC with deleg, it is not mandatory.  However, using deleg with unsigned zones can create possibilities of domain hijackings. This could  be hard to detect when not speaking directly to the authoritative name server.
 This risk of domain hijacking is not expected to increase significantly compared to the situation without deleg.
