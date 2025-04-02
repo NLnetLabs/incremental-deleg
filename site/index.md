@@ -3,7 +3,7 @@ title: Extensible Delegation testbed
 layout: default
 permalink: /
 ---
-This website hosts information on the domains we have deployed for evaluating and testing the [`draft-homburg-deleg-incremental-deleg`](/draft-homburg-deleg-incremental-deleg-latest.html) protocol proposal, as well as [`draft-wesplaap-deleg`](https://datatracker.ietf.org/doc/draft-wesplaap-deleg/).
+This website hosts information on the domains we have deployed for evaluating and testing the [`draft-homburg-deleg`](/draft-homburg-deleg-latest.html) protocol proposal, as well as [`draft-wesplaap-deleg`](https://datatracker.ietf.org/doc/draft-wesplaap-deleg/).
 
 ## Zones and name servers
 
@@ -95,11 +95,11 @@ _(The transfer is cut-off and edited for readability)_
 
 ## IDELEG Resolver
 
-A resolver implementing the [minimal implementation](https://ideleg.net/draft-homburg-deleg-incremental-deleg-latest.html#name-minimal-implementation) is provided at `resolver.ideleg.net` with IP addresses <a href="" onclick="navigator.clipboard.writeText('{{ tb.resolver.ipv4}}')" title="copy '{{ tb.resolver.ipv4}}' to clipboard">{{ tb.resolver.ipv4}}</a> and <a href="" onclick="navigator.clipboard.writeText('{{ tb.resolver.ipv6}}')" title="copy '{{ tb.resolver.ipv6}}' to clipboard">{{ tb.resolver.ipv6}}</a>.
+A resolver implementing the [minimal implementation](https://ideleg.net/draft-homburg-deleg-latest.html#name-minimal-implementation) is provided at `resolver.ideleg.net` with IP addresses <a href="" onclick="navigator.clipboard.writeText('{{ tb.resolver.ipv4}}')" title="copy '{{ tb.resolver.ipv4}}' to clipboard">{{ tb.resolver.ipv4}}</a> and <a href="" onclick="navigator.clipboard.writeText('{{ tb.resolver.ipv6}}')" title="copy '{{ tb.resolver.ipv6}}' to clipboard">{{ tb.resolver.ipv6}}</a>.
 The addresses are accessable over TCP or TLS, or over UDP with a valid server cookie.
 
 The resolver is running a special version of [Unbound](/unbound.html).
-It does not anticipate [optimized](/draft-homburg-deleg-incremental-deleg-latest.html#name-optimized-implementation) and [extra optimized](draft-homburg-deleg-incremental-deleg-latest.html#name-extra-optimized-implementat) responses, and it does not (yet) follow AliasMode IDELEG RRs, but it can be used to test our own IDELEG (only) delegations.
+It does not anticipate [optimized](/draft-homburg-deleg-latest.html#name-optimized-implementation) and [extra optimized](draft-homburg-deleg-latest.html#name-extra-optimized-implementat) responses, and it does not (yet) follow AliasMode IDELEG RRs, but it can be used to test our own IDELEG (only) delegations.
 
 ## Zones at name servers table
 
