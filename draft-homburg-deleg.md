@@ -204,7 +204,7 @@ Deleg query:
 Delegation point:
 : The location in the delegating zone where the RRs are provided that make up the delegation.
   In legacy delegations, this is the parent side of the zone cut and has the same name as the subzone.
-  With deleg, this is the location given by the delegating name.
+  With deleg, this is the location given by the IDELEG delegating name.
   If needed we differentiate by explicitly calling it IDELEG delegation point or legacy delegation point.
 
 Triggering query:
@@ -400,7 +400,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ;; WHEN: Mon Feb 24 20:36:25 2025
 ;; MSG SIZE  rcvd: 456
 ~~~
-{: #deleg-response title="An deleg referral response"}
+{: #deleg-response title="A deleg referral response"}
 
 The referral response in {{deleg-response}} includes the signed IDELEG RRset in the authority section.
 
