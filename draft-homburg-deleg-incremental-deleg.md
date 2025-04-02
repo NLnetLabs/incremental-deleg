@@ -622,7 +622,7 @@ The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`)
 
 This method of signalling that the legacy delegation MUST be used, is RECOMMENDED.
 
-# Fewer queries
+# Fewer queries {#fewer-queries}
 
 The algorithm described in {{recursive-resolver-behavior}} is optimized for
 low latency.
@@ -632,7 +632,7 @@ It is also possible optimize for a lowest number of additional queries.
 However, this may in some cases result in extra latency.
 
 To achieve this, the behavior of the recursive resolver is modified as follows.
-If the state state of the zone is known, then queries are executed as
+If the state of the zone is known (the `_deleg.<apex>` is known to exist or not to exist), then queries are executed as
 described in {{recursive-resolver-behavior}} and {{behavior-with-auth-support}}.
 
 If the state of the zone is unknown then initially only conventional queries
