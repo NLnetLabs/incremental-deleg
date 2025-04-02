@@ -211,7 +211,7 @@ Deleg query:
 Delegation point:
 : The location in the delegating zone where the RRs are provided that make up the delegation.
   In legacy delegations, this is the parent side of the zone cut and has the same name as the subzone.
-  With deleg, this is the location given by the delegating name.
+  With deleg, this is the location given by the IDELEG delegating name.
   If needed we differentiate by explicitly calling it IDELEG delegation point or legacy delegation point.
 
 Triggering query:
@@ -441,13 +441,13 @@ The testing query can have three possible outcomes:
 1. The `_deleg` label does not exist within the zone, and an NXDOMAIN response is returned.
 
    The non-existence of the `_deleg` label MUST be registered for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the boundaries for TTL values that the resolver has ({{Section 4 of !RFC8767}}).
-   For the period the non-existence of the `_deleg` label is cached, the label is "known not to be present" and the resolver SHOULD NOT send any (additional) deleg queries.
+   For the period the non-existence of the `_deleg` label is registered, the label is "known not to be present" and the resolver SHOULD NOT send any (additional) deleg queries.
 
 2. The `_deleg` label does exist within the zone but contains no data.
    A NOERROR response is returned with no RRs in the answer section.
 
-   The existence of the `_deleg` name MUST be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
-   For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present" and the resolver MUST send additional deleg queries as described in {{recursive-resolver-behavior}}.
+   The existence of the `_deleg` name MUST be registered for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
+   For the period the existence of the empty non-terminal at the `_deleg` label is registered, the label is "known to be present" and the resolver MUST send additional deleg queries as described in {{recursive-resolver-behavior}}.
 
 3. The `_deleg` label does exist within the zone, but is a delegation.
    A NOERROR legacy referral response is returned with an NS RRset in the authority section.
@@ -495,7 +495,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 ;; WHEN: Mon Feb 24 20:36:25 2025
 ;; MSG SIZE  rcvd: 456
 ~~~
-{: #deleg-response title="An deleg referral response"}
+{: #deleg-response title="A deleg referral response"}
 
 The referral response in {{deleg-response}} includes the signed IDELEG RRset in the authority section.
 
