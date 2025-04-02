@@ -1594,7 +1594,7 @@ If needed we differentiate by explicitly calling it IDELEG delegation name or le
           <dd style="margin-left: 1.5em" id="section-1.6-4.16">
             <p id="section-1.6-4.16.1">The location in the delegating zone where the RRs are provided that make up the delegation.
 In legacy delegations, this is the parent side of the zone cut and has the same name as the subzone.
-With deleg, this is the location given by the delegating name.
+With deleg, this is the location given by the IDELEG delegating name.
 If needed we differentiate by explicitly calling it IDELEG delegation point or legacy delegation point.<a href="#section-1.6-4.16.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
@@ -1841,7 +1841,7 @@ DNSSEC signers <span class="bcp14">SHOULD</span> construct the NS RRset and glue
       </h2>
 <p id="section-4-1">Deleg supporting authoritative name servers include the IDELEG delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses to legacy DNS queries.
 For example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer5.example. A</code>, will return the following referral response:<a href="#section-4-1" class="pilcrow">¶</a></p>
-<span id="name-an-deleg-referral-response"></span><div id="deleg-response">
+<span id="name-a-deleg-referral-response"></span><div id="deleg-response">
 <figure id="figure-7">
         <div class="alignLeft art-text artwork" id="section-4-2.1">
 <pre>
@@ -1875,7 +1875,7 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 </pre>
 </div>
 <figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
-<a href="#name-an-deleg-referral-response" class="selfRef">An deleg referral response</a>
+<a href="#name-a-deleg-referral-response" class="selfRef">A deleg referral response</a>
         </figcaption></figure>
 </div>
 <p id="section-4-3">The referral response in <a href="#deleg-response" class="auto internal xref">Figure 7</a> includes the signed IDELEG RRset in the authority section.<a href="#section-4-3" class="pilcrow">¶</a></p>
