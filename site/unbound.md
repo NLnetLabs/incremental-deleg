@@ -137,7 +137,7 @@ libtool: install: cp -f .libs/unbound-anchor /usr/local/sbin/unbound-anchor
 if test ! -e "/usr/local/etc/unbound/unbound.conf"; then /bin/bash ./install-sh -d `dirname "/usr/local/etc/unbound/unbound.conf"`; /bin/bash ./install-sh -c -m 644 doc/example.conf "/usr/local/etc/unbound/unbound.conf"; fi
 ```
 
-This version of Unbound performs the algorithm as described in [Section 4. Minimal implementation](https://ideleg.net/draft-homburg-deleg-incremental-deleg-latest.html#name-minimal-implementation) in the draft.
+This version of Unbound performs the algorithm as described in [Section 4. Minimal implementation](https://ideleg.net/draft-homburg-deleg-latest.html#name-minimal-implementation) in the draft.
 It does not (yet) leverage optimized responses.
 It also does not (yet) support the AliasMode.
 It can be used to test your own IDELEG delegations, as long as they do not involve AliasMode IDELEG RRs.

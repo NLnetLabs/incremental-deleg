@@ -13,9 +13,9 @@
 - title: Internet draft
   subnav:
     - title: Latest
-      url: /draft-homburg-deleg-incremental-deleg-latest.html
+      url: /draft-homburg-deleg-latest.html
     - title: Editors copy
-      url: /draft-homburg-deleg-incremental-deleg.html
+      url: /draft-homburg-deleg.html
     - title: Incr. DNSSEC
       url: /draft-homburg-deleg-incremental-dnssec-latest.html
 

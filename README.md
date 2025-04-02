@@ -2,10 +2,10 @@
 
 This is the working area for the individual Internet-Draft, "Incrementally Deployable Extensible Delegation for DNS".
 
-* [Editor's Copy](https://NLnetLabs.github.io/incremental-deleg/#go.draft-homburg-deleg-incremental-deleg.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-homburg-deleg-incremental-deleg)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-homburg-deleg-incremental-deleg)
-* [Compare Editor's Copy to Individual Draft](https://NLnetLabs.github.io/incremental-deleg/#go.draft-homburg-deleg-incremental-deleg.diff)
+* [Editor's Copy](https://NLnetLabs.github.io/incremental-deleg/#go.draft-homburg-deleg.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-homburg-deleg)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-homburg-deleg)
+* [Compare Editor's Copy to Individual Draft](https://NLnetLabs.github.io/incremental-deleg/#go.draft-homburg-deleg.diff)
 
 
 ## Contributing
