@@ -1557,7 +1557,7 @@ appear in all capitals, as shown here.<a href="#section-1.6-1" class="pilcrow">�
             <p id="section-1.6-4.2.1">The delegation mechanism as specified in this document.<a href="#section-1.6-4.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.6-4.3">Extensible delegation:</dt>
+<dt id="section-1.6-4.3">IDELEG delegation:</dt>
           <dd style="margin-left: 1.5em" id="section-1.6-4.4">
             <p id="section-1.6-4.4.1">A delegation as specified in this document<a href="#section-1.6-4.4.1" class="pilcrow">¶</a></p>
 </dd>
@@ -1582,19 +1582,21 @@ Sometimes also called the "parent zone" of a delegation.<a href="#section-1.6-4.
           <dd style="margin-left: 1.5em" id="section-1.6-4.12">
             <p id="section-1.6-4.12.1">The name which realizes the delegation.
 In legacy delegations, this name is the same as the name of the subzone to which the delegation refers.
-Delegations described in this document are provided with a different name than the zone that is delegated to.<a href="#section-1.6-4.12.1" class="pilcrow">¶</a></p>
+Delegations described in this document are provided with a different name than the zone that is delegated to.
+If needed we differentiate by explicitly calling it IDELEG delegation name or legacy delegation name.<a href="#section-1.6-4.12.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.6-4.13">Deleg query:</dt>
           <dd style="margin-left: 1.5em" id="section-1.6-4.14">
-            <p id="section-1.6-4.14.1">An explicit query for IDELEG RRset at the delegating name as used for extensible delegations.<a href="#section-1.6-4.14.1" class="pilcrow">¶</a></p>
+            <p id="section-1.6-4.14.1">An explicit query for IDELEG RRset at the delegating name as used for IDELEG delegations.<a href="#section-1.6-4.14.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.6-4.15">Delegation point:</dt>
           <dd style="margin-left: 1.5em" id="section-1.6-4.16">
             <p id="section-1.6-4.16.1">The location in the delegating zone where the RRs are provided that make up the delegation.
 In legacy delegations, this is the parent side of the zone cut and has the same name as the subzone.
-With deleg, this is the location given by the delegating name.<a href="#section-1.6-4.16.1" class="pilcrow">¶</a></p>
+With deleg, this is the location given by the delegating name.
+If needed we differentiate by explicitly calling it IDELEG delegation point or legacy delegation point.<a href="#section-1.6-4.16.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.6-4.17">Triggering query:</dt>
@@ -1637,7 +1639,7 @@ Port Prefix Naming <span><a href="https://rfc-editor.org/rfc/rfc9461#section-3" 
       <h2 id="name-delegation-administration">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-delegation-administration" class="section-name selfRef">Delegation administration</a>
       </h2>
-<p id="section-3-1">An extensible delegation is realized with an IDELEG Resource Record set (RRset) <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> below a specially for the purpose reserved label with the name <code>_deleg</code> at the apex of the delegating zone.
+<p id="section-3-1">An IDELEG delegation is realized with an IDELEG Resource Record set (RRset) <span>[<a href="#RFC9460" class="cite xref">RFC9460</a>]</span> below a specially for the purpose reserved label with the name <code>_deleg</code> at the apex of the delegating zone.
 The <code>_deleg</code> label scopes the interpretation of the IDELEG records and requires registration in the "Underscored and Globally Scoped DNS Node Names" registry (see <span><a href="#node-name" class="internal xref">_deleg Node Name</a> (<a href="#node-name" class="auto internal xref">Section 12.2</a>)</span>).
 The full scoping of delegations includes the labels that are <strong>below</strong> the <code>_deleg</code> label and those, together with the name of the delegating domain, make up the name of the subzone to which the delegation refers.
 For example, if the delegating zone is <code>example.</code>, then a delegation to subzone <code>customer.example.</code> is realized by a IDELEG RRset at the name <code>customer._deleg.example.</code> in the parent zone.
@@ -1839,8 +1841,8 @@ DNSSEC signers <span class="bcp14">SHOULD</span> construct the NS RRset and glue
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-minimal-implementation" class="section-name selfRef">Minimal implementation</a>
       </h2>
 <p id="section-4-1">Support in recursive resolvers suffices for the mechanism to be fully functional.
-<a href="#recursive-resolver-behavior" class="auto internal xref">Section 4.1</a> specifies the basic algorithm for resolving extensible delegations.
-In <a href="#presence" class="auto internal xref">Section 4.2</a>, an optimization is presented that will reduce the number of (parallel) queries especially for when authoritative name server support is still lacking and there are still many zones that do not contain extensible delegations.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<a href="#recursive-resolver-behavior" class="auto internal xref">Section 4.1</a> specifies the basic algorithm for resolving IDELEG delegations.
+In <a href="#presence" class="auto internal xref">Section 4.2</a>, an optimization is presented that will reduce the number of (parallel) queries especially for when authoritative name server support is still lacking and there are still many zones that do not contain IDELEG delegations.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div id="recursive-resolver-behavior">
 <section id="section-4.1">
         <h3 id="name-recursive-resolver-behavior">
@@ -1868,12 +1870,12 @@ The NS RRset and glue, in the response of the legacy query that was sent in para
           <li id="section-4.1-5.2">
             <p id="section-4.1-5.2.1">The deleg query name does not exist (NXDOMAIN).<a href="#section-4.1-5.2.1" class="pilcrow">¶</a></p>
 <p id="section-4.1-5.2.2">
-There is no extensible delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed as would be done with legacy DNS and DNSSEC processing.<a href="#section-4.1-5.2.2" class="pilcrow">¶</a></p>
+There is no IDELEG delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed as would be done with legacy DNS and DNSSEC processing.<a href="#section-4.1-5.2.2" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.1-5.3">
             <p id="section-4.1-5.3.1">The deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).<a href="#section-4.1-5.3.1" class="pilcrow">¶</a></p>
 <p id="section-4.1-5.3.2">
-If the legacy query, did result in a referral for the same number of labels as the subdomain that the deleg query was for, then there was no extensible delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed as would be done with legacy DNS and DNSSEC processing.<a href="#section-4.1-5.3.2" class="pilcrow">¶</a></p>
+If the legacy query, did result in a referral for the same number of labels as the subdomain that the deleg query was for, then there was no IDELEG delegation for the subzone, and the referral response for the legacy delegation <span class="bcp14">MUST</span> be processed as would be done with legacy DNS and DNSSEC processing.<a href="#section-4.1-5.3.2" class="pilcrow">¶</a></p>
 <p id="section-4.1-5.3.3">
 Otherwise, the subzone may be more than one label below the delegating zone.<a href="#section-4.1-5.3.3" class="pilcrow">¶</a></p>
 <p id="section-4.1-5.3.4">
@@ -1893,7 +1895,7 @@ Processing of the responses of those two new queries will be done as described a
         <h3 id="name-_deleg-label-presence">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-_deleg-label-presence" class="section-name selfRef"><code>_deleg</code> label presence</a>
         </h3>
-<p id="section-4.2-1">Absence of the <code>_deleg</code> label in a zone is a clear signal that the zone does not contain any extensible delegations.
+<p id="section-4.2-1">Absence of the <code>_deleg</code> label in a zone is a clear signal that the zone does not contain any IDELEG delegations.
 Recursive resolvers <span class="bcp14">SHOULD NOT</span> send any additional deleg queries for zones for which it is known that it does not contain the <code>_deleg</code> label at the apex.
 The state regarding the presence of the <code>_deleg</code> label within a resolver can be "unknown", "known not to be present", or "known to be present".<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">The state regarding the presence of the <code>_deleg</code> label can be deduced from the response of the deleg query, if the target zone is signed with DNSSEC.
@@ -1925,8 +1927,8 @@ For the period the existence of the empty non-terminal at the <code>_deleg</code
               <p id="section-4.2.1-3.3.1">The <code>_deleg</code> label does exist within the zone, but is a delegation.
 A NOERROR legacy referral response is returned with an NS RRset in the authority section.<a href="#section-4.2.1-3.3.1" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-3.3.2">
-The resolver <span class="bcp14">MUST</span> record that the zone does not have valid extensible delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries.
-For the period indicated by the NS RRset's TTL value, the zone is considered to <strong>not</strong> to have valid extensible delegations, and <span class="bcp14">MUST NOT</span> send any (additional) deleg queries.<a href="#section-4.2.1-3.3.2" class="pilcrow">¶</a></p>
+The resolver <span class="bcp14">MUST</span> record that the zone does not have valid IDELEG delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries.
+For the period indicated by the NS RRset's TTL value, the zone is considered to <strong>not</strong> to have valid IDELEG delegations, and <span class="bcp14">MUST NOT</span> send any (additional) deleg queries.<a href="#section-4.2.1-3.3.2" class="pilcrow">¶</a></p>
 </li>
           </ol>
 </section>
@@ -1948,7 +1950,7 @@ In <a href="#behavior-with-auth-support" class="auto internal xref">Section 5.2<
         <h3 id="name-authoritative-name-server-s">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-authoritative-name-server-s" class="section-name selfRef">Authoritative name server support</a>
         </h3>
-<p id="section-5.1-1">Deleg supporting authoritative name servers include the extensible delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses to legacy DNS queries.
+<p id="section-5.1-1">Deleg supporting authoritative name servers include the IDELEG delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses to legacy DNS queries.
 For example, querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer5.example. A</code>, will return the following referral response:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <span id="name-an-deleg-referral-response"></span><div id="deleg-response">
 <figure id="figure-7">
@@ -2026,7 +2028,7 @@ ns.customer6.example.   3600    IN      AAAA    2001:db8:6::1
 <a href="#name-referral-response-without-d" class="selfRef">Referral response without deleg</a>
           </figcaption></figure>
 </div>
-<p id="section-5.1-6">Next to the legacy delegation, the deleg supporting authoritative returns the NSEC(3) RRs needed to show that there was no extensible delegation in the referral response in <a href="#no-incr-deleg-response" class="auto internal xref">Figure 8</a>.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+<p id="section-5.1-6">Next to the legacy delegation, the deleg supporting authoritative returns the NSEC(3) RRs needed to show that there was no IDELEG delegation in the referral response in <a href="#no-incr-deleg-response" class="auto internal xref">Figure 8</a>.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
 <p id="section-5.1-7">Querying the zone from <a href="#dnssec-zone" class="auto internal xref">Figure 6</a> for <code>www.customer7.example. A</code>, will return the following referral response:<a href="#section-5.1-7" class="pilcrow">¶</a></p>
 <span id="name-aliasing-referral-response"></span><div id="alias-response">
 <figure id="figure-9">
@@ -2069,9 +2071,9 @@ ns.customer5.example.   3600    IN      AAAA    2001:db8:5::1
 <p id="section-5.1-9">The delegation of <code>customer7.example.</code> is aliased to the one that is also used by <code>customer5.example.</code>
 Since both delegations are in the same zone, the authoritative name server for <code>example.</code> returns both the CNAME realising the alias, as well as the IDELEG RRset which is the target of the alias in <a href="#alias-response" class="auto internal xref">Figure 9</a>.
 In other cases a returned CNAME or IDELEG RR in AliasMode may need further chasing by the resolver.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
-<p id="section-5.1-10">With unsigned zones, only if an extensible delegation exists, the IDELEG RRset (or CNAME) will be present in the authority section of referral responses.
+<p id="section-5.1-10">With unsigned zones, only if an IDELEG delegation exists, the IDELEG RRset (or CNAME) will be present in the authority section of referral responses.
 
-If there is no extensible delegation, then the IDELEG RRset (or CNAME) is simply absent from the authority section and the referral response is indistinguishable from an non deleg supportive authoritative.<a href="#section-5.1-10" class="pilcrow">¶</a></p>
+If there is no IDELEG delegation, then the IDELEG RRset (or CNAME) is simply absent from the authority section and the referral response is indistinguishable from an non deleg supportive authoritative.<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="behavior-with-auth-support">
@@ -2079,22 +2081,22 @@ If there is no extensible delegation, then the IDELEG RRset (or CNAME) is simply
         <h3 id="name-resolver-behavior-with-auth">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-resolver-behavior-with-auth" class="section-name selfRef">Resolver behavior with authoritative name server support</a>
         </h3>
-<p id="section-5.2-1">Deleg supporting authoritative name servers will include the extensible delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
-For an unsigned zone, an deleg supporting authoritative cannot return that an extensible delegation is absent (because of lack of an authenticated denial of existence), however with support from the served zone (the zone has the Resource Record provisioned <code>*._deleg IN IDELEG 0 .</code>), the authoritative name server can signal support also for unsigned zones (see <span><a href="#extra-optimized" class="internal xref">Extra optimized implementation</a> (<a href="#extra-optimized" class="auto internal xref">Section 6</a>)</span>).<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">If it is known that an authoritative name server supports deleg, then no direct queries for the extensible delegation need to be sent in parallel to the legacy delegation query.
-A resolver <span class="bcp14">SHOULD</span> register that an authoritative name server supports deleg when the authority section, of the returned referral responses from that authoritative name server, contains extensible delegation information.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">When the authority section of a referral response contains an IDELEG RRset or a CNAME record on the extensible delegation name, or valid NSEC(3) RRs showing the non-existence of such an IDELEG or CNAME RRset, then the resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server supports deleg for the duration indicated by the TTL for that IDELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+<p id="section-5.2-1">Deleg supporting authoritative name servers will include the IDELEG delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
+For an unsigned zone, an deleg supporting authoritative cannot return that an IDELEG delegation is absent (because of lack of an authenticated denial of existence), however with support from the served zone (the zone has the Resource Record provisioned <code>*._deleg IN IDELEG 0 .</code>), the authoritative name server can signal support also for unsigned zones (see <span><a href="#extra-optimized" class="internal xref">Extra optimized implementation</a> (<a href="#extra-optimized" class="auto internal xref">Section 6</a>)</span>).<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">If it is known that an authoritative name server supports deleg, then no direct queries for the IDELEG delegation need to be sent in parallel to the legacy delegation query.
+A resolver <span class="bcp14">SHOULD</span> register that an authoritative name server supports deleg when the authority section, of the returned referral responses from that authoritative name server, contains IDELEG delegation information.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">When the authority section of a referral response contains an IDELEG RRset or a CNAME record on the IDELEG delegation name, or valid NSEC(3) RRs showing the non-existence of such an IDELEG or CNAME RRset, then the resolver <span class="bcp14">SHOULD</span> register that the contacted authoritative name server supports deleg for the duration indicated by the TTL for that IDELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Subsequent queries <span class="bcp14">SHOULD NOT</span> include deleg queries, as described in <a href="#recursive-resolver-behavior" class="auto internal xref">Section 4.1</a>, to be send in parallel for the duration support for deleg is registered for the authoritative name server.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4">For example, in <a href="#deleg-response" class="auto internal xref">Figure 7</a>, the IDELEG RRset at the extensible delegation point has TTL 3600.
+<p id="section-5.2-4">For example, in <a href="#deleg-response" class="auto internal xref">Figure 7</a>, the IDELEG RRset at the IDELEG delegation point has TTL 3600.
 The resolver should register that the contacted authoritative name server supports deleg for (at least) 3600 seconds (one hour).
 All subsequent queries to that authoritative name server <span class="bcp14">SHOULD NOT</span> include deleg queries to be send in parallel.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
-<p id="section-5.2-5">If the authority section contains more than one RRset making up the extensible delegation, then the RRset with the longest TTL <span class="bcp14">MUST</span> be taken to determine the duration for which deleg support is registered.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
-<p id="section-5.2-6">For example, in <a href="#alias-response" class="auto internal xref">Figure 9</a>, both a CNAME and an IDELEG RRset for the extensible delegation are included in the authority section.
+<p id="section-5.2-5">If the authority section contains more than one RRset making up the IDELEG delegation, then the RRset with the longest TTL <span class="bcp14">MUST</span> be taken to determine the duration for which deleg support is registered.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.2-6">For example, in <a href="#alias-response" class="auto internal xref">Figure 9</a>, both a CNAME and an IDELEG RRset for the IDELEG delegation are included in the authority section.
 The longest TTL must be taken for deleg support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
 <p id="section-5.2-7">With DNSSEC-signed zones, support is apparent with all referral responses.
-With unsigned zones, support is apparent only from referral responses for which an extensible delegation exists, unless the zone has the Resource Record <code>*._deleg IN IDELEG 0 .</code> provisioned (see <span><a href="#extra-optimized" class="internal xref">Extra optimized implementation</a> (<a href="#extra-optimized" class="auto internal xref">Section 6</a>)</span>).<a href="#section-5.2-7" class="pilcrow">¶</a></p>
-<p id="section-5.2-8">If the resolver knows that the authoritative name server supports deleg, <em>and</em> a DNSSEC-signed zone is being served, then all referrals <span class="bcp14">SHOULD</span> contain either an extensible delegation, or NSEC(3) records showing that the delegation does not exist.
-If a referral is returned that does not contain an extensible delegation nor an indication that it does not exist, then the resolver <span class="bcp14">MAY</span> register that authoritative server does not support deleg and <span class="bcp14">MUST</span> send an additional deleg query to find the delegation (or denial of its existence).<a href="#section-5.2-8" class="pilcrow">¶</a></p>
+With unsigned zones, support is apparent only from referral responses for which an IDELEG delegation exists, unless the zone has the Resource Record <code>*._deleg IN IDELEG 0 .</code> provisioned (see <span><a href="#extra-optimized" class="internal xref">Extra optimized implementation</a> (<a href="#extra-optimized" class="auto internal xref">Section 6</a>)</span>).<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+<p id="section-5.2-8">If the resolver knows that the authoritative name server supports deleg, <em>and</em> a DNSSEC-signed zone is being served, then all referrals <span class="bcp14">SHOULD</span> contain either an IDELEG delegation, or NSEC(3) records showing that the delegation does not exist.
+If a referral is returned that does not contain an IDELEG delegation nor an indication that it does not exist, then the resolver <span class="bcp14">MAY</span> register that authoritative server does not support deleg and <span class="bcp14">MUST</span> send an additional deleg query to find the delegation (or denial of its existence).<a href="#section-5.2-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2104,10 +2106,10 @@ If a referral is returned that does not contain an extensible delegation nor an 
       <h2 id="name-extra-optimized-implementat">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-extra-optimized-implementat" class="section-name selfRef">Extra optimized implementation</a>
       </h2>
-<p id="section-6-1">An IDELEG RRset on an extensible delegation point, with an IDELEG RR in AliasMode, aliasing to the root zone, <span class="bcp14">MUST</span> be interpreted to mean that the legacy delegation information <span class="bcp14">MUST</span> be used to follow the referral.
-All service parameters for such AliasMode (aliasing to the root) IDELEG RRs on the extensible delegation point, <span class="bcp14">MUST</span> be ignored.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">An IDELEG RRset on an IDELEG delegation point, with an IDELEG RR in AliasMode, aliasing to the root zone, <span class="bcp14">MUST</span> be interpreted to mean that the legacy delegation information <span class="bcp14">MUST</span> be used to follow the referral.
+All service parameters for such AliasMode (aliasing to the root) IDELEG RRs on the IDELEG delegation point, <span class="bcp14">MUST</span> be ignored.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">For example, such an IDELEG RRset registered on the wildcard below the <code>_deleg</code> label on the apex of a zone, can signal that legacy DNS referrals <span class="bcp14">MUST</span> be used for both signed and <em>unsigned</em> zones:<a href="#section-6-2" class="pilcrow">¶</a></p>
-<span id="name-wildcard-extensible-delegat"></span><div id="wildcard-deleg">
+<span id="name-wildcard-ideleg-delegation-"></span><div id="wildcard-deleg">
 <figure id="figure-10">
         <div class="alignLeft art-text artwork" id="section-6-3.1">
 <pre>
@@ -2122,12 +2124,12 @@ customer3._deleg  IN  CNAME _dns.ns.operator1
 </pre>
 </div>
 <figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
-<a href="#name-wildcard-extensible-delegat" class="selfRef">Wildcard extensible delegation to control duration of detected support</a>
+<a href="#name-wildcard-ideleg-delegation-" class="selfRef">Wildcard IDELEG delegation to control duration of detected support</a>
         </figcaption></figure>
 </div>
 <p id="section-6-4">Resolvers <span class="bcp14">SHOULD</span> register that an authoritative name server supports deleg, if such an IDELEG RRset is returned in the authority section of referral responses, for the duration of the TTL if the IDELEG RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
 Note that this will also be included in referral responses for unsigned zones, which would otherwise not have signalling of deleg support by the authoritative name server.
-Also, signed zones need fewer RRs to indicate that no extensible delegation exists.
+Also, signed zones need fewer RRs to indicate that no IDELEG delegation exists.
 The wildcard expansion already shows the closest encloser (i.e. <code>_deleg.&lt;apex&gt;</code>), so only one additional NSEC(3) is needed to show non-existence of the queried-for name below the closest encloser.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5">This method of signalling that the legacy delegation <span class="bcp14">MUST</span> be used, is <span class="bcp14">RECOMMENDED</span>.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
@@ -2212,7 +2214,7 @@ a parent zone to a child zone is left unchanged.<a href="#section-9-2.1.2" class
 The new delegations do not interfere with legacy software.<a href="#section-9-2.2.2" class="pilcrow">¶</a></p>
 <p id="section-9-2.2.3">
 The behavior of deleg supporting resolvers includes a fallback to NS
-records if no extensible delegation is present (See <a href="#recursive-resolver-behavior" class="auto internal xref">Section 4.1</a>).<a href="#section-9-2.2.3" class="pilcrow">¶</a></p>
+records if no IDELEG delegation is present (See <a href="#recursive-resolver-behavior" class="auto internal xref">Section 4.1</a>).<a href="#section-9-2.2.3" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-9-2.3">
           <p id="section-9-2.3.1">H3. DELEG must not negatively impact most DNS software.<a href="#section-9-2.3.1" class="pilcrow">¶</a></p>
@@ -2221,26 +2223,26 @@ Deleg introduces a new RR type.
 Software that parses zone file format needs to be changed to support the new
 type.
 Though unknown type notation <span>[<a href="#RFC3597" class="cite xref">RFC3597</a>]</span> can be used in some cases if no support for the new RR type is present.
-Existing authoritatives can serve deleg zones (though less efficiently), existing signers can sign deleg zones, existing diagnostic tools can query deleg zones.
+Existing authoritatives can serve IDELEG zones (though less efficiently), existing signers can sign IDELEG zones, existing diagnostic tools can query IDELEG zones.
 Non-recursive DNSSEC validators can operate independently from (possibly legacy) recursive resolvers.<a href="#section-9-2.3.2" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-9-2.4">
           <p id="section-9-2.4.1">H4. DELEG must be able to secure delegations with DNSSEC.<a href="#section-9-2.4.1" class="pilcrow">¶</a></p>
 <p id="section-9-2.4.2">
-Extensible delegations as described in this document are automatically secured with DNSSEC
+IDELEG delegations as described in this document are automatically secured with DNSSEC
 (if the parent zone is signed). A replacement for DS records is described in <span>[<a href="#I-D.homburg-deleg-incremental-dnssec" class="cite xref">I-D.homburg-deleg-incremental-dnssec</a>]</span>.<a href="#section-9-2.4.2" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-9-2.5">
           <p id="section-9-2.5.1">H5. DELEG must support updates to delegation information with the same relative ease as currently exists with NS records.<a href="#section-9-2.5.1" class="pilcrow">¶</a></p>
 <p id="section-9-2.5.2">
-Extensible delegations are affected by TTL like any other
+IDELEG delegations are affected by TTL like any other
 DNS record.<a href="#section-9-2.5.2" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-9-2.6">
           <p id="section-9-2.6.1">H6. DELEG must be incrementally deployable and not require any sort of flag day of universal change.<a href="#section-9-2.6.1" class="pilcrow">¶</a></p>
 <p id="section-9-2.6.2">
-Deleg zones can be added without upgrading authoritatives.
-Deleg zones still work with old resolvers and validators.
+IDELEG zones can be added without upgrading authoritatives.
+IDELEG zones still work with old resolvers and validators.
 Basically any combination of old and new should work, though with
 reduced efficiency for some combinations.<a href="#section-9-2.6.2" class="pilcrow">¶</a></p>
 </li>
@@ -2267,7 +2269,7 @@ The exception is a replacement for the DS records, which is described in <span>[
 <p id="section-9-2.10.2">
 Assuming Qname-minimisation, there are no extra queries needed in most cases
 if the authoritative name server has deleg support. The exception
-is when the parent zone is not signed and has no deleg records.
+is when the parent zone is not signed and has no IDELEG records.
 In that case, one extra query is needed when the parent zone is first
 contacted (and every TTL).<a href="#section-9-2.10.2" class="pilcrow">¶</a></p>
 <p id="section-9-2.10.3">
@@ -2297,7 +2299,7 @@ SVCB-style records are extensible by design.<a href="#section-9-2.13.2" class="p
         <li class="normal" id="section-9-2.14">
           <p id="section-9-2.14.1">S7. DELEG should be able to convey a security model for delegations stronger than currently exists with DNSSEC.<a href="#section-9-2.14.1" class="pilcrow">¶</a></p>
 <p id="section-9-2.14.2">
-Extensible delegations are protected by DNSSEC, unlike
+IDELEG delegations are protected by DNSSEC, unlike
 NS records at the parent zone.<a href="#section-9-2.14.2" class="pilcrow">¶</a></p>
 </li>
       </ul>
@@ -2310,7 +2312,7 @@ NS records at the parent zone.<a href="#section-9-2.14.2" class="pilcrow">¶</a>
       </h2>
 <p id="section-10-1"><strong>Note to the RFC Editor</strong>: please remove this entire section before publication.<a href="#section-10-1" class="pilcrow">¶</a></p>
 <p id="section-10-2">We are using RR type code 65280 for experiments.<a href="#section-10-2" class="pilcrow">¶</a></p>
-<p id="section-10-3">Jesse van Zutphen has built a proof of concept implementation supporting extensible delegations as specified in a previous version of this document <span>[<a href="#I-D.homburg-deleg-incremental-deleg-00" class="cite xref">I-D.homburg-deleg-incremental-deleg-00</a>]</span> for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam <span>[<a href="#JZUTPHEN" class="cite xref">JZUTPHEN</a>]</span>.
+<p id="section-10-3">Jesse van Zutphen has built a proof of concept implementation supporting IDELEG delegations as specified in a previous version of this document <span>[<a href="#I-D.homburg-deleg-incremental-deleg-00" class="cite xref">I-D.homburg-deleg-incremental-deleg-00</a>]</span> for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam <span>[<a href="#JZUTPHEN" class="cite xref">JZUTPHEN</a>]</span>.
 Jesse's implementation has been adapted to query for the IDELEG RR types (with code point 65280).
 This version is available in the <code>ideleg</code> branch of the <code>NLnetLabs/unbound</code> github repository <span>[<a href="#IDELEG4UNBOUND" class="cite xref">IDELEG4UNBOUND</a>]</span>.
 Note that this implementation does not yet support <span><a href="#behavior-with-auth-support" class="internal xref">optimized behaviour</a> (<a href="#behavior-with-auth-support" class="auto internal xref">Section 5.2</a>)</span>, and also does not yet follow AliasMode IDELEG RRs.<a href="#section-10-3" class="pilcrow">¶</a></p>
@@ -2318,7 +2320,7 @@ Note that this implementation does not yet support <span><a href="#behavior-with
 This includes support for IDELEG in the DNS lookup utility <code>drill</code>, as well as in the DNSSEC zone signer <code>ldns-signzone</code> and all other tools and examples included with the ldns software.<a href="#section-10-4" class="pilcrow">¶</a></p>
 <p id="section-10-5">Wouter Petri has built a proof of concept support for IDELEG in the NSD authoritative name server software as part of a research project for the Security and Network Engineering master program of the University of Amsterdam <span>[<a href="#WPETRI" class="cite xref">WPETRI</a>]</span>.
 The source code of his implementation is available on github <span>[<a href="#IDELEG4NSD" class="cite xref">IDELEG4NSD</a>]</span>.<a href="#section-10-5" class="pilcrow">¶</a></p>
-<p id="section-10-6">Wouter's implementation is serving the <code>ideleg.net.</code> domain, containing a variety of different extensible delegations, for evaluation purposes.
+<p id="section-10-6">Wouter's implementation is serving the <code>ideleg.net.</code> domain, containing a variety of different IDELEG delegations, for evaluation purposes.
 We are planning to provide information about the deployment, including what software to evaluate these delegations, at <a href="http://ideleg.net/">http://ideleg.net/</a>, hopefully before the <a href="https://datatracker.ietf.org/meeting/122/proceedings">IETF 122 in Bangkok</a>.<a href="#section-10-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2540,7 +2542,7 @@ This risk of domain hijacking is not expected to increase significantly compared
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
 <p id="appendix-A-1">The idea to utilize SVCB based RRs to signal capabilities was first proposed by Tim April in <span>[<a href="#I-D.tapril-ns2" class="cite xref">I-D.tapril-ns2</a>]</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2">The idea to utilize SVCB for extensible delegations (and also the idea described in this document) emerged from the DNS Hackathon at the IETF 118.
+<p id="appendix-A-2">The idea to utilize SVCB for IDELEG delegations (and also the idea described in this document) emerged from the DNS Hackathon at the IETF 118.
 The following participants contributed to this brainstorm session: Vandan Adhvaryu, Roy Arends, David Blacka, Manu Bretelle, Vladimír Čunát, Klaus Darilion, Peter van Dijk, Christian Elmerot, Bob Halley, Philip Homburg, Shumon Huque, Shane Kerr, David C Lawrence, Edward Lewis, George Michaelson, Erik Nygren, Libor Peltan, Ben Schwartz, Petr Špaček, Jan Včelák and Ralf Weber<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 </section>
 </div>
