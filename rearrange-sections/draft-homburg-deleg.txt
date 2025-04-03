@@ -102,7 +102,8 @@ Table of Contents
        3.1.4.  DNSSEC-signed name servers within the subzone
    4.  Authoritative name server support
      4.1.  Registration of authoritative name server support
-     4.2.  Deregistering authoritative name server support
+     4.2.  Support detection with unsigned zones
+     4.3.  Deregistering authoritative name server support
    5.  Resolving without authoritative name server support
      5.1.  The deleg query
      5.2.  _deleg label presence
@@ -332,6 +333,10 @@ Table of Contents
    represented in a single IDELEG RR, it is RECOMMENDED to refer to the
    name of the operator's IDELEG RRset with a CNAME on the delegation
    point instead of a IDELEG RR in AliasMode Section 10.2 of [RFC9460].
+
+   For reasons that will be explained in Section 4.2, operators SHOULD
+   include the following in zones that include IDELEG records: *._deleg
+   86400 IN IDELEG 0 .
 
 3.1.  Examples
 
@@ -636,6 +641,8 @@ Table of Contents
    (Section 4 of [RFC8767]), but only if it is longer than any already
    registered duration.
 
+4.2.  Support detection with unsigned zones
+
    An IDELEG RRset on an IDELEG delegation point, with an IDELEG RR in
    AliasMode, aliasing to the root zone, MUST be interpreted to mean
    that the legacy delegation information MUST be used to follow the
@@ -676,7 +683,7 @@ Table of Contents
    This method of signalling that the legacy delegation MUST be used, is
    RECOMMENDED.
 
-4.2.  Deregistering authoritative name server support
+4.3.  Deregistering authoritative name server support
 
    If the resolver knows that the authoritative name server supports
    deleg, _and_ a DNSSEC-signed zone is being served, then all referrals
