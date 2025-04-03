@@ -112,9 +112,8 @@ The mechanism realizes delegations with resource record sets placed below a `_de
 This authoritative delegation point can be aliased to other names using CNAME and DNAME.
 This document proposes a new DNS resource record type, IDELEG, which is based on the SVCB and inherits extensibility from it.
 
-Support in recursive resolvers suffices for the mechanism to be fully functional.
-The number of subsequent interactions between the recursive resolver and the authoritative name servers is comparable with those for DNS Query Name Minimisation.
-Additionally, but not required, support in the authoritative name servers enables optimized behavior with reduced (simultaneous) queries.
+IDELEG RRsets containing delegation information will be returned in the authority section in referral responses from supportive authoritative name servers.
+Lack of support in the authoritative name servers, forwarders or other components, does not obstruct obtaining the delegation information for resolvers, as it is originally authoritative information that can be queried for directly.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
 
 --- middle
@@ -165,14 +164,8 @@ No semantic changes as to what zones are authoritative for what data are needed.
 As a consequence, existing DNS software, such as authoritative name servers and DNSSEC signing software, can remain unmodified.
 Unmodified authoritative name server software will serve the delegation information when queried for.
 Unmodified signers will sign the delegation information in the delegating zone.
-Only the recursive resolver needs modification to follow referrals as provided by the delegation information.
-
-Such a resolver would explicitly query for the delegations administered as specified in {{delegation-administration}}.
-The number of round trips from the recursive resolver to the authoritative name server is comparable to what is needed for DNS Query Name Minimisation {{!RFC9156}}.
-Additional implementation in the authoritative name server optimizes resolution and reduces the number of simultaneous in parallel queries to that what would be needed for legacy delegations.
+Support for IDELEG is only required for functionalities following delegations (like recursive resolvers), but they do not need of the components it queries.
 None, mixed or full deployment of the mechanism on authoritative name servers are all fully functional, allowing for the mechanism to be incrementally deployed on the authoritative name servers.
-
-Implementation in the recursive may be less demanding with respect to (among other things) DNSSEC validation because there is no need to make additional exceptions as to what is authoritative at the parent side of a delegation.
 
 ## Terminology
 
@@ -248,6 +241,8 @@ For example, if the delegating zone is `example.`, then a delegation to subzone 
 A fully scoped delegating name (such as `customer._deleg.example.`) is referred to further in this document as the "delegation point".
 
 Note that if the delegation is outsourcing to a single operator represented in a single IDELEG RR, it is RECOMMENDED to refer to the name of the operator's IDELEG RRset with a CNAME on the delegation point instead of a IDELEG RR in AliasMode {{Section 10.2 of !RFC9460}}.
+
+For reasons that will be explained in {{unsigned-support}}, operators SHOULD include the following in zones that include IDELEG records: `*._deleg  86400  IN  IDELEG 0 .`
 
 ## Examples
 
@@ -373,95 +368,7 @@ Note that both `customer5.example.` and `customer6.example.` have legacy delegat
 It is important to have those legacy delegations to maintain support for legacy resolvers, that do not support deleg.
 DNSSEC signers SHOULD construct the NS RRset and glue for the legacy delegation from the IDELEG RRset.
 
-
-# Minimal implementation
-
-Support in recursive resolvers suffices for the mechanism to be fully functional.
-{{recursive-resolver-behavior}} specifies the basic algorithm for resolving IDELEG delegations.
-In {{presence}}, an optimization is presented that will reduce the number of (parallel) queries especially for when authoritative name server support is still lacking and there are still many zones that do not contain IDELEG delegations.
-
-## Recursive Resolver behavior {#recursive-resolver-behavior}
-
-As part of the processing a recursive resolver does, it learns where the zone boundaries are in the DNS name tree.
-If the triggering query name is already known to be the apex of a zone, then no further delegation point probing will need to be done for this name (subject to the TTL of this information).
-
-Otherwise, the triggering query is below the target zone apex and it is unknown whether the triggering query name itself is the name of a delegation or zone.
-In this case two parallel queries MUST be sent.
-One for the triggering query in the way that is conventional with legacy delegations (which could be just the triggering query or a minimised query {{!RFC9156}}), and one *deleg query* with query type IDELEG.
-
-The deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a `_deleg` label and the name of the target zone.
-For example if the triggering query is `www.customer.example.` and the target zone `example.`, then the deleg query name is `customer._deleg.example.`
-For another example, if the triggering query is `www.faculty.university.example.` and the target zone `faculty.university.example.` then the deleg query name is `www._deleg.faculty.university.example.`
-
-DNAME, CNAME and IDELEG in AliasMode processing happens as before, though note that when following an IDELEG RR in AliasMode the target RR type is SVCB (see {{the-deleg-resource-record-type}}).
-The eventual deleg query response, after following all redirections caused by DNAME, CNAME and AliasMode IDELEG RRs, has three possible outcomes:
-
-1. An IDELEG RRset in ServiceMode is returned in the response's answer section containing the delegation for the subzone.
-
-   The IDELEG RRs in the RRset MUST be used to follow the referral.
-   The TargetName data field in the IDELEG RRs in the RRset MUST be used as the names for the name servers to contact for the subzone, and the ipv4hint and ipv6hint parameters MUST be used as the IP addresses for the TargetName in the same IDELEG RR.
-
-   The NS RRset and glue, in the response of the legacy query that was sent in parallel to the deleg query, MUST NOT be used, but the signed DS record (or NSEC(3) records indicating that there was no DS) MUST be used in linking the DNSSEC authentication chain as which would conventionally be done with DNSSEC as well.
-
-2. The deleg query name does not exist (NXDOMAIN).
-
-   There is no IDELEG delegation for the subzone, and the referral response for the legacy delegation MUST be processed as would be done with legacy DNS and DNSSEC processing.
-
-3. The deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).
-
-   If the legacy query, did result in a referral for the same number of labels as the subdomain that the deleg query was for, then there was no IDELEG delegation for the subzone, and the referral response for the legacy delegation MUST be processed as would be done with legacy DNS and DNSSEC processing.
-
-   Otherwise, the subzone may be more than one label below the delegating zone.
-
-   If the response to the legacy query resulted in a referral, then a new deleg query MUST be spawned, matching the zone cut of the legacy referral response.
-   For example if the triggering query is `www.university.ac.example.` and the target zone `example.`, and the legacy response contained an NS RRset for `university.ac.example.`, then the deleg query name is `university.ac._deleg.example.`
-   The response to the new deleg query MUST be processed as described above, as if it was the initial deleg query.
-
-   If the legacy query was sent minimised and needs a followup query, then parallel to that followup query a new deleg query will be sent, adding a single label to the previous deleg query name.
-   For example if the triggering query is `www.university.ac.example.` and the target zone is `example.` and the minimised legacy query name is `ac.example.` (which also resulted in a NOERROR no answer response), then the deleg query to be sent along in parallel with the followup legacy query will become `university.ac._deleg.example.`
-   Processing of the responses of those two new queries will be done as described above.
-
-## `_deleg` label presence {#presence}
-
-Absence of the `_deleg` label in a zone is a clear signal that the zone does not contain any IDELEG delegations.
-Recursive resolvers SHOULD NOT send any additional deleg queries for zones for which it is known that it does not contain the `_deleg` label at the apex.
-The state regarding the presence of the `_deleg` label within a resolver can be "unknown", "known not to be present", or "known to be present".
-
-The state regarding the presence of the `_deleg` label can be deduced from the response of the deleg query, if the target zone is signed with DNSSEC.
-**No** additional queries are needed.
-If the target zone is unsigned, the procedure as described in the remainder of this section SHOULD be followed.
-
-### Test `_deleg` label presence (unsigned zones only)
-
-When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the unsigned target zone (though not when the target name server is known to support _deleg, which is discussed in {{authoritative-name-server-support}}).
-The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type NS.
-
-The testing query can have three possible outcomes:
-
-1. The `_deleg` label does not exist within the zone, and an NXDOMAIN response is returned.
-
-   The non-existence of the `_deleg` label MUST be registered for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the boundaries for TTL values that the resolver has ({{Section 4 of !RFC8767}}).
-   For the period the non-existence of the `_deleg` label is registered, the label is "known not to be present" and the resolver SHOULD NOT send any (additional) deleg queries.
-
-2. The `_deleg` label does exist within the zone but contains no data.
-   A NOERROR response is returned with no RRs in the answer section.
-
-   The existence of the `_deleg` name MUST be registered for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.
-   For the period the existence of the empty non-terminal at the `_deleg` label is registered, the label is "known to be present" and the resolver MUST send additional deleg queries as described in {{recursive-resolver-behavior}}.
-
-3. The `_deleg` label does exist within the zone, but is a delegation.
-   A NOERROR legacy referral response is returned with an NS RRset in the authority section.
-
-   The resolver MUST record that the zone does not have valid IDELEG delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries.
-   For the period indicated by the NS RRset's TTL value, the zone is considered to **not** to have valid IDELEG delegations, and MUST NOT send any (additional) deleg queries.
-
-# Optimized implementation
-
-Support for authoritative name servers enables optimized query behavior by resolvers with reduced (simultaneous) queries.
-{{authoritative-name-server-support}} specifies how deleg supporting authoritative name servers return referral responses for delegations.
-In {{behavior-with-auth-support}} we specify how resolvers can benefit from those authoritative servers.
-
-## Authoritative name server support
+# Authoritative name server support {#auth-support}
 
 Deleg supporting authoritative name servers include the IDELEG delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses to legacy DNS queries.
 For example, querying the zone from {{dnssec-zone}} for `www.customer5.example. A`, will return the following referral response:
@@ -578,16 +485,9 @@ With unsigned zones, only if an IDELEG delegation exists, the IDELEG RRset (or C
 If there is no IDELEG delegation, then the IDELEG RRset (or CNAME) is simply absent from the authority section and the referral response is indistinguishable from an non deleg supportive authoritative.
 <!-- TODO: Add a non deleg referral response for an unsigned zone -->
 
-## Resolver behavior with authoritative name server support {#behavior-with-auth-support}
+## Registration of authoritative name server support {#controlled-support-registration}
 
-Deleg supporting authoritative name servers will include the IDELEG delegation information (or the NSEC(3) records showing the non-existence) in the authority section of referral responses.
-For an unsigned zone, an deleg supporting authoritative cannot return that an IDELEG delegation is absent (because of lack of an authenticated denial of existence), however with support from the served zone (the zone has the Resource Record provisioned `*._deleg IN IDELEG 0 .`), the authoritative name server can signal support also for unsigned zones (see {{extra-optimized (Extra optimized implementation)}}).
-
-If it is known that an authoritative name server supports deleg, then no direct queries for the IDELEG delegation need to be sent in parallel to the legacy delegation query.
-A resolver SHOULD register that an authoritative name server supports deleg when the authority section, of the returned referral responses from that authoritative name server, contains IDELEG delegation information.
-
-When the authority section of a referral response contains an IDELEG RRset or a CNAME record on the IDELEG delegation name, or valid NSEC(3) RRs showing the non-existence of such an IDELEG or CNAME RRset, then the resolver SHOULD register that the contacted authoritative name server supports deleg for the duration indicated by the TTL for that IDELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
-Subsequent queries SHOULD NOT include deleg queries, as described in {{recursive-resolver-behavior}}, to be send in parallel for the duration support for deleg is registered for the authoritative name server.
+When the authority section of a referral response contains an IDELEG RRset or a CNAME record on the IDELEG delegation name, or valid NSEC(3) RRs showing the non-existence of such an IDELEG or CNAME RRset, then IDELEG supporting resolver SHOULD register that the contacted authoritative name server supports deleg for the duration indicated by the TTL for that IDELEG, CNAME or NSEC(3) RRset, adjusted to the resolver's TTL boundaries ({{Section 4 of !RFC8767}}), but only if it is longer than any already registered duration.
 
 For example, in {{deleg-response}}, the IDELEG RRset at the IDELEG delegation point has TTL 3600.
 The resolver should register that the contacted authoritative name server supports deleg for (at least) 3600 seconds (one hour).
@@ -598,13 +498,9 @@ If the authority section contains more than one RRset making up the IDELEG deleg
 For example, in {{alias-response}}, both a CNAME and an IDELEG RRset for the IDELEG delegation are included in the authority section.
 The longest TTL must be taken for deleg support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.
 
-With DNSSEC-signed zones, support is apparent with all referral responses.
-With unsigned zones, support is apparent only from referral responses for which an IDELEG delegation exists, unless the zone has the Resource Record `*._deleg IN IDELEG 0 .` provisioned (see {{extra-optimized (Extra optimized implementation)}}).
+If an proof of non-existence of an IDELEG delegation is returned in the authority section of a referral response, IDELEG supporting resolvers SHOULD register that the authoritative name server that returned that response supports IDELEG for the duration of the maximum of the TTL of the NSEC(3) covering the name of the IDELEG delegation and the minimum rdata field of the SOA for the zone, adjusted to the boundaries for TTL values that the resolver has ({{Section 4 of !RFC8767}}), but only if it is longer than any already registered duration.
 
-If the resolver knows that the authoritative name server supports deleg, *and* a DNSSEC-signed zone is being served, then all referrals SHOULD contain either an IDELEG delegation, or NSEC(3) records showing that the delegation does not exist.
-If a referral is returned that does not contain an IDELEG delegation nor an indication that it does not exist, then the resolver MAY register that authoritative server does not support deleg and MUST send an additional deleg query to find the delegation (or denial of its existence).
-
-# Extra optimized implementation {#extra-optimized}
+## Support detection with unsigned zones {#unsigned-support}
 
 An IDELEG RRset on an IDELEG delegation point, with an IDELEG RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
 All service parameters for such AliasMode (aliasing to the root) IDELEG RRs on the IDELEG delegation point, MUST be ignored.
@@ -623,75 +519,163 @@ customer3._deleg  IN  CNAME _dns.ns.operator1
 ~~~
 {: #wildcard-deleg title="Wildcard IDELEG delegation to control duration of detected support"}
 
-Resolvers SHOULD register that an authoritative name server supports deleg, if such an IDELEG RRset is returned in the authority section of referral responses, for the duration of the TTL if the IDELEG RRset, adjusted to the resolver's TTL boundaries, but only if it is longer than any already registered duration.
+Resolvers SHOULD register that an authoritative name server supports deleg, if such an IDELEG RRset is returned in the authority section of referral responses, for the duration of the TTL if the IDELEG RRset, adjusted to the resolver's TTL boundaries ({{Section 4 of !RFC8767}}), but only if it is longer than any already registered duration.
 Note that this will also be included in referral responses for unsigned zones, which would otherwise not have signalling of deleg support by the authoritative name server.
+
 Also, signed zones need fewer RRs to indicate that no IDELEG delegation exists.
 The wildcard expansion already shows the closest encloser (i.e. `_deleg.<apex>`), so only one additional NSEC(3) is needed to show non-existence of the queried-for name below the closest encloser.
 
 This method of signalling that the legacy delegation MUST be used, is RECOMMENDED.
 
-# Fewer queries {#fewer-queries}
+## Deregistering authoritative name server support
 
-The algorithm described in {{recursive-resolver-behavior}} is optimized for
-low latency.
-The additional queries required are sent at the same time as query for
-legacy delegations.
-It is also possible optimize for a lowest number of additional queries.
-However, this may in some cases result in extra latency.
+If the resolver knows that the authoritative name server supports deleg, *and* a DNSSEC-signed zone is being served, then all referrals SHOULD contain either an IDELEG delegation, or NSEC(3) records showing that the delegation does not exist.
+If a referral is returned that does not contain an IDELEG delegation nor an indication that it does not exist, then the resolver MAY deregister that the authoritative server supports IDELEG and MUST send an additional deleg query to find the delegation (or denial of its existence) (see also {{without-support (Resolving without authoritative name server support)}}).
 
-To achieve this, the behavior of the recursive resolver is modified as follows.
-If the state of the zone is known (the `_deleg.<apex>` is known to exist or not to exist), then queries are executed as
-described in {{recursive-resolver-behavior}} and {{behavior-with-auth-support}}.
+# Resolving without authoritative name server support {#without-support}
 
-If the state of the zone is unknown then initially only conventional queries
-are sent. If a reply arrives that does not contain a legacy delegation then
-the algorithm is done and no further queries are sent.
+In two cases, resolvers do **not** need to do additional processing.
 
-If the reply contains a legacy delegation then the follow up query or queries
-depend on whether the zone is DNSSEC signed or not.
-If the zone is signed then a deleg query is sent that matches
-the legacy delegation.
-In a signed zone, the query is either successful and returns an IDELEG RRset or
-the query contains a proof of non-existence from which it is possible to
-deduce whether the zone contains an `_deleg` label or not.
+1. As part of the processing a recursive resolver does, it learns where the zone boundaries are in the DNS name tree.
+   If the triggering query name is already known to be the apex of a zone, then no further delegation point probing will need to be done for this name (subject to the TTL of this information).
 
-If the zone is not signed then two separate queries are needed.
-One query just for the `_deleg` label and one deleg query that
-matches legacy delegation.
+2. If a resolver encounters a non-referral response, then no delegations are involved and no further delegation probing is needed for this name (subject to the TTL of this information).
 
-If the reply the `_deleg` query is NXDOMAIN then the zone does not contain any
-IDELEG delegations and further queries are unnecessary.
-See {{presence}} for processing the response to the `_deleg` query.
-The response to the deleg query is processed as described in
-{{recursive-resolver-behavior}}.
+If a resolver encounters an referral that does not contain an IDELEG delegation nor an indication that it does not exist, then the resolver MUST find out whether the queried zone contains IDELEG delegations at all.
 
-The effect on the number of extra queries is the following.
-If the response does not contain a legacy delegation then no extra queries
-are sent.
+1. For DNSSEC signed zones, a direct query for the IDELEG delegation information suffices (see {{deleg-query (The deleg query)}}).
 
-If the nameserver supports deleg and the zone is signed then no additional
-queries will be sent independent of whether zone contains the `_deleg` label or
-not.
+2. For unsigned zones, if unknown, the presence of the `_deleg` label at the zone's apex needs to be detected in addition to a direct query for the IDELEG delegation information (see {{presence (`_deleg` label presence)}}).
 
-If the nameserver supports deleg, the zone is not signed and no IDELEG RRset
-is returned in the response then two follow up queries need to be sent.
-The response to the `_deleg` query will be cached until the TTL expires.
+Sub section {{additional-summary (Summary)}} contains an overview summarizing sub sections {{deleg-query}} and {{presence}}
 
-If the nameserver does not support deleg but the zone is signed then one
-follow up queries will be sent: a deleg query that matches the legacy
-delegation.
-Presence or absence of the `_deleg` label will be cached.
-IF the `_deleg` label is absent then no further additonal queries will be sent.
+## The deleg query {#deleg-query}
 
-Finally, if the nameserver does not support deleg and the zone is not signed
-then two follow up queries will be sent.
-The response to the `_deleg` query will be cached until the TTL expires.
+The deleg query name is constructed by concatenating the first label below the part that the triggering query name has in common with the target zone, a `_deleg` label and the name of the target zone.
+For example if the triggering query is `www.customer.example.` and the target zone `example.`, then the deleg query name is `customer._deleg.example.`
+For another example, if the triggering query is `www.faculty.university.example.` and the target zone `faculty.university.example.` then the deleg query name is `www._deleg.faculty.university.example.`
+
+DNAME, CNAME and IDELEG in AliasMode processing happens as before, though note that when following an IDELEG RR in AliasMode the target RR type is SVCB (see {{the-deleg-resource-record-type}}).
+The eventual deleg query response, after following all redirections caused by DNAME, CNAME and AliasMode IDELEG RRs, has three possible outcomes:
+
+1. An IDELEG RRset in ServiceMode is returned in the response's answer section containing the delegation for the subzone.
+
+   The IDELEG RRs in the RRset MUST be used to follow the referral.
+   The TargetName data field in the IDELEG RRs in the RRset MUST be used as the names for the name servers to contact for the subzone, and the ipv4hint and ipv6hint parameters MUST be used as the IP addresses for the TargetName in the same IDELEG RR.
+
+   The NS RRset and glue, from the referral response, MUST NOT be used, but the signed DS record (or NSEC(3) records indicating that there was no DS) MUST be used in linking the DNSSEC authentication chain as which would conventionally be done with DNSSEC as well.
+
+2. The deleg query name does not exist (NXDOMAIN).
+
+   There is no IDELEG delegation for the subzone, and the referral response for the legacy delegation MUST be processed as would be done with legacy DNS and DNSSEC processing.
+
+   When the query was for an DNSSEC signed zone, the NXDOMAIN response will expose whether or not the `_deleg` label exists at the zone's apex.
+   If it does not exist, this should be registered for the duration of the maximum of the TTL of the NSEC(3) covering the `_deleg` label and the minimum rdata field of the SOA for the zone, adjusted to the boundaries for TTL values that the resolver has ({{Section 4 of !RFC8767}}).
+   For this period, deleg queries to this zone MUST NOT be made (see also {{presence}}).
+
+3. The deleg query name does exist, but resulted in a NOERROR no answer response (also known as a NODATA response).
+
+   If the legacy query, did result in a referral for the same number of labels as the subdomain that the deleg query was for, then there was no IDELEG delegation for the subzone, and the referral response for the legacy delegation MUST be processed as would be done with legacy DNS and DNSSEC processing.
+
+   Otherwise, the subzone may be more than one label below the delegating zone.
+
+   A new deleg query MUST be spawned, matching the zone cut of the initial referral response.
+   For example if the triggering query is `www.university.ac.example.` and the target zone `example.`, and the legacy response contained an NS RRset for `university.ac.example.`, then the deleg query name is `university.ac._deleg.example.`
+   The response to the new deleg query MUST be processed as described above, as if it was the initial deleg query.
+
+   If the legacy query was sent minimised and needs a followup query, then parallel to that followup query a new deleg query will be sent, adding a single label to the previous deleg query name.
+   For example if the triggering query is `www.university.ac.example.` and the target zone is `example.` and the minimised legacy query name is `ac.example.` (which also resulted in a NOERROR no answer response), then the deleg query to be sent along in parallel with the followup legacy query will become `university.ac._deleg.example.`
+   Processing of the responses of those two new queries will be done as described above.
+
+## `_deleg` label presence {#presence}
+
+Absence of the `_deleg` label in a zone is a clear signal that the zone does not contain any IDELEG delegations.
+Recursive resolvers SHOULD NOT send any additional deleg queries for zones for which it is known that it does not contain the `_deleg` label at the apex.
+The state regarding the presence of the `_deleg` label within a resolver can be "unknown", "known not to be present", or "known to be present".
+
+The state regarding the presence of the `_deleg` label can be deduced from the response of the deleg query, if the target zone is signed with DNSSEC.
+**No** additional queries are needed.
+If the target zone is unsigned, the procedure as described in the remainder of this section SHOULD be followed.
+
+### Test `_deleg` label presence (unsigned zones only)
+
+When the presence of a `_deleg` label is "unknown", a `_deleg` presence test query SHOULD be sent in parallel to the next query for the unsigned target zone (though not when the target name server is known to support _deleg, which is discussed in {{auth-support (Authoritative name server support)}}).
+The query name for the test query is the `_deleg` label prepended to the apex of zone for which to test presence, with query type NS.
+
+The testing query can have three possible outcomes:
+
+1. The `_deleg` label does not exist within the zone, and an NXDOMAIN response is returned.
+
+   The non-existence of the `_deleg` label MUST be registered for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the boundaries for TTL values that the resolver has ({{Section 4 of !RFC8767}}).
+   For the period the non-existence of the `_deleg` label is cached, the label is "known not to be present" and the resolver SHOULD NOT send any (additional) deleg queries.
+
+2. The `_deleg` label does exist within the zone but contains no data.
+   A NOERROR response is returned with no RRs in the answer section.
+
+   The existence of the `_deleg` name MUST be cached for the duration indicated by the "minimum" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries ({{Section 4 of !RFC8767}}).
+   For the period the existence of the empty non-terminal at the `_deleg` label is cached, the label is "known to be present".
+
+3. The `_deleg` label does exist within the zone, but is a delegation.
+   A NOERROR legacy referral response is returned with an NS RRset in the authority section.
+
+   The resolver MUST record that the zone does not have valid IDELEG delegations deployed for the duration indicated by the NS RRset's TTL value, adjusted to the resolver's TTL boundaries ({{Section 4 of !RFC8767}}).
+   For the period indicated by the NS RRset's TTL value, the zone is considered to **not** to have valid IDELEG delegations, and MUST NOT send any (additional) deleg queries.
+
+## Summary {#additional-summary}
+
+Table {{xtraqueries}} provides an overview of when additional queries, following a non-IDELEG referral response, are sent.
+
+|---|--------------|-------------------|----|------------------------------|-------------------------|
+|   | auth support | `_deleg` presence | \| | `<sub>._deleg.<apex> IDELEG` | `_deleg.<apex> A`       |
+|:-:|:------------:|:-----------------:|----|:----------------------------:|:-----------------------:|
+| 1 | Yes          | \*                | \| |                              |                         |
+|---|--------------|-------------------|----|------------------------------|-------------------------|
+| 2 | No           | No                | \| |                              |                         |
+|---|--------------|-------------------|----|------------------------------|-------------------------|
+| 3 | No           | Yes               | \| | X                            |                         |
+|---|--------------|-------------------|----|------------------------------|-------------------------|
+| 4 | No           | Unknown           | \| | X                            | only for unsigned zones |
+|---|--------------|-------------------|----|------------------------------|-------------------------|
+{: #xtraqueries title="Additional queries to an non-IDELEG referral response"}
+
+The two headers on the left side of the table mean the following:
+
+{: vspace="0"}
+auth support:
+: Whether or not the target authoritative server supports incremental deleg.
+  "Yes" means support is registered and "No" means support is not registered.
+
+`_deleg` presence:
+: Whether or not the `_deleg` label is present in the target zone (and thus incremental delegations)
+  "Yes" means it is present, "No" means it is not present, "Unknown" means this is not yet known and "*" means it doesn't matter.
+
+On the right side of the table are the additional follow-up queries, to be sent in response to non-IDELEG referrals.
+The `_deleg` presence test query (most right column) only needs to be sent to unsigned target zones, because its non-existence will be shown in the NSEC(3) records showing the non-existence of the incremental delegation (second from right column).
+
+If the query name is the same as the apex of the target zone, or the response is a non-referral response, no additional queries need to be sent.
+Otherwise:
+
+1. If the authoritative name server supports IDELEG (Row 1), no additional queries need to be sent.
+2. If the `_deleg` label is known not to exist in the target zone (Row 2), no additional queries need to be sent.
+3. If the `_deleg` label is known to exist in the target zone, but there was no authoritative name server support in the referral response (Row 3), an additional deleg query ({{deleg-query}}) needs to be sent.
+4. If it is not known whether or not the `_delewg` label exists, and there was no authoritative name server support in the referral response (Row 4), an additional deleg query ({{deleg-query}}) needs to be sent.
+   If the target zone is unsigned, presence of the `_deleg` label needs to be tested explicitly as well ({{presence}}).
+
+### Reduced latency
+
+Latency can be reduced with one round trip when the deleg query is sent in parallel to the legacy query.
+This will induce more additional queries since authoritative name server support (eliminating the need to send deleg queries), is detected from the legacy query.
 
 # Priming queries {#priming-queries}
 
 Some zones, such as the root zone, are targeted directly from hints files.
 Information about which authoritative name servers and with capabilities, MAY be provided in an IDELEG RRset directly at the `_deleg` label under the apex of the zone.
 Priming queries from an deleg supporting resolver, MUST send an `_deleg.<apex> IDELEG` query in parallel to the legacy `<apex> NS` query and process the content as if it was found through an referral response.
+
+# Limitations
+
+The presence of the `_deleg` label in the delegation information reduces that maximum length of a domain name for a zone to 248 bytes.
+Note that names within zones are not limited and can still be 255 bytes.
 
 # How does the protocol described in this draft meet the requirements
 
@@ -707,7 +691,7 @@ This section will discuss how deleg meets the requirements for a new delegation 
   The new delegations do not interfere with legacy software.
 
   The behavior of deleg supporting resolvers includes a fallback to NS
-  records if no IDELEG delegation is present (See {{recursive-resolver-behavior}}).
+  records if no IDELEG delegation is present (See {{deleg-query}}).
 
 + H3. DELEG must not negatively impact most DNS software.
 
@@ -792,7 +776,7 @@ We are using RR type code 65280 for experiments.
 Jesse van Zutphen has built a proof of concept implementation supporting IDELEG delegations as specified in a previous version of this document {{?I-D.homburg-deleg-incremental-deleg-00}} for the Unbound recursive resolver as part of his master thesis for the Security and Network Engineering master program of the University of Amsterdam {{JZUTPHEN}}.
 Jesse's implementation has been adapted to query for the IDELEG RR types (with code point 65280).
 This version is available in the `ideleg` branch of the `NLnetLabs/unbound` github repository {{IDELEG4UNBOUND}}.
-Note that this implementation does not yet support {{behavior-with-auth-support (optimized behaviour)}}, and also does not yet follow AliasMode IDELEG RRs.
+Note that this implementation does not yet respond to support in the authoritative {{auth-support (Authoritative name server support)}}, and also does not yet follow AliasMode IDELEG RRs.
 
 The ldns DNS library and tools software has been extended with support for IDELEG, which is available in the `features/ideleg` branch of the `NLnetLabs/ldns` github repository {{IDELEG4LDNS}}.
 This includes support for IDELEG in the DNS lookup utility `drill`, as well as in the DNSSEC zone signer `ldns-signzone` and all other tools and examples included with the ldns software.
