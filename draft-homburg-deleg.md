@@ -242,6 +242,8 @@ A fully scoped delegating name (such as `customer._deleg.example.`) is referred 
 
 Note that if the delegation is outsourcing to a single operator represented in a single IDELEG RR, it is RECOMMENDED to refer to the name of the operator's IDELEG RRset with a CNAME on the delegation point instead of a IDELEG RR in AliasMode {{Section 10.2 of !RFC9460}}.
 
+For reasons that will be explained in {{unsigned-support}}, operators SHOULD include the following in zones that include IDELEG records: `*._deleg  86400  IN  IDELEG 0 .`
+
 ## Examples
 
 ### One name server within the subzone
@@ -497,6 +499,8 @@ For example, in {{alias-response}}, both a CNAME and an IDELEG RRset for the IDE
 The longest TTL must be taken for deleg support registration, though because the TTL of both RRsets is 3600, it does not matter in this case.
 
 If an proof of non-existence of an IDELEG delegation is returned in the authority section of a referral response, IDELEG supporting resolvers SHOULD register that the authoritative name server that returned that response supports IDELEG for the duration of the maximum of the TTL of the NSEC(3) covering the name of the IDELEG delegation and the minimum rdata field of the SOA for the zone, adjusted to the boundaries for TTL values that the resolver has ({{Section 4 of !RFC8767}}), but only if it is longer than any already registered duration.
+
+## Support detection with unsigned zones {#unsigned-support}
 
 An IDELEG RRset on an IDELEG delegation point, with an IDELEG RR in AliasMode, aliasing to the root zone, MUST be interpreted to mean that the legacy delegation information MUST be used to follow the referral.
 All service parameters for such AliasMode (aliasing to the root) IDELEG RRs on the IDELEG delegation point, MUST be ignored.
