@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-01T00:34:37.430465+00:00",
+  "timestamp": "2025-04-03T00:29:38.814041+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -2281,20 +2281,246 @@
       "id": "PR_kwDOMN-KqM6PoPu9",
       "title": "Fewer queries",
       "url": "https://github.com/NLnetLabs/incremental-deleg/pull/23",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "Philip-NLnetLabs",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-03-21T14:34:26Z",
-      "updatedAt": "2025-03-21T14:34:27Z",
+      "updatedAt": "2025-04-02T12:59:07Z",
       "baseRepository": "NLnetLabs/incremental-deleg",
       "baseRefName": "main",
       "baseRefOid": "77da1fd47a6a261b17ea68828d73739b9719ac2e",
       "headRepository": "NLnetLabs/incremental-deleg",
       "headRefName": "fewer-packets",
-      "headRefOid": "c808531744ddd0b3f1bea0758307cd6726a7d85a",
+      "headRefOid": "5879efcc2035f2eb06ce12b24c83100ac00ad7a1",
+      "closedAt": "2025-04-02T12:59:07Z",
+      "mergedAt": "2025-04-02T12:59:07Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "e1f9447fa3522346084dbaed1331ea9a6fc58653"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6jEAXm",
+          "commit": {
+            "abbreviatedOid": "c808531"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Yes, makes sense",
+          "createdAt": "2025-04-02T10:04:23Z",
+          "updatedAt": "2025-04-02T10:26:06Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\nIf the state of the zone is known (the `_deleg.<apex>` is known to exist or not to exist), then queries are executed as\r\n```",
+              "createdAt": "2025-04-02T10:04:23Z",
+              "updatedAt": "2025-04-02T10:26:06Z"
+            },
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n# Fewer queries {#fewer-queries}\r\n```\r\nFor referencing this from the table in Section 9",
+              "createdAt": "2025-04-02T10:24:08Z",
+              "updatedAt": "2025-04-02T10:26:06Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOMN-KqM6RBVr3",
+      "title": "removed comparisons, set aside",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/25",
+      "state": "MERGED",
+      "author": "moonshiner",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Pulled out the compasrison section but saved it as its own file for now.  still sueful text",
+      "createdAt": "2025-04-02T03:28:25Z",
+      "updatedAt": "2025-04-02T11:57:13Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "bb747ce6800a2581ef1709797b8b74a7219ac9a7",
+      "headRepository": "moonshiner/incremental-deleg",
+      "headRefName": "rm-comparisons",
+      "headRefOid": "e073decbd44f3f19e66bd65cf532988cf00cf5f0",
+      "closedAt": "2025-04-02T11:57:13Z",
+      "mergedAt": "2025-04-02T11:57:13Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "97307a070ad3c8a479ba769525035c029197ab01"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6jDt6s",
+          "commit": {
+            "abbreviatedOid": "e073dec"
+          },
+          "author": "wtoorop",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Perfect.",
+          "createdAt": "2025-04-02T09:38:49Z",
+          "updatedAt": "2025-04-02T09:38:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOMN-KqM6RFmU4",
+      "title": "Remove the term incremental",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/26",
+      "state": "MERGED",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-04-02T13:08:57Z",
+      "updatedAt": "2025-04-02T13:42:19Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "e1f9447fa3522346084dbaed1331ea9a6fc58653",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "remove-incremental",
+      "headRefOid": "bd2763db39b54e37183d18a522440802d5577a8b",
+      "closedAt": "2025-04-02T13:42:18Z",
+      "mergedAt": "2025-04-02T13:42:18Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "2782ef120cba4da228535d01d8dd44cbd054a0f5"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6jGHBi",
+          "commit": {
+            "abbreviatedOid": "e51d7cd"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-04-02T13:29:43Z",
+          "updatedAt": "2025-04-02T13:29:43Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "```suggestion\r\n  With deleg, this is the location given by the IDELEG delegating name.\r\n```",
+              "createdAt": "2025-04-02T13:29:43Z",
+              "updatedAt": "2025-04-02T13:32:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6jGK1S",
+          "commit": {
+            "abbreviatedOid": "472c447"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-04-02T13:34:36Z",
+          "updatedAt": "2025-04-02T13:34:36Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "```suggestion\r\n   For the period the non-existence of the `_deleg` label is registered, the label is \"known not to be present\" and the resolver SHOULD NOT send any (additional) deleg queries.\r\n```",
+              "createdAt": "2025-04-02T13:34:36Z",
+              "updatedAt": "2025-04-02T13:34:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6jGLj6",
+          "commit": {
+            "abbreviatedOid": "472c447"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-04-02T13:35:35Z",
+          "updatedAt": "2025-04-02T13:35:35Z",
+          "comments": [
+            {
+              "originalPosition": 177,
+              "body": "```suggestion\r\n   The existence of the `_deleg` name MUST be registered for the duration indicated by the \"minimum\" RDATA field of the SOA resource record in the authority section, adjusted to the resolver's TTL boundaries.\r\n```",
+              "createdAt": "2025-04-02T13:35:35Z",
+              "updatedAt": "2025-04-02T13:35:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6jGLxr",
+          "commit": {
+            "abbreviatedOid": "472c447"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-04-02T13:35:52Z",
+          "updatedAt": "2025-04-02T13:35:52Z",
+          "comments": [
+            {
+              "originalPosition": 179,
+              "body": "```suggestion\r\n   For the period the existence of the empty non-terminal at the `_deleg` label is registered, the label is \"known to be present\" and the resolver MUST send additional deleg queries as described in {{recursive-resolver-behavior}}.\r\n```",
+              "createdAt": "2025-04-02T13:35:52Z",
+              "updatedAt": "2025-04-02T13:35:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6jGMgl",
+          "commit": {
+            "abbreviatedOid": "472c447"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-04-02T13:36:49Z",
+          "updatedAt": "2025-04-02T13:36:49Z",
+          "comments": [
+            {
+              "originalPosition": 208,
+              "body": "```suggestion\r\n{: #deleg-response title=\"A deleg referral response\"}\r\n```",
+              "createdAt": "2025-04-02T13:36:49Z",
+              "updatedAt": "2025-04-02T13:36:49Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOMN-KqM6RG976",
+      "title": "Rearranged sections to talk about auth support first",
+      "url": "https://github.com/NLnetLabs/incremental-deleg/pull/27",
+      "state": "OPEN",
+      "author": "wtoorop",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-04-02T15:17:22Z",
+      "updatedAt": "2025-04-02T15:20:30Z",
+      "baseRepository": "NLnetLabs/incremental-deleg",
+      "baseRefName": "main",
+      "baseRefOid": "2782ef120cba4da228535d01d8dd44cbd054a0f5",
+      "headRepository": "NLnetLabs/incremental-deleg",
+      "headRefName": "rearrange-sections",
+      "headRefOid": "322aefc5f6724044e5e2d47c43377840706f2e35",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
