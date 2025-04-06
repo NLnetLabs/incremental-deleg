@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-03T00:29:38.814041+00:00",
+  "timestamp": "2025-04-06T00:32:28.842409+00:00",
   "repo": "NLnetLabs/incremental-deleg",
   "labels": [
     {
@@ -2507,26 +2507,55 @@
       "id": "PR_kwDOMN-KqM6RG976",
       "title": "Rearranged sections to talk about auth support first",
       "url": "https://github.com/NLnetLabs/incremental-deleg/pull/27",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "wtoorop",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-04-02T15:17:22Z",
-      "updatedAt": "2025-04-02T15:20:30Z",
+      "updatedAt": "2025-04-03T11:50:07Z",
       "baseRepository": "NLnetLabs/incremental-deleg",
       "baseRefName": "main",
       "baseRefOid": "2782ef120cba4da228535d01d8dd44cbd054a0f5",
       "headRepository": "NLnetLabs/incremental-deleg",
       "headRefName": "rearrange-sections",
-      "headRefOid": "322aefc5f6724044e5e2d47c43377840706f2e35",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "1390a0fb99887a80e9db2381c942e55e27569cd0",
+      "closedAt": "2025-04-03T11:50:07Z",
+      "mergedAt": "2025-04-03T11:50:07Z",
+      "mergedBy": "wtoorop",
+      "mergeCommit": {
+        "oid": "7dada59cad67d5f36b3a62f2dcd3773a0a5a4548"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOMN-KqM6jNxNf",
+          "commit": {
+            "abbreviatedOid": "322aefc"
+          },
+          "author": "moonshiner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "I see some smol edits but they can wait ",
+          "createdAt": "2025-04-03T03:13:54Z",
+          "updatedAt": "2025-04-03T03:13:54Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMN-KqM6jSeaL",
+          "commit": {
+            "abbreviatedOid": "1390a0f"
+          },
+          "author": "Philip-NLnetLabs",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-04-03T11:32:03Z",
+          "updatedAt": "2025-04-03T11:32:03Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
